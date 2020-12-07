@@ -1,0 +1,177 @@
+body {
+  background: #90EE90;
+  height: 100%;
+   overflow: hidden; /* Hide scrollbars */
+}
+
+*{
+  font-family:Century Gothic;
+
+}
+.bar{
+  height: 100px;
+  margin-top: -18px;
+  margin-bottom: -10px;
+}
+.user{
+  text-align: right;
+  align-content: flex-end;
+  margin-right: 30px;
+  margin-top: -65px;
+
+}
+.logo{
+text-align: left;
+align-items: center;
+}
+img {
+  width: 200px;
+  text-align: left;
+  margin-left: 10px;
+
+}
+.greets{
+  font-size: 22px;
+}
+
+.logout{
+  font-size: 15px;
+  text-decoration: none;
+
+}
+
+.logout:hover{
+  text-decoration: underline;
+  color: white;
+}
+.container{
+  width: 100%;
+  height: 550px;
+  display: flex;
+
+}
+.nav-bar{
+  background-color: #fff;
+  border: 2px solid #ccc;
+  background: #fff;
+  border-radius: 15px;
+  height: 35%;
+}
+
+
+.other_stuff{
+  background-color: #fff;
+  border: 2px solid #ccc;
+  background: #fff;
+  border-radius: 15px;
+  margin-top: 3%;
+  height: 63%;
+
+}
+
+
+
+ ul a{
+  text-decoration: none;
+  list-style-type: none;
+  list-style: none;
+  color: black;
+}
+ul a:hover{
+  opacity: 0.5;
+  color: grey;
+}
+
+
+.active{
+  color: brown;
+  font-weight: bold;
+}
+.active:hover{
+  color: grey;
+}
+
+.nothing{
+  width: 2%;
+}
+.chargers{
+  width: 83%;
+  background-color: #fff;
+  height: 100%;
+  border: 2px solid #ccc;
+  background: #fff;
+  border-radius: 15px;
+  display:flex;
+
+
+
+}
+
+.charger1, .charger2, .charger3,.charger4,.charger5{
+  color: #90EE90;
+  margin-top: 35px;
+  margin-left: 27px;
+  margin-right: 15px;
+}
+.charger_img{
+  color: #90EE90;
+  width: 70px;
+  margin-top: 35px;
+  margin-left: 11px;
+  margin-right: 15px;
+}
+
+
+
+
+
+.charger1 ,.charger2, .charger3,.charger4,.charger5{
+  width: 6.5%;
+  text-align: center;
+  justify-content: center;
+  height: 250px;
+
+}
+
+
+
+.line1{
+  display: flex;
+}
+
+.db{
+  color: transparent;
+}
+
+span{
+  color:black;
+  margin-left: 10px;
+  align-items: center;
+  text-align: center;
+}
+
+.info1{
+  background-color: #F5F5F5;
+  margin-top: 35px;
+  margin-left: 10px;
+  margin-right: 15px;
+  height: 180px;
+  font-size: 9px;
+  width: 80px;
+  color: black;
+
+}
+.fa-exclamation-triangle{
+  color:red;
+}
+.warning{
+  font-size: 12px;
+}
+
+.line_2{
+  position: absolute;
+  top: 80%;
+  left: 50%;
+  transform:translate(-50%,-50%);
+
+}
