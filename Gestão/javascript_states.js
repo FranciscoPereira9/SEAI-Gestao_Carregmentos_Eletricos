@@ -4,6 +4,7 @@
       $('#state3').load('load_colors.php');
       $('#state4').load('load_colors.php');
       $('#state5').load('load_colors.php');
+      $('#state6').load('load_colors.php');
 
 
     refresh();
@@ -17,6 +18,7 @@
           $('#state3').load('load_colors.php');
           $('#state4').load('load_colors.php');
           $('#state5').load('load_colors.php');
+          $('#state6').load('load_colors.php');
         refresh();
       },2000);
 

@@ -1,7 +1,6 @@
 body {
 
   background: #90EE90;
-  display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
@@ -18,8 +17,9 @@ form{
   padding: 30px;
   background: #fff;
   border-radius: 15px;
-  margin-top: 120px;
-
+  margin-top: 40px;
+  margin-left: auto;
+  margin-right: auto;
 
 }
 
@@ -66,4 +66,7 @@ button:hover{
   width: 95%;
   border-radius: 5px;
   margin: 20px auto;
+}
+img{
+  width: 500px;
 }

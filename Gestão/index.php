@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="style.css">
   </head>
   <body>
+    <img src="logo_seai.png" alt="">
     <form action="login.php" method="post">
 <h2>LOGIN</h2>
 <?php if (isset($_GET['error'])) { ?>

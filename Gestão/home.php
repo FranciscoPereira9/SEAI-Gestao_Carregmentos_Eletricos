@@ -1,6 +1,6 @@
 <?php
 include "load_colors.php";
-session_start();
+
 if (isset($_SESSION['id']) && isset($_SESSION['username'])) {
 
 
@@ -58,14 +58,16 @@ if (isset($_SESSION['id']) && isset($_SESSION['username'])) {
           </div>
         </div>
         <img class="charger_img" src="charger.png" alt="">
-        <span>Charger<span id="chargerid1"></span></span>
+        <span class="info_charger">Charger<span id="chargerid1"></span></span>
         <a href="interruption.php?id=<?php echo $chargerid1; ?>"><i class="fas fa-toggle-off"></i></a>
       </div>
       <div class="info1">
         <p>Voltage Inst. = <span id="voltage_inst1"></span> </p>
         <p>Curr Inst. = <span id="current_inst1"></span></p>
         <p>Curr max = <span id="max_curr1"></span> </p>
-        <p>Charging id = <span id="charging_id1"></span> </p>
+        <p>Charging id =<span id="charging_id1"></span> </p>
+        <p>Charging type =<span id="charging_type1"></span></p>
+        <a href="data_charger.php?id=<?php echo $chargerid1; ?>">+ info</a>
       </div>
       <div class="charger2">
         <div id="state2">
@@ -74,7 +76,7 @@ if (isset($_SESSION['id']) && isset($_SESSION['username'])) {
           </div>
         </div>
         <img class="charger_img" src="charger.png" alt="">
-        <span>Charger<span id="chargerid2"></span></span>
+        <span class="info_charger">Charger<span id="chargerid2"></span></span>
         <a href="interruption.php?id=<?php echo $chargerid2; ?>"><i class="fas fa-toggle-off"></i></a>
       </div>
       <div class="info1">
@@ -82,6 +84,8 @@ if (isset($_SESSION['id']) && isset($_SESSION['username'])) {
         <p>Curr Inst. = <span id="current_inst2"></span></p>
         <p>Curr max = <span id="max_curr2"></span> </p>
         <p>Charging id = <span id="charging_id2"></span> </p>
+        <p>Charging type =<span id="charging_type2"></span></p>
+        <a href="data_charger.php?id=<?php echo $chargerid2; ?>">+ info</a>
       </div>
       <div class="charger3">
         <div id="state3">
@@ -90,7 +94,7 @@ if (isset($_SESSION['id']) && isset($_SESSION['username'])) {
           </div>
         </div>
         <img class="charger_img" src="charger.png" alt="">
-        <span>Charger<span id="chargerid3"></span></span>
+        <span class="info_charger">Charger<span id="chargerid3"></span></span>
         <a href="interruption.php?id=<?php echo $chargerid3; ?>"><i class="fas fa-toggle-off"></i></a>
       </div>
       <div class="info1">
@@ -98,6 +102,8 @@ if (isset($_SESSION['id']) && isset($_SESSION['username'])) {
         <p>Curr Inst. = <span id="current_inst3"></span></p>
         <p>Curr max = <span id="max_curr3"></span> </p>
         <p>Charging id = <span id="charging_id3"></span> </p>
+        <p>Charging type =<span id="charging_type3"></span></p>
+        <a href="data_charger.php?id=<?php echo $chargerid3; ?>">+ info</a>
       </div>
       <div class="charger4">
         <div id="state4">
@@ -106,7 +112,7 @@ if (isset($_SESSION['id']) && isset($_SESSION['username'])) {
           </div>
         </div>
         <img class="charger_img" src="charger.png" alt="">
-        <span>Charger<span id="chargerid4"></span></span>
+        <span class="info_charger">Charger<span id="chargerid4"></span></span>
         <a href="interruption.php?id=<?php echo $chargerid4; ?>"><i class="fas fa-toggle-off"></i></a>
       </div>
       <div class="info1">
@@ -114,6 +120,8 @@ if (isset($_SESSION['id']) && isset($_SESSION['username'])) {
         <p>Curr Inst. = <span id="current_inst4"></span></p>
         <p>Curr max = <span id="max_curr4"></span> </p>
         <p>Charging id = <span id="charging_id4"></span> </p>
+        <p>Charging type =<span id="charging_type4"></span></p>
+        <a href="data_charger.php?id=<?php echo $chargerid4; ?>">+ info</a>
       </div>
       <div class="charger5">
         <div id="state5">
@@ -122,7 +130,7 @@ if (isset($_SESSION['id']) && isset($_SESSION['username'])) {
           </div>
         </div>
         <img class="charger_img" src="charger.png" alt="">
-        <span>Charger<span id="chargerid5"></span></span>
+        <span class="info_charger">Charger<span id="chargerid5"></span></span>
         <a href="interruption.php?id=<?php echo $chargerid5; ?>"><i class="fas fa-toggle-off"></i></a>
       </div>
       <div class="info1">
@@ -130,6 +138,8 @@ if (isset($_SESSION['id']) && isset($_SESSION['username'])) {
         <p>Curr Inst. = <span id="current_inst5"></span></p>
         <p>Curr max = <span id="max_curr5"></span> </p>
         <p>Charging id = <span id="charging_id5"></span> </p>
+        <p>Charging type =<span id="charging_type5"></span></p>
+        <a href="data_charger.php?id=<?php echo $chargerid5; ?>">+ info</a>
       </div>
 
 
@@ -138,7 +148,24 @@ if (isset($_SESSION['id']) && isset($_SESSION['username'])) {
 
 
 <div class="line_2">
-PPPPPP
+  <div class="charger6">
+    <div id="state6">
+      <div class="value6">
+        <p></p>
+      </div>
+    </div>
+    <img class="charger_img" src="charger.png" alt="">
+    <span class="info_charger">Charger<span id="chargerid6"></span></span>
+    <a href="interruption.php?id=<?php echo $chargerid6; ?>"><i class="fas fa-toggle-off"></i></a>
+  </div>
+  <div class="info1_line2">
+    <p>Voltage Inst. = <span id="voltage_inst6"></span> </p>
+    <p>Curr Inst. = <span id="current_inst6"></span></p>
+    <p>Curr max = <span id="max_curr6"></span> </p>
+    <p>Charging id = <span id="charging_id6"></span> </p>
+    <p>Charging type =<span id="charging_type6"></span></p>
+    <a href="data_charger.php?id=<?php echo $chargerid6; ?>">+ info</a>
+  </div>
 </div>
 
 

@@ -66,7 +66,6 @@ img {
   border-radius: 15px;
   margin-top: 3%;
   height: 63%;
-
 }
 
 
@@ -107,7 +106,7 @@ ul a:hover{
 
 }
 
-.charger1, .charger2, .charger3,.charger4,.charger5{
+.charger1, .charger2, .charger3,.charger4,.charger5,.charger6{
   color: #90EE90;
   margin-top: 35px;
   margin-left: 27px;
@@ -115,7 +114,7 @@ ul a:hover{
 }
 .charger_img{
   color: #90EE90;
-  width: 70px;
+  width: 72px;
   margin-top: 35px;
   margin-left: 11px;
   margin-right: 15px;
@@ -125,12 +124,12 @@ ul a:hover{
 
 
 
-.charger1 ,.charger2, .charger3,.charger4,.charger5{
-  width: 6.5%;
+.charger1 ,.charger2, .charger3,.charger4,.charger5,.charger6{
+  color: #90EE90;
+  width: 6%;
   text-align: center;
   justify-content: center;
   height: 250px;
-
 }
 
 
@@ -157,10 +156,20 @@ span{
   margin-right: 15px;
   height: 180px;
   font-size: 9px;
-  width: 80px;
+  width: 100%;
   color: black;
-
 }
+.info1_line2{
+  background-color: #F5F5F5;
+  margin-top: 35px;
+  margin-left: 10px;
+  margin-right: 15px;
+  height: 180px;
+  font-size: 9px;
+  width: 8.5%;
+  color: black;
+}
+
 .fa-exclamation-triangle{
   color:red;
 }
@@ -170,8 +179,67 @@ span{
 
 .line_2{
   position: absolute;
-  top: 80%;
-  left: 50%;
+  top: 85%;
+  left: 57%;
   transform:translate(-50%,-50%);
+  width: 80%;
+  height: 350px;
+  display:flex;
 
+
+}
+.info_charger{
+  font-size: 17px;
+  margin-left: -3px;
+  margin-top: 3px;
+
+}
+.no{
+visibility: hidden;
+}
+.charts{
+  list-style:none;
+  margin-top: 50px;
+
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+    color: black;
+
+}
+.charts1:hover{
+  color: black;
+  background-color: #90EE90;
+}
+.charts1{
+  text-decoration: none;
+  color: black;
+  border: 3px solid #90EE90;
+  padding: 6px;
+    color: black;
+}
+.other_stuff1{
+  background-color: #fff;
+  border: 2px solid #ccc;
+  background: #fff;
+  border-radius: 15px;
+  margin-top: 3%;
+  height: 63%;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+}
+.lista_charts{
+  position: absolute;
+  top: 67%;
+  left: 6.2%;
+  transform:translate(-50%,-50%);
+}
+.charts1_active{
+  text-decoration: none;
+  color: black;
+  border: 3px solid #90EE90;
+  padding: 6px;
+    color: black;
+  background-color:#90EE90;
 }
