@@ -1,1 +1,29 @@
 Ficheiros desenvolvidos para a Base de Dados.
+
+
+///////////////////INDICE BIBLIOTECA///////////////
+connect(self) - faz conexão a base de dados, retorna um objeto
+específico da conexão do psycopg2 (biblioteca de python para
+postgreSQL)
+
+
+
+
+update_charger_measures(self, voltage, current, charger_id)
+-inputs: voltage - novo valor de tensão; current - novo valor de corrente; charger_id - carregador a atualizar.
+-descrição: atualiza campos dos valores de tensão e corrente nabase de dados para o carregador charger_id
+
+
+start_charging(self, charger_id, max_curr, charge_type)-
+inputs: charger_id - id carregador; max_curr - corrente máxima disponibilizada; charge_type - tipo carregamento, true se for carregamento rápido.
+descrição: insere novo carregamento na tabela charging (referente aos carregamentos que estão a acontecer), insere novo registo no histórico e atualiza estado do carregador no qual este será carregado
+
+
+stop_charging(self, charger_id, for) -
+inputs:charger_id - id carregador; fori - true se interrompido, false se finalizado
+descrição: dá sinal de fim de carregamento, dando hora e data final, indica que foi finalizado, recalcula potência média e atualiza carregador, indicando que está disponível
+
+
+new_measure(self, charger_id, current, voltage):
+inputs: charger_id - id carregador, current - corrente lida no carregador, voltage - tensão lida no carregador
+descrição: insere medição no histórico, recalcula potência média no carregamento e atualiza essa informação na tabela de carregamentos
