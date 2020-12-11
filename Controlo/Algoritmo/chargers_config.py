@@ -13,8 +13,8 @@ normalPow = 22
 #   "newConnection" : 0,    -> 1 New Car Connected, 0 
 #   "chargingMode" : 0,     -> 0 NormalCharging, 1 FastCharging, 2 NoCharging
 #   "voltageMode":  0,      -> 0 DC, 1 AC
-#   "instCurrent": 0,       -> Instantaneous Current
-#   "maxCurrent": 0,        -> Max Current Allowed
+#   "instPower": 0,       -> Instantaneous Power
+#   "maxPower": 0,        -> Max Power Allowed
 #   "voltage": 400          -> Applied Voltage = Constant
 # }
 
@@ -24,8 +24,8 @@ charger1 = {
   "newConnection" : 1,
   "chargingMode" : 1,
   "voltageMode":  0,
-  "instCurrent": 0,
-  "maxCurrent": 0,
+  "instPower": 0,
+  "maxPower": 0,
   "voltage": 400
 }
 
@@ -35,8 +35,8 @@ charger2 = {
   "newConnection" : 0,
   "chargingMode" : 1,
   "voltageMode":  0,
-  "instCurrent": 400,
-  "maxCurrent": 0,
+  "instPower": 400,
+  "maxPower": 0,
   "voltage": 400
 }
 
@@ -46,8 +46,8 @@ charger3 = {
   "newConnection" : 1,
   "chargingMode" : 0,
   "voltageMode":  0,
-  "instCurrent": 0,
-  "maxCurrent": 0,
+  "instPower": 0,
+  "maxPower": 0,
   "voltage": 400
 }
 
@@ -57,8 +57,8 @@ charger4 = {
   "newConnection" : 0,
   "chargingMode" : 0,
   "voltageMode":  0,
-  "instCurrent": 0,
-  "maxCurrent": 0,
+  "instPower": 0,
+  "maxPower": 0,
   "voltage": 400
 }
 
@@ -68,8 +68,8 @@ charger5 = {
   "newConnection" : 0,
   "chargingMode" : 0,
   "voltageMode":  0,
-  "instCurrent": 0,
-  "maxCurrent": 0,
+  "instPower": 0,
+  "maxPower": 0,
   "voltage": 400
 }
 
@@ -79,8 +79,8 @@ charger6 = {
   "newConnection" : 0,
   "chargingMode" : 0,
   "voltageMode":  0,
-  "instCurrent": 0,
-  "maxCurrent": 0,
+  "instPower": 0,
+  "maxPower": 0,
   "voltage": 400
 }
 
@@ -90,8 +90,8 @@ charger7 = {
   "newConnection" : 0,
   "chargingMode" : 0,
   "voltageMode":  0,
-  "instCurrent": 0,
-  "maxCurrent": 0,
+  "instPower": 0,
+  "maxPower": 0,
   "voltage": 400
 }
 
@@ -101,8 +101,8 @@ charger8 = {
   "newConnection" : 0,
   "chargingMode" : 0,
   "voltageMode":  0,
-  "instCurrent": 0,
-  "maxCurrent": 0,
+  "instPower": 0,
+  "maxPower": 0,
   "voltage": 400
 }
 
@@ -112,8 +112,8 @@ charger9 = {
   "newConnection" : 0,
   "chargingMode" : 0,
   "voltageMode":  0,
-  "instCurrent": 0,
-  "maxCurrent": 0,
+  "instPower": 0,
+  "maxPower": 0,
   "voltage": 400
 }
 
@@ -123,8 +123,8 @@ charger10 = {
   "newConnection" : 0,
   "chargingMode" : 0,
   "voltageMode":  0,
-  "instCurrent": 0,
-  "maxCurrent": 0,
+  "instPower": 0,
+  "maxPower": 0,
   "voltage": 400
 }
 
