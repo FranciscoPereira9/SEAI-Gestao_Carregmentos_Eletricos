@@ -1,6 +1,9 @@
 import json
 import socket
 import threading
+import sys
+sys.path.append('../Algoritmo')
+from Algoritmo import control as ctrl
 
 HEADER = 64
 PORT = 5050
@@ -62,10 +65,19 @@ def handle_msg(conn, msg):
     if json_data['module'] == 0:
         conn.send("És carregador".encode(FORMAT))
         # Como é que o sistema trata as mesnagens vindas do controlo
+        # update charger state
+        x = ctrl.run_control(json_data['module'], json_data['ID'], json_data['state_occupation'], json_data['new_connection'],
+                        json_data['charging_mode'],json_data['instant_power'], json_data['max_power'])
+        # enviar info para carregador
+        x = json.dumps(x)
+        conn.send(x.encode(FORMAT))
 
     elif json_data['module'] == 1:
         conn.send("És interface".encode(FORMAT))
         # Como é que o sistema trata as mesnagens vindas da interface
+        x = ctrl.run_control(json_data['module'], json_data['ID'], json_data['state_occupation'], json_data['new_connection'],
+                        json_data['charging_mode'], json_data['instant_power'], json_data['max_power'])
+
         if json_data['state'] == 0:
             print("[", json_data['ID'], "]", " Livre.")
         elif json_data['state'] == 1:
@@ -94,6 +106,7 @@ start_server()
 # 1 - Normal
 # 0 - Desligado
 # -1 - Interrupção
+
 
 # Message to get from Carregadores
 # charger = {
