@@ -1,6 +1,11 @@
 <?php
-session_start();
 include "db_conn.php";
+session_start();
+
+
+
+
+
 
 if (isset($_POST['uname']) && isset($_POST['password'])) {
   function validate($data){
@@ -22,20 +27,16 @@ if (empty($uname)) {
 
 
 
-$sql = "SELECT * FROM trabalho2.clientes WHERE username = '$uname' AND password = '$pass'";
+$sql = "SELECT * FROM seai.operator WHERE username = '$uname' AND password = '$pass'";
   $result = pg_query($conn, $sql);
   if (pg_num_rows($result)===1) {
     $row = pg_fetch_assoc($result);
     if ($row['username'] === $uname && $row['password'] === $pass) {
       $_SESSION['username'] = $row['username'];
-      $_SESSION['id'] = $row['id_cliente'];
+      $_SESSION['id'] = $row['id'];
 
-      if ($_SESSION['username']=="admin") {
-        header("Location: main.php");
-      }else {
-        header("Location: main.php");
-      }
 
+      header("Location: home.php");
       exit();
     } else {
       header("Location: index.php?error=Incorrect username or password");

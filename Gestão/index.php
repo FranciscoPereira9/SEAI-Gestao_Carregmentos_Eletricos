@@ -3,13 +3,10 @@
   <head>
     <meta charset="utf-8">
     <title>LOGIN</title>
-    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="style.css">
   </head>
   <body>
-    <div class="image">
-      <img src="portophones.png" alt="">
-      <span><b>PocketPhones</b></span>
-    </div>
+    <img src="logo_seai.png" alt="">
     <form action="login.php" method="post">
 <h2>LOGIN</h2>
 <?php if (isset($_GET['error'])) { ?>
@@ -20,11 +17,9 @@
 
 <label>Password</label>
 <input type="password" name="password" placeholder="Password">
+
+
 <button type="submit" name="button">Login</button>
-
-<p class="register">I don´t have an account, Register <a href="register.php">now</a></p>
-
-
   </form>
   </body>
 </html>
