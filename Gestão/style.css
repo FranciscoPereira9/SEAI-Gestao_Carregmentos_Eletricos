@@ -1,72 +1,84 @@
-body {
-
-  background: #90EE90;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
+body{
+   font-family: 'Prompt';font-size: 22px;
+   background-color: white;
 }
 
-*{
-  font-family: Century Gothic;
-  box-sizing: border-box;
+.grey_bar{
+  width: 110%;
+  height: 100px;
+  background-color: #E5E5E5;
+  margin-top: -1%;
+  display: flex;
+  margin-left: 100px;
 }
-
-form{
-  width: 500px;
-  border: 2px solid #ccc;
-  padding: 30px;
-  background: #fff;
-  border-radius: 15px;
-  margin-top: 40px;
-  margin-left: auto;
-  margin-right: auto;
-
-}
-
-h2{
-  text-align: center;
-  margin-bottom: 40px;
-}
-
-input{
-  display: block;
-  border: 2px solid #ccc;
-  width: 95%;
-  padding: 10px;
-  margin: 10px auto;
-  border-radius: 5px;
-}
-
-label{
-  color: #888;
-  font-size: 18px;
-  padding: 10px;
-}
-
-button{
-  float: center;
-  background: #555;
-  padding: 10px 15px;
-  color: #fff;
-  border-radius: 5px;
-  border: none;
-  margin-top: 12px;
-  margin-bottom: -5px;
-}
-
-button:hover{
-  opacity: .7;
-}
-
-
-.error{
-  background: #F2DEDE;
-  color: #A94442;
-  padding: 10px;
-  width: 95%;
-  border-radius: 5px;
-  margin: 20px auto;
+.logo{
+  width: 30%;
+  height: 100%;
+  margin-left: 55px;
 }
 img{
-  width: 500px;
+  width: 35%;
+  margin-left:100px;
+
+}
+.search{
+  width: 40%;
+  height: 100px;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  display: flex;
+}
+.search_bar{
+  width: 90%;
+  height: 35%;
+  margin-top: 15px;
+  border-radius: 1px transparent;
+  overflow: hidden;
+}
+input{
+  border-radius: 10px;
+}
+.lupa{
+  margin-top: 10px;
+  height: 80px;
+}
+i{
+  margin-top: 35px;
+  margin-left: 5px;
+}
+.carro_compras{
+  margin-left: 160px;
+  margin-right: 10px;
+  margin-top: 7px;
+  font-size: 30px;
+}
+.user{
+  margin-left: 15px;
+  margin-right: 10px;
+  margin-top: 7px;
+  font-size: 30px;
+}
+.marca{
+  position: absolute;
+top: 4%;
+left: 21.3%;
+transform:translate(-50%,-50%);
+}
+.white_bar{
+  width: 110%;
+  height: 130px;
+  display: inline-block;
+  font-size: 15px;
+  text-align: left;
+}
+ul{
+  margin-left: 100px;
+}
+.white_bar li{
+  float: none;
+  display: inline-block;
+  padding: 10px;
+  margin-left: 35px;
+margin-top: 10px;
 }
