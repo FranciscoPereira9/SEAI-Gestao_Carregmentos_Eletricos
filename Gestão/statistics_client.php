@@ -2,6 +2,7 @@
 include "load_colors.php";
 include "db_conn.php";
 
+
 if (isset($_SESSION['id']) && isset($_SESSION['username'])) {
 
   $sql = "SELECT * FROM seai.charging ORDER BY charger_id";
@@ -69,9 +70,9 @@ $normal=0;
     <div class="other_stuff1">
 
           <ul class="lista_charts">
-            <li class="charts"><a class="charts1_active" href="statistics.php">General</a></li>
+            <li class="charts"><a class="charts1" href="statistics.php">General</a></li>
             <li class="charts"><a class="charts1" href="statistics_ind.php">Individual</a></li>
-            <li class="charts"><a class="charts1" href="statistics_client.php">Client</a></li>
+            <li class="charts"><a class="charts1_active"class="charts1" href="statistics_client.php">Client</a></li>
           </ul>  <a class="no" href="interruption_all.php"><i class="fas fa-exclamation-triangle"></i><span class="warning">Force all chargers to turn off</span> </a>
 
 
@@ -80,19 +81,55 @@ $normal=0;
 
   </div>
   <div class="nothing">
-
   </div>
-  <div class="chargers">
-    <div class="line1_charts">
-      <div class="chart1">
-          <h4>Avg Power Per Charger</h4>
-            <div id="chart"></div>
-      </div>
-      <div class="chart2">
-        <h4>Type of charge count</h4>
-          <div id="fast_normal"></div>
-      </div>
+  <div class="chargers_client">
+    <div class="tabela">
+      <table>
+        <tr>
+          <th>Name</th>
+          <th>E-mail</th>
+          <th>User Type</th>
+          <th>Total Charging time</th>
+          <th>Average charging time</th>
+          </tr>
+          <?php
+             $sql = "SELECT * FROM seai.user";
+             $result = pg_query($conn, $sql);
+                if (pg_num_rows($result)>0) {
+                  while ($row = pg_fetch_assoc($result)) {
+                      $user_id = $row['id'];
+                       $sql1 = "SELECT * FROM seai.charging WHERE	user_id = '$user_id'";
+                       $result1 = pg_query($conn, $sql1);
+                       $all = 0;
+                       if (pg_num_rows($result1)>0) {
+                         while ($row1 = pg_fetch_assoc($result1)) {
+                            $starting_time = $row1['starting_time'];
+                            $datetime2=0;
+                              // VER ISTO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                            $all =  $all +  $datetime2;
+                            $datetime2 = strtotime($all);
+                            $data_min = $datetime2 / 60;
+                            $formattedmin = number_format($data_min);
+                            $data_seg = $datetime2 - ($formattedmin*60);
+                            $data_fin = "$formattedmin"." min and "."$data_seg"." sec";
+                            }
+                         }
+
+                      echo "<tr><td>". $row['name'] ."</td><td>" .$row['email'] ."</td><td>" .$row['user_type']
+                      ."</td><td>". $data_fin ."</td><td>" . $row['email'] ."</td></tr>";
+                            }
+                           }
+                          ?>
+      </table>
     </div>
+
+
+<div class="top">
+  <h4>Top 3 clients</h4>
+
+</div>
+
+
 
 
       </div>
@@ -112,21 +149,7 @@ $normal=0;
   </body>
 </html>
 <script>
-  Morris.Bar({
-    element : 'chart',
-    data:[<?php echo $chart_data ?>],
-    xkey: 'charger_id',
-    ykeys: ['avg_power'],
-    labels: ['avg_power'],
-  });
 
-  Morris.Donut({
-    element : 'fast_normal',
-    data: [
-      { label: "Nr. Fast Charging", value: <?php echo $fast; ?>},
-      { label: "Nr. Normal Charging", value: <?php echo $normal; ?>}
-    ]
-  });
 </script>
 <?php
 }else {
