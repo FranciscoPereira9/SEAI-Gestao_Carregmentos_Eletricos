@@ -3,7 +3,6 @@
 
 # TODO
 # - Interrupcao pela Manutencao
-# - Atualização do dict dos carregadores
 # - Atualização da DB
 
 import time
