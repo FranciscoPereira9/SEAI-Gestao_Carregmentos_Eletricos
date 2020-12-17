@@ -1,11 +1,11 @@
 # Config File - for chargers and currents
 # Unit Tested
 
-# Minimum Power 4 Fast Charging - in kW
-fastACPow = 43
-fastDCPow = 50
-# Maximum Power 4 Normal Charging - in kW
-normalPow = 22
+# Minimum Power 4 Fast Charging - in Watts
+fastACPow = 43 * 1000
+fastDCPow = 50 * 1000
+# Maximum Power 4 Normal Charging - in Watts
+normalPow = 22 * 1000
 
 # charger = {
 #   "chargerID" : 202001,   -> Year + Order
