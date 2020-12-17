@@ -11,10 +11,10 @@ import chargers_config
 
 # Load Chargers Configs from chargers_config
 chargers = chargers_config.chargersSet
-# Load Charging Configs - in Watts
-fastACPow = chargers_config.fastACPow * 1000
-fastDCPow = chargers_config.fastDCPow * 1000
-normalMaxPow = chargers_config.normalPow * 1000
+# Load Charging Configs - in Kw
+fastACPow = chargers_config.fastACPow
+fastDCPow = chargers_config.fastDCPow
+normalMaxPow = chargers_config.normalPow
 
 # Constants
 INSTALLED_POWER = len(chargers) * normalMaxPow
@@ -27,13 +27,13 @@ greenChargAvail = 1 # 1 - Available ; 0 - Not Available
 
 
 # Individual Functions
-def run_control(module, ID, state_occupation, new_connection, charging_mode, instant_power, max_power):
+def run_control(module, ID, state_occupation, new_connection, charging_mode, voltage_mode, instant_power, max_power):
     # Update Flags
     updateFastChargAvail()
     updateGreenChargAvail()
     
     # Atualiza o dicionario
-    updateChargersState(module, ID, state_occupation, new_connection, charging_mode, instant_power, max_power)
+    updateChargersState(module, ID, state_occupation, new_connection, charging_mode, voltage_mode, instant_power, max_power)
     
     # Atualiza as Correntes
     updateMaxPowers()
@@ -45,40 +45,43 @@ def run_control(module, ID, state_occupation, new_connection, charging_mode, ins
     return chargers.get(chargerKey)
     
 
-def updateChargersState(module, ID, state_occupation, new_connection, charging_mode, instant_power, max_power):
+def updateChargersState(module, ID, state_occupation, new_connection, charging_mode, voltage_mode, instant_power, max_power):
     # module: stub -> Carregador, interface, management -> Gestao 
-    
     # Comunica com os carregadores, atualiza o estado
     # Atualiza o dicionario Chargers
+    
     chargerKey = dictionaryKeyFromID(ID)
     
     # PROVENIENTE DO CARREGADOR
-    #Se newConnection = 1:
+    # Se newConnection = 1:
     #    - maxPower = 0 -> Current maxima nula
     #    - chargingMode = 2 -> Sem tipo de carregamento atribuido
     if(module == "stub"):
-        # chargers.get(chargerKey).update({"stateOcupation": state_occupation})
         chargers.get(chargerKey).update({"newConnection": new_connection})
+        chargers.get(chargerKey).update({"voltageMode": voltageMode})
         chargers.get(chargerKey).update({"instantPower": instant_power})
     
-    #Se newConnection = -1:
-    #    - O veiculo desligou-se, reset as variaveis
     
-    
+    # PROVENIENTE DA GESTAO
     if(module == "management"):
         # Para
-    
-    
-    # Comunica com a interface/db e atualiza o tipo de carregamento    
+        print("Teste")
+     
     
     # PROVENIENTE DA INTERFACE
     # ChargingMode:
     #    - 0 ou 1 -> Calcula Corrente
     #    - 2 -> Parou o carregamento - Reset as Variaveis
     if(module == "interface"):
-        # chargers.get(chargerKey).update({"stateOcupation": state_occupation})
+        # Interface atualiza o modo de carregamento
         chargers.get(chargerKey).update({"chargingMode": charging_mode})
-        chargers.get(chargerKey).update({"instantPower": instant_power})
+        
+        if (charging_mode == 2):
+            # reset as variaveis do carregador
+            resetCharger(chargerKey);
+            # EM FALTA: manda o carregador desligar
+            # EM FALTA: manda o carregador desligar
+            # EM FALTA: manda o carregador desligar
         
     
     print("Hello from a function")
@@ -92,13 +95,12 @@ def updateMaxPowers():
     for key, dict in chargers.items():
         # Se a corrente instantanea e menor que a maxima
         if ( (chargers.get(key).get("instPower") < chargers.get(key).get("maxPower")) \
-        and (chargers.get(key).get("newConnection") == 0) \
-        and (chargers.get(key).get("stateOcupation") == 1) ):
+        and (chargers.get(key).get("newConnection") == 0) and (chargers.get(key).get("stateOcupation") == 1) ):
             # Atualizacao o novo valor da corrente maxima
             chargers.get(key).update({"maxPower": chargers.get(key).get("instPower")})
         
         # Calcula o total consumido
-        totalPower = totalPower + chargers.get(key).get("instPower") * chargers.get(key).get("voltage")
+        totalPower = totalPower + chargers.get(key).get("instPower")
     
     
     availablePower = INSTALLED_POWER - totalPower
@@ -115,7 +117,8 @@ def updateMaxPowers():
                        / ( chargersCount[3] + newChargersCount[3] )
     """       
     
-    if ( (chargersCount[3] + newChargersCount[3] ) > 0 ):
+    # if ( (chargersCount[3] + newChargersCount[3] ) > 0 ):
+    if ( newChargersCount[3] > 0 ):
         normalPower = (availablePower - (newChargersCount[1]) * fastDCPow  \
                        - (newChargersCount[2]) * fastACPow ) \
                        / (newChargersCount[3] )
@@ -124,19 +127,19 @@ def updateMaxPowers():
     if ( normalPower > normalMaxPow ):
         normalPower = normalMaxPow
     
+    """
     print("Power:")   
     print(availablePower)       
     print(INSTALLED_POWER)   
     print(totalPower)   
     print(normalPower)
-  
+    """
     
     # PARA VEICULOS NOVOS LIGADOS:
     # Atribui potencia maxima aos rapidos e distribui pelos restantes
     for key, dict in chargers.items():
         # Atribui corrente maxima aos carregadores rapidos
-        if ( (chargers.get(key).get("newConnection") == 1) and \
-        (chargers.get(key).get("chargingMode") == 1) ):
+        if ( (chargers.get(key).get("newConnection") == 1) and (chargers.get(key).get("chargingMode") == 1) ):
             # Atualizacao da nova corrente maxima DC
             if ( chargers.get(key).get("voltageMode") == 0 ):
                 chargers.get(key).update({"maxPower": fastDCPow })
@@ -155,8 +158,7 @@ def updateMaxPowers():
             
         
         # Atribui corrente maxima possivel aos carregadores normais
-        elif ( (chargers.get(key).get("newConnection") == 1) and \
-        (chargers.get(key).get("chargingMode") == 0) ):
+        elif ( (chargers.get(key).get("newConnection") == 1) and (chargers.get(key).get("chargingMode") == 0) ):
             # Atualizacao da nova corrente maxima
             chargers.get(key).update({"maxPower": normalPower })
             # Atualizacao de "novo carregamento"
@@ -196,6 +198,15 @@ def updateGreenChargAvail():
         greenChargAvail = 1
   
   
+def resetCharger(chargerKey):
+  # Resets Charger Variables When is turned Off
+  chargers.get(chargerKey).update({"stateOcupation": 0})
+  chargers.get(chargerKey).update({"newConnection": 0})
+  chargers.get(chargerKey).update({"chargingMode": 2})
+  chargers.get(chargerKey).update({"instPower": 0})
+  chargers.get(chargerKey).update({"maxPower": 0})
+  
+
 def dictionaryKeyFromID(ID):
     # Retorna a key ("charger1") do dicionario a partir do ID
     for key, dict in chargers.items():
@@ -264,11 +275,10 @@ def main():
     print(chargers.get("charger1").get("maxPower"))    
     print(chargers.get("charger1").get("newConnection"))
     print("\n")
-    updatemaxPowers()
+    updateMaxPowers()
     print("\n")
     print(chargers.get("charger1").get("maxPower")) 
     print(chargers.get("charger1").get("newConnection"))
-    
     
     # SEQUENCE:
     
@@ -277,16 +287,10 @@ def main():
     
     # updateChargersState() - FROM CHARGERS TO DICT
     
-    # updatemaxPowers()
+    # updateMaxPowers()
     
     # sendInfoToChargers() - From Control to Chargers
     # updateDB: chargersState + Flags
-    
-    # Reset : chargers.get(key).update({"newConnection": 0 })
-    # Que é para a Interface saber qual veiculo acabou de se ligar
-    #       Faço isto em cima, mas tenho de mudar
 
 if __name__ == '__main__':
     main()
-
-
