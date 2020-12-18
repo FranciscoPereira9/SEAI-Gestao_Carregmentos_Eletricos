@@ -66,6 +66,9 @@ img {
   border-radius: 15px;
   margin-top: 3%;
   height: 63%;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 
 
@@ -100,16 +103,19 @@ ul a:hover{
   border: 2px solid #ccc;
   background: #fff;
   border-radius: 15px;
-  display:flex;
-
-
-
+  display: flex;
 }
 
-.charger1, .charger2, .charger3,.charger4,.charger5,.charger6{
+.charger1, .charger2, .charger3,.charger4{
   color: #90EE90;
   margin-top: 35px;
   margin-left: 27px;
+  margin-right: 15px;
+}
+.charger5,.charger6,.charger7,.charger8,.charger9,.charger10{
+  color: #90EE90;
+  margin-top: 35px;
+  margin-left: 24px;
   margin-right: 15px;
 }
 .charger_img{
@@ -124,9 +130,9 @@ ul a:hover{
 
 
 
-.charger1 ,.charger2, .charger3,.charger4,.charger5,.charger6{
+.charger1 ,.charger2, .charger3,.charger4,.charger5,.charger6,.charger7,.charger8,.charger9,.charger10{
   color: #90EE90;
-  width: 6%;
+  width: 5.8%;
   text-align: center;
   justify-content: center;
   height: 250px;
@@ -140,6 +146,9 @@ ul a:hover{
 
 .db{
   color: transparent;
+}
+.turn_off{
+  width: 60px;
 }
 
 span{
@@ -159,6 +168,16 @@ span{
   width: 100%;
   color: black;
 }
+.info1_{
+  background-color: #F5F5F5;
+  margin-top: 35px;
+  margin-left: 13px;
+  margin-right: 15px;
+  height: 180px;
+  font-size: 9px;
+  width: 100%;
+  color: black;
+}
 .info1_line2{
   background-color: #F5F5F5;
   margin-top: 35px;
@@ -169,6 +188,17 @@ span{
   width: 8.5%;
   color: black;
 }
+.info1_line2_{
+  background-color: #F5F5F5;
+  margin-top: 35px;
+  margin-left: 15px;
+  margin-right: 15px;
+  height: 180px;
+  font-size: 9px;
+  width: 8.5%;
+  color: black;
+}
+
 
 .fa-exclamation-triangle{
   color:red;
@@ -180,14 +210,13 @@ span{
 .line_2{
   position: absolute;
   top: 85%;
-  left: 57%;
+  left: 58.5%;
   transform:translate(-50%,-50%);
-  width: 80%;
+  width: 83%;
   height: 350px;
   display:flex;
-
-
 }
+
 .info_charger{
   font-size: 17px;
   margin-left: -3px;
@@ -204,7 +233,7 @@ visibility: hidden;
   text-align: center;
   justify-content: center;
   align-items: center;
-    color: black;
+  color: black;
 
 }
 .charts1:hover{
@@ -243,3 +272,152 @@ visibility: hidden;
     color: black;
   background-color:#90EE90;
 }
+.chart1{
+  width: 45%;
+  position: absolute;
+  top: 55%;
+  left: 40%;
+  transform:translate(-50%,-50%);
+}
+.chart2{
+  width: 15%;
+  position: absolute;
+  top: 55%;
+  right: 1%;
+  transform:translate(-50%,-50%);
+
+
+}
+.line1_charts{
+  width: 100%;
+  height: 50%;
+  display: flex;
+  text-align: center;
+  align-items: center;
+}
+h4{
+  margin-bottom: -10px;
+}
+.selector{
+  height: 30px;
+  width: 200px;
+  padding: 5px;
+  margin-left: 5px;
+  margin-bottom: 30px;
+
+}
+.chargers_chart{
+  width: 83%;
+  background-color: #fff;
+  height: 100%;
+  border: 2px solid #ccc;
+  background: #fff;
+  border-radius: 15px;
+}
+.wrapper1{
+  position: fixed;
+  max-height: 250px;
+}
+.title{
+  margin-left: 150px;
+}
+.avg{
+  position: absolute;
+  top: 58.5%;
+  right: 5%;
+  transform:translate(-50%,-50%);
+width: 300px;
+height: 550px;
+text-align: center;
+align-items: center;
+justify-content: center;
+}
+.avg_info{
+  margin-top: 45px;
+}
+.avg_info_detailed{
+  margin-top: 30px;
+}
+.chargers_client{
+  width: 83%;
+  background-color: #fff;
+  height: 100%;
+  border: 2px solid #ccc;
+  background: #fff;
+  border-radius: 15px;
+}
+.tabela{
+  display: inline-block;
+  overflow-y: scroll;
+  max-height:700px;
+  padding: 15px;
+  margin-left: 150px;
+  margin-top: 10px;
+
+
+}
+table{
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  margin: auto;
+  padding: 30px;
+  margin-top: 14px;
+
+}
+.emergency_table{
+  width: 80%;
+  height: 300px;
+  margin-top: 50px;
+}
+th{
+  background-color: #90EE90;
+  border-radius: 3px;
+  border: 1px solid transparent;
+}
+tr:nth-child(even) {
+  background-color: #ccc;
+}
+.top{
+  width: 100%;
+  background-color: blue;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  margin-top: 70px;
+}
+.emergency{
+  width: 100%;
+  height: 200px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-top: 40px;
+}
+
+
+.emergency2{
+    -webkit-animation: blink 1700ms infinite alternate;
+    -moz-animation: blink 1000ms infinite alternate;
+    -o-animation: blink 1700ms infinite alternate;
+    animation: blink 1000ms infinite alternate;
+    margin-top: 30px;
+    border-radius: 2px;
+}
+@-webkit-keyframes blink {
+	from { opacity:1; }
+	to { opacity:0; }
+}
+@-o-keyframes blink {
+	from { opacity:1; }
+	to { opacity:0; }
+}
+@-moz-keyframes blink {
+	from { opacity:1; }
+	to { opacity:0; }
+}
+@keyframes blink {
+	from { opacity:1; }
+	to { opacity:0; }
+};

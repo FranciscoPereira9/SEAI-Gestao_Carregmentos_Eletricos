@@ -47,7 +47,11 @@ if (isset($_SESSION['id']) && isset($_SESSION['username'])) {
     $id_init=$_GET['id']
     ?>
 
-    <p class="id_charger"><?php echo $id_init[strlen($id_init)-1]; ?></p>
+    <p class="id_charger"><?php if ($id_init=="202010") {
+      $id_init=10; echo $id_init;
+    } else {
+      $id_init = $id_init[strlen($id_init)-1];echo $id_init;
+    } ?></p>
     <p><a class="view_all" href="home.php">View all chargers</a></p>
     </div>
 

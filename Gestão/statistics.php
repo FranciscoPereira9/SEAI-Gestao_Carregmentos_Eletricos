@@ -63,14 +63,15 @@ $normal=0;
       <ul>
         <a href="home.php"><li>Home</li></a>
         <a href="statistics.php"><li class="active">Statistics</li></a>
+        <a href="alerts.php"><li>Alerts</li></a>
       </ul>
     </div>
     <div class="other_stuff1">
 
           <ul class="lista_charts">
             <li class="charts"><a class="charts1_active" href="statistics.php">General</a></li>
-            <li class="charts"><a class="charts1" href="statistics.php">Individual</a></li>
-            <li class="charts"><a class="charts1" href="statistics.php">Client</a></li>
+            <li class="charts"><a class="charts1" href="statistics_ind.php">Individual</a></li>
+            <li class="charts"><a class="charts1" href="statistics_client.php">Client</a></li>
           </ul>  <a class="no" href="interruption_all.php"><i class="fas fa-exclamation-triangle"></i><span class="warning">Force all chargers to turn off</span> </a>
 
 
@@ -82,13 +83,18 @@ $normal=0;
 
   </div>
   <div class="chargers">
-    <div id="chart"></div>
-    <div id="fast_normal"></div>
+    <div class="line1_charts">
+      <div class="chart1">
+          <h4>Avg Power Per Charger</h4>
+            <div id="chart"></div>
+      </div>
+      <div class="chart2">
+        <h4>Type of charge count</h4>
+          <div id="fast_normal"></div>
+      </div>
+    </div>
 
-<div class="">
 
-  <?php echo $normal; ?>
-</div>
       </div>
 
 
