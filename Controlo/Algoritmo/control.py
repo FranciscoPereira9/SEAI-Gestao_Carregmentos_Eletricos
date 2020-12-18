@@ -6,7 +6,7 @@
 # - Atualização da DB
 
 import time
-import chargers_config
+from Algoritmo import chargers_config
 
 # Load Chargers Configs from chargers_config
 chargers = chargers_config.chargersSet
@@ -26,39 +26,38 @@ greenChargAvail = 1 # 1 - Available ; 0 - Not Available
 
 
 # Individual Functions
-def run_control(module, ID, state_occupation, new_connection, charging_mode, voltage_mode, instant_power, max_power):
+def run_control(module, ID, state_occupation, new_connection, charging_mode, voltage_mode, inst_power, max_power):
     # Update Flags
     updateFastChargAvail()
     updateGreenChargAvail()
-    
     # Atualiza o dicionario
-    updateChargersState(module, ID, state_occupation, new_connection, charging_mode, voltage_mode, instant_power, max_power)
+    updateChargersState(module, ID, state_occupation, new_connection, charging_mode, voltage_mode, inst_power, max_power)
     
     # Atualiza as Correntes
     updateMaxPowers()
     
     # update database
-    updateDB()
+    #updateDB()
                 
     chargerKey = dictionaryKeyFromID(ID)
+    print(chargers.get(chargerKey))
     return chargers.get(chargerKey)
     
 
-def updateChargersState(module, ID, state_occupation, new_connection, charging_mode, voltage_mode, instant_power, max_power):
+def updateChargersState(module, ID, state_occupation, new_connection, charging_mode, voltage_mode, inst_power, max_power):
     # module: stub -> Carregador, interface, management -> Gestao 
     # Comunica com os carregadores, atualiza o estado
     # Atualiza o dicionario Chargers
-    
     chargerKey = dictionaryKeyFromID(ID)
     
     # PROVENIENTE DO CARREGADOR
     # Se newConnection = 1:
     #    - maxPower = 0 -> Current maxima nula
     #    - chargingMode = 2 -> Sem tipo de carregamento atribuido
-    if(module == "stub"):
+    if(module == 'stub'):
         chargers.get(chargerKey).update({"newConnection": new_connection})
-        chargers.get(chargerKey).update({"voltageMode": voltageMode})
-        chargers.get(chargerKey).update({"instantPower": instant_power})
+        chargers.get(chargerKey).update({"voltageMode": voltage_mode})
+        chargers.get(chargerKey).update({"instPower": inst_power})
     
     
     # PROVENIENTE DA GESTAO
@@ -77,13 +76,13 @@ def updateChargersState(module, ID, state_occupation, new_connection, charging_m
         
         if (charging_mode == 2):
             # reset as variaveis do carregador
-            resetCharger(chargerKey);
+            resetCharger(chargerKey)
             # EM FALTA: manda o carregador desligar
             # EM FALTA: manda o carregador desligar
             # EM FALTA: manda o carregador desligar
         
     
-    print("Hello from a function")
+    #print("Hello from a function")
 
 
 def updateMaxPowers():
@@ -255,41 +254,3 @@ def countNewChargers():
                 
     return countNewActive, countNewFastDC, countNewFastAC, countNewNormal
 
-
-def main():
-
-    print("python main function")
-    
-    x = countChargers();
-    
-    """
-    print("\n")
-    print(fastChargAvail)
-    print("\n")
-    updateFastChargAvail()
-    print(fastChargAvail)
-    print("\n")
-    """
-    
-    print(chargers.get("charger1").get("maxPower"))    
-    print(chargers.get("charger1").get("newConnection"))
-    print("\n")
-    updateMaxPowers()
-    print("\n")
-    print(chargers.get("charger1").get("maxPower")) 
-    print(chargers.get("charger1").get("newConnection"))
-    
-    # SEQUENCE:
-    
-    # updateFastChargAvail()
-    # updateGreenChargAvail()
-    
-    # updateChargersState() - FROM CHARGERS TO DICT
-    
-    # updateMaxPowers()
-    
-    # sendInfoToChargers() - From Control to Chargers
-    # updateDB: chargersState + Flags
-
-if __name__ == '__main__':
-    main()

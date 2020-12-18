@@ -3,29 +3,24 @@ import socket
 
 HEADER = 64
 PORT = 5050
-SERVER = "192.168.192.7"
+SERVER = "10.227.158.183"
 ADDR = (SERVER, PORT)
 FORMAT = 'utf-8'
 DISCONNECT_MESSAGE = "!DISCONNECT"
 
 # Define message to send
-'''
+
 charger_string = {
-    "chargers": [
-        {
-            "module": 0
-            "ID": "202010",
-            "state_occupation": true,
-            "new_connection": true,
-            "charging_mode": true,
-            "voltage_mode": false,
-            "instant_current": 120,
-            "max_current": 200,
-            "voltage": 230
-        }
-    ]
+        "module": 'stub',
+        "chargerID" : 202001,
+        "stateOcupation" : 1,
+        "newConnection" : 0,
+        "chargingMode" : 1,
+        "voltageMode":  0,
+        "instPower": 120,
+        "maxPower": 200,
+        "voltage": 400
 }
-'''
 
 
 # Function to encode and send messages to the server
@@ -39,10 +34,7 @@ def send_msg(msg):
     client.send(encoded_header)
     client.send(encoded_msg)
 
-
-# end of function send_msg ----------------------------------
-
-
+''' 
 class Charger:
 
     def __init__(self, ID, charging_mode, voltage_mode, max_current, voltage, state_occupation, new_connection,
@@ -56,7 +48,7 @@ class Charger:
         self.state_occupation = state_occupation
         self.new_connection = new_connection
         self.instant_current = instant_current
-
+'''
 
 # Criar socket
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # AF_INET - IPV4 and SOCK_STREAM has by default TCP
@@ -64,13 +56,21 @@ client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # AF_INET - IPV4 and
 # Connect to server in the same port
 client.connect(ADDR)
 
-ch202010 = Charger("202010", True, False, 200, 230, True, True, 120)
+#ch202010 = Charger("202010", True, False, 200, 230, True, True, 120)
 
 # Send a message to the SERVER
-jdata = json.dumps(ch202010.__dict__)
+jdata = json.dumps(charger_string)  # serializes obj to a string
 # Send message to Controlo
+#print(jdata)
 send_msg(jdata)
-print(client.recv(2048).decode(FORMAT))
+
+msg_length = client.recv(HEADER).decode(FORMAT)
+if msg_length:  # Verifify that it is not null
+    # Decode the message
+    msg_length = int(msg_length)
+    msg = client.recv(msg_length).decode(FORMAT)
+    print(msg)
+
 send_msg(DISCONNECT_MESSAGE)
 
 # "chargerID" : 202001, -> Year + Order

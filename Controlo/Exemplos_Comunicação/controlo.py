@@ -1,8 +1,11 @@
 import json
 import socket
 import threading
+import os
 import sys
-sys.path.append('../Algoritmo')
+cd = os.path.dirname(os.path.realpath(__file__))
+pd = os.path.dirname(cd)
+sys.path.append(pd)
 from Algoritmo import control as ctrl
 
 HEADER = 64
@@ -22,7 +25,7 @@ s.bind(ADDR)
 # Function to establish new connections
 def start_server():
     # Listen
-    s.listen(15)  # Queue of 10 connections
+    s.listen(15)  # Queue of 15 connections
     print(f"[LISTENNING] On: {SERVER}")
 
     while True:
@@ -60,23 +63,26 @@ def handle_client(conn, addr):
 # Function to handle messages
 def handle_msg(conn, msg):
     json_data = json.loads(msg)  # Load msg as json - dictionary
-    print(json_data)
 
-    if json_data['module'] == 0:
-        conn.send("És carregador".encode(FORMAT))
+    # print(json_data)
+
+    if json_data['module'] == 'stub':
         # Como é que o sistema trata as mesnagens vindas do controlo
         # update charger state
-        x = ctrl.run_control(json_data['module'], json_data['ID'], json_data['state_occupation'], json_data['new_connection'],
-                        json_data['charging_mode'],json_data['instant_power'], json_data['max_power'])
+        x = ctrl.run_control(json_data['module'], json_data['chargerID'], json_data['stateOcupation'], json_data['newConnection'],
+                        json_data['chargingMode'], json_data['voltageMode'], json_data['instPower'], json_data['maxPower'])
         # enviar info para carregador
-        x = json.dumps(x)
-        conn.send(x.encode(FORMAT))
+        # x = json.dumps(x)
+        send_msg(conn, x)
 
-    elif json_data['module'] == 1:
+    elif json_data['module'] == 'interface':
         conn.send("És interface".encode(FORMAT))
         # Como é que o sistema trata as mesnagens vindas da interface
-        x = ctrl.run_control(json_data['module'], json_data['ID'], json_data['state_occupation'], json_data['new_connection'],
-                        json_data['charging_mode'], json_data['instant_power'], json_data['max_power'])
+
+        x = ctrl.run_control(json_data['module'], json_data['chargerID'], json_data['state_occupation'],
+                             json_data['newConnection'],
+                             json_data['chargingMode'], json_data['voltageMode'], json_data['instPower'],
+                             json_data['maxPower'])
 
         if json_data['state'] == 0:
             print("[", json_data['ID'], "]", " Livre.")
@@ -87,14 +93,27 @@ def handle_msg(conn, msg):
         elif json_data['state'] == -1:
             print("[", json_data['ID'], "]", " Interrupção.")
 
-    elif json_data['module'] == 2:
+    elif json_data['module'] == 'management':
         conn.send("És gestão".encode(FORMAT))
         # Como é que o sistema trata as mensagens vindas da gestão
         if json_data['state'] == -1:
             print("Interrupção.")
         else:
-            print("Funcionameno Normal.")
+            print("Funcionamento Normal.")
 
+
+
+def send_msg(conn, msg):
+    # Encode msg and header
+    print('X = ', msg)
+    msg = json.dumps(msg)
+    encoded_msg = msg.encode(FORMAT)
+    msg_length = len(encoded_msg)
+    encoded_header = str(msg_length).encode(FORMAT)
+    encoded_header += b' ' * (HEADER - len(encoded_header))
+    # Send msgs to server
+    conn.send(encoded_header)
+    conn.send(encoded_msg)
 
 print("Server is starting .....")
 start_server()

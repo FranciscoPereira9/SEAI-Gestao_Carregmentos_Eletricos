@@ -20,12 +20,12 @@ normalPow = 22 * 1000
 
 charger1 = {
   "chargerID" : 202001,
-  "stateOcupation" : 0,
-  "newConnection" : 1,
+  "stateOcupation" : 1,
+  "newConnection" : 0,
   "chargingMode" : 1,
   "voltageMode":  0,
-  "instPower": 0,
-  "maxPower": 0,
+  "instPower": 120,
+  "maxPower": 200,
   "voltage": 400
 }
 
@@ -107,7 +107,7 @@ charger8 = {
 }
 
 charger9 = {
-  "chargerID" : 202008,
+  "chargerID" : 202009,
   "stateOcupation" : 0,
   "newConnection" : 0,
   "chargingMode" : 0,
