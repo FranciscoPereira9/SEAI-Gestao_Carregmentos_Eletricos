@@ -7,6 +7,7 @@ fastDCPow = 50 * 1000
 # Maximum Power 4 Normal Charging - in Watts
 normalPow = 22 * 1000
 
+# CHARGER DEFINITION
 # charger = {
 #   "chargerID" : 202001,   -> Year + Order
 #   "stateOcupation" : 0,   -> 0 Free, 1 Occupied
@@ -18,24 +19,60 @@ normalPow = 22 * 1000
 #   "voltage": 400          -> Applied Voltage = Constant
 # }
 
+# STATE NOT CONNECTED
+# charger = {
+#   "chargerID" : X,        -> Year + Order
+#   "stateOcupation" : 0,   -> 0 Free, 1 Occupied
+#   "newConnection" : 0,    -> 1 New Car Connected, 0 
+#   "chargingMode" : 2,     -> 2 NoCharging
+#   "voltageMode":  0,      -> 0 DC, 1 AC
+#   "instPower": 0,       -> Instantaneous Power
+#   "maxPower": 0,        -> Max Power Allowed
+#   "voltage": 400          -> Applied Voltage = Constant
+# }
+
+# STATE NEW CONECTION
+# charger = {
+#   "chargerID" : X,        -> Year + Order
+#   "stateOcupation" : 0,   -> 0 Free
+#   "newConnection" : 1,    -> 1 New Car Connected
+#   "chargingMode" : 2,     -> 2 NoCharging
+#   "voltageMode":  0 or 1, -> 0 DC, 1 AC
+#   "instPower": 0,         -> Instantaneous Power
+#   "maxPower": 0,          -> Max Power Allowed
+#   "voltage": 400          -> Applied Voltage = Constant
+# }
+
+# STATE CONNECTED and CHARGING
+# charger = {
+#   "chargerID" : X,        -> Year + Order
+#   "stateOcupation" : 1,   -> 1 Occupied
+#   "newConnection" : 0,    -> 0 Not new car connected
+#   "chargingMode" : 0 or 1,-> 0 NormalCharging, 1 FastCharging
+#   "voltageMode":  0 or 1, -> 0 DC, 1 AC
+#   "instPower": Y,         -> Instantaneous Power
+#   "maxPower": X,          -> Max Power Allowed
+#   "voltage": 400          -> Applied Voltage = Constant
+# }
+
 charger1 = {
   "chargerID" : 202001,
-  "stateOcupation" : 1,
-  "newConnection" : 0,
+  "stateOcupation" : 0,
+  "newConnection" : 1,
   "chargingMode" : 1,
   "voltageMode":  0,
-  "instPower": 120,
-  "maxPower": 200,
+  "instPower": 0,
+  "maxPower": 0,
   "voltage": 400
 }
 
 charger2 = {
   "chargerID" : 202002,
-  "stateOcupation" : 1,
+  "stateOcupation" : 0,
   "newConnection" : 0,
-  "chargingMode" : 1,
+  "chargingMode" : 0,
   "voltageMode":  0,
-  "instPower": 400,
+  "instPower": 0,
   "maxPower": 0,
   "voltage": 400
 }
@@ -43,7 +80,7 @@ charger2 = {
 charger3 = {
   "chargerID" : 202003,
   "stateOcupation" : 0,
-  "newConnection" : 1,
+  "newConnection" : 0,
   "chargingMode" : 0,
   "voltageMode":  0,
   "instPower": 0,
