@@ -4,8 +4,14 @@
 # TODO
 # - Interrupcao pela Manutencao
 # - Atualização da DB
+# - "MANDAR" CARREGADORES PARAR
 
-import time
+import sys
+sys.path.append('../')
+
+from BaseDados.database import database
+db = database()
+
 from Algoritmo import chargers_config
 
 # Load Chargers Configs from chargers_config
@@ -33,17 +39,21 @@ def run_control(module, ID, state_occupation, new_connection, charging_mode, vol
     # Atualiza o dicionario
     updateChargersState(module, ID, state_occupation, new_connection, charging_mode, voltage_mode, inst_power, max_power)
     
-    # Atualiza as Correntes
+    # Atualiza as Potencias
     updateMaxPowers()
     
     # update database
-    #updateDB()
+    # updateDB()
                 
     chargerKey = dictionaryKeyFromID(ID)
-    print(chargers.get(chargerKey))
+    # print(chargers.get(chargerKey))
     return chargers.get(chargerKey)
     
 
+def updateDB():
+    print("Update")      
+
+        
 def updateChargersState(module, ID, state_occupation, new_connection, charging_mode, voltage_mode, inst_power, max_power):
     # module: stub -> Carregador, interface, management -> Gestao 
     # Comunica com os carregadores, atualiza o estado
@@ -55,34 +65,54 @@ def updateChargersState(module, ID, state_occupation, new_connection, charging_m
     #    - maxPower = 0 -> Current maxima nula
     #    - chargingMode = 2 -> Sem tipo de carregamento atribuido
     if(module == 'stub'):
-        chargers.get(chargerKey).update({"newConnection": new_connection})
-        chargers.get(chargerKey).update({"voltageMode": voltage_mode})
-        chargers.get(chargerKey).update({"instPower": inst_power})
+        # New Connection
+        if( (new_connection == 1) and (state_occupation == 0) ):
+            chargers.get(chargerKey).update({"newConnection": new_connection})
+            chargers.get(chargerKey).update({"voltageMode": voltage_mode})
+            chargers.get(chargerKey).update({"chargingMode": charging_mode})
+            # Update DB - New Charger
+            print("NEW CONNECTION \n")
+            db.new_connection(ID, new_connection)
+            
+        # Measure Update
+        if( (new_connection == 0) and (state_occupation == 1) ):
+            chargers.get(chargerKey).update({"instPower": inst_power})
+            # Update DB - New Measure
+            print("NEW MEASURE \n")
+            db.new_measure(ID, inst_power, chargers.get(chargerKey).get("voltage"), max_power)
     
     
     # PROVENIENTE DA GESTAO
-    if(module == "management"):
-        # Para
-        print("Teste")
+    if(module == 'management'):
+        # Parar
+        
+        # ACABAR AQUI
+        # ACABAR AQUI
+        # ACABAR AQUI
+        
+        # Quando manda parar 1
+        db.charger_interr(ID)
+        # Quando manda parar todos
+        db.charger_emer()
      
     
     # PROVENIENTE DA INTERFACE
     # ChargingMode:
     #    - 0 ou 1 -> Calcula Corrente
     #    - 2 -> Parou o carregamento - Reset as Variaveis
-    if(module == "interface"):
+    if(module == 'interface'):
         # Interface atualiza o modo de carregamento
         chargers.get(chargerKey).update({"chargingMode": charging_mode})
         
         if (charging_mode == 2):
             # reset as variaveis do carregador
             resetCharger(chargerKey)
+            # Update DB
+            # fori -  flag para dizer se o carregamento foi interrompido ou finalizado
+            db.stop_charging(ID, 'true', 0)                                                 
             # EM FALTA: manda o carregador desligar
             # EM FALTA: manda o carregador desligar
             # EM FALTA: manda o carregador desligar
-        
-    
-    #print("Hello from a function")
 
 
 def updateMaxPowers():
@@ -95,7 +125,7 @@ def updateMaxPowers():
         if ( (chargers.get(key).get("instPower") < chargers.get(key).get("maxPower")) \
         and (chargers.get(key).get("newConnection") == 0) and (chargers.get(key).get("stateOcupation") == 1) ):
             # Atualizacao o novo valor da corrente maxima
-            chargers.get(key).update({"maxPower": chargers.get(key).get("instPower")})
+            chargers.get(key).update({"maxPower": chargers.get(key).get("instPower")}) 
         
         # Calcula o total consumido
         totalPower = totalPower + chargers.get(key).get("instPower")
@@ -104,6 +134,7 @@ def updateMaxPowers():
     availablePower = INSTALLED_POWER - totalPower
     chargersCount = countChargers()
     newChargersCount = countNewChargers()
+    
     # Potencia a distribuir para os novos carregamentos normais: normalPower
     normalPower = 0
     # So se calcula caso haja carregamentos normais
@@ -125,14 +156,6 @@ def updateMaxPowers():
     if ( normalPower > normalMaxPow ):
         normalPower = normalMaxPow
     
-    """
-    print("Power:")   
-    print(availablePower)       
-    print(INSTALLED_POWER)   
-    print(totalPower)   
-    print(normalPower)
-    """
-    
     # PARA VEICULOS NOVOS LIGADOS:
     # Atribui potencia maxima aos rapidos e distribui pelos restantes
     for key, dict in chargers.items():
@@ -145,6 +168,11 @@ def updateMaxPowers():
                 chargers.get(key).update({"newConnection": 0 })
                 # A partir deste momento estao ocupados
                 chargers.get(key).update({"stateOcupation": 1 })
+                # Atualiza db - Rapido DC
+                chargerID = chargers.get(key).get("chargerID")
+                print("START CHARGING FAST DC \n")
+                # start_charging(self, charger_id, max_curr, charge_type_int, voltage_mode, new_connection, state_occupation_int)
+                db.start_charging(chargerID, fastDCPow, 1, 0, 0, 1)
                 
             # Atualizacao da nova corrente maxima AC
             elif ( chargers.get(key).get("voltageMode") == 1 ):
@@ -153,7 +181,10 @@ def updateMaxPowers():
                 chargers.get(key).update({"newConnection": 0 })
                 # A partir deste momento estao ocupados
                 chargers.get(key).update({"stateOcupation": 1 })
-            
+                # Atualiza DB - Rapido AC
+                chargerID = chargers.get(key).get("chargerID")
+                print("START CHARGING FAST AC\n")
+                db.start_charging(chargerID, fastACPow, 1, 1, 0, 1)            
         
         # Atribui corrente maxima possivel aos carregadores normais
         elif ( (chargers.get(key).get("newConnection") == 1) and (chargers.get(key).get("chargingMode") == 0) ):
@@ -163,6 +194,11 @@ def updateMaxPowers():
             chargers.get(key).update({"newConnection": 0 })
             # A partir deste momento estao ocupados
             chargers.get(key).update({"stateOcupation": 1 })
+            # Atualiza DB - Normal
+            chargerID = chargers.get(key).get("chargerID")
+            voltageMode = chargers.get(key).get("voltageMode")
+            print("START CHARGING NORMAL \n")
+            db.start_charging(chargerID, normalPower, 0, voltageMode, 0, 1)
     
   
 def updateFastChargAvail():
@@ -178,13 +214,15 @@ def updateFastChargAvail():
     
     if (totalPower >= (INSTALLED_POWER - 1.25 * fastDCPow)):
         fastChargAvail = 0
+        # Update DB
+        
     else:
         fastChargAvail = 1
+        # updateDB
         
         
 def updateGreenChargAvail():
     # Atualiza a flag que descreve a disponibilidade do carregamento verde
-
     # COMUNICA COM O STUB E ATUALIZA greenPower
     greenPower = 0
     
@@ -192,8 +230,12 @@ def updateGreenChargAvail():
     
     if(greenPower <= 1.10 * fastDCPow):
         greenChargAvail = 0
+        # updateDB
+        
     else:
         greenChargAvail = 1
+        # updateDB
+        
   
   
 def resetCharger(chargerKey):
@@ -254,3 +296,11 @@ def countNewChargers():
                 
     return countNewActive, countNewFastDC, countNewFastAC, countNewNormal
 
+# EXAMPLE SEQUENCE WITH SUCCESS
+# run_control(module, ID, state_occupation, new_connection, charging_mode, voltage_mode, inst_power, max_power):
+# UNCOMMENT
+# run_control('stub', 202001, 0, 1, 2, 0, 0, 0)           # NEW CONNECTION
+# run_control('interface', 202001, 0, 0, 0, 0, 0, 0)      # CONNECTION TYPE SELECTED - START CHARGING
+# run_control('stub', 202001, 1, 0, 0, 0, 50, 200)        # NEW MEASURE
+# run_control('stub', 202001, 1, 0, 0, 0, 40, 50)         # NEW MEASURE
+# run_control('interface', 202001, 1, 0, 2, 0, 0, 0)     # STOP CHARGING - FROM INTERFACE
