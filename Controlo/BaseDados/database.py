@@ -11,8 +11,8 @@ class database:
 
     def start_charging(self, charger_id, max_curr, charge_type_int, voltage_mode, new_connection, state_occupation_int):
         state_occupation = True if state_occupation_int == 1 else False
-        print(state_occupation)
-        print(state_occupation_int)
+        # print(state_occupation)
+        # print(state_occupation_int)
         charge_type = True if charge_type_int == 1 else False
         try:
             conn = self.connect()
@@ -38,12 +38,12 @@ class database:
             conn.commit()
 
             # ATUALIZA CARREGADOR
-            print(state_occupation)
+            # print(state_occupation)
             query = 'update "seai".charger set max_curr=%s, charging_id=%s, charging_mode=%s, state_occupation=%s, ' \
                     'new_connection=%s where charger_id=%s '
 
-            print(cursor.mogrify(query, (max_curr, charging_id, charge_type, state_occupation,
-                                                  new_connection, charger_id)))
+            # print(cursor.mogrify(query, (max_curr, charging_id, charge_type, state_occupation,
+            #                                       new_connection, charger_id)))
             cursor.execute(cursor.mogrify(query, (max_curr, charging_id, charge_type, state_occupation,
                                                   new_connection, charger_id)))
             conn.commit()
@@ -58,11 +58,12 @@ class database:
 
     def stop_charging(self, charger_id, fori, state_occupation_int):
         state_occupation = True if state_occupation_int == 1 else False
+        fori = True if fori == 1 else False
 
         try:
             conn = self.connect()
             cursor = conn.cursor()
-
+            # print(1)
             self.new_measure(charger_id, 0, 0, 0)
 
             now = datetime.now()
@@ -117,7 +118,7 @@ class database:
 
 
             # CÁLCULO POTÊNCIA MÉDIA
-            avg_power = self.get_avg_power(charging_id, intervalo_total_s, intervalo_atual_s)
+            avg_power = self.get_avg_power2(charging_id, intervalo_total_s, intervalo_atual_s)
             # print(avg_power)
 
             # FAZ UPDATE CARREGADOR
@@ -138,15 +139,14 @@ class database:
                 conn.close()
         return
 
-    def charger_interr(self, charger_id):
+    def charger_interr(self, charger_id, state_occupation_int):
 
         try:
             conn = self.connect()
             cursor = conn.cursor()
 
-            # INSERE HISTÓRICO
-            self.new_measure(charger_id, 0, 0)
-
+            # PARA CARREGAMENTO
+            self.stop_charging(charger_id, 1, state_occupation_int)
         except (Exception, psycopg2.DatabaseError) as error:
             print("Error while new_measure", error)
 
@@ -156,7 +156,7 @@ class database:
                 conn.close()
         return
 
-    def charger_emer(self):
+    def charger_emer(self, state_occupation_int):
 
         try:
             conn = self.connect()
@@ -166,7 +166,7 @@ class database:
             # print(charger_id)
             for i in charger_id:
                 # print(i)
-                self.charger_interr(charger_id[i-1])
+                self.charger_interr(i, state_occupation_int)
 
         except (Exception, psycopg2.DatabaseError) as error:
             print("Error while charger_emer", error)
@@ -213,18 +213,58 @@ class database:
                 conn.close()
         return
 
+    def update_all_green_power(self, green_power_state):
+        try:
+            conn = self.connect()
+            cursor = conn.cursor()
+
+            charger_id = self.get_all_chargers_id()
+            # print(charger_id)
+            for i in charger_id:
+                # print(i)
+                self.update_green_power(i, green_power_state)
+
+        except (Exception, psycopg2.DatabaseError) as error:
+            print("Error while updating all green power", error)
+
+        finally:
+            if conn:
+                cursor.close()
+                conn.close()
+        return
+
     def update_fc_availability(self, charger_id, fc_state_int):
         fc_state = True if fc_state_int == 1 else False
         try:
             conn = self.connect()
             cursor = conn.cursor()
 
-            query = 'update "seai".charger set green_power=%s where charger_id=%s'
+            query = 'update "seai".charger set fc_availability=%s where charger_id=%s'
             cursor.execute(cursor.mogrify(query, (fc_state, charger_id)))
             conn.commit()
 
         except (Exception, psycopg2.DatabaseError) as error:
             print("Error while updating green power", error)
+
+        finally:
+            if conn:
+                cursor.close()
+                conn.close()
+        return
+
+    def update_all_fc_availability(self, fc_state_int):
+        try:
+            conn = self.connect()
+            cursor = conn.cursor()
+
+            charger_id = self.get_all_chargers_id()
+            # print(charger_id)
+            for i in charger_id:
+                # print(i)
+                self.update_fc_availability(i, fc_state_int)
+
+        except (Exception, psycopg2.DatabaseError) as error:
+            print("Error while updating all green power", error)
 
         finally:
             if conn:
@@ -362,6 +402,33 @@ class database:
                 conn.close()
         return new_power
 
+    def get_avg_power2(self, charging_id, total_time, actual_time):
+        try:
+            conn = self.connect()
+            cursor = conn.cursor()
+
+            # CÁLCULO POTÊNCIA MÉDIA
+            query = 'select avg_power from "seai".charging where id=%s'
+            cursor.execute(cursor.mogrify(query, (charging_id,)))
+            power_avg = float(cursor.fetchone()[0])
+            query = 'select current_inst from "seai".charger where charging_id=%s'
+            cursor.execute(cursor.mogrify(query, (charging_id,)))
+            row = cursor.fetchall()[0]
+            power_atual = float(row[0])
+
+            new_power = power_atual * actual_time / total_time + \
+                        power_avg * (1 - actual_time / total_time)
+
+
+        except (Exception, psycopg2.DatabaseError) as error:
+            print("Error while updating charger table", error)
+
+        finally:
+            if conn:
+                cursor.close()
+                conn.close()
+        return new_power
+
     def get_active_chargers_id(self):
 
         try:
@@ -385,3 +452,28 @@ class database:
                 cursor.close()
                 conn.close()
         return charger_id
+
+    def get_all_chargers_id(self):
+        try:
+            conn = self.connect()
+            cursor = conn.cursor()
+
+            query = 'select charger_id from "seai".charger'
+            cursor.execute(query)
+            # print(cursor.fetchall())
+            charger_id = []
+            for row in cursor.fetchall():
+                # print(row)
+                charger_id.append(row[0])
+                # print(charger_id)
+
+        except (Exception, psycopg2.DatabaseError) as error:
+            print("Error while new_measure", error)
+
+        finally:
+            if conn:
+                cursor.close()
+                conn.close()
+        return charger_id
+
+
