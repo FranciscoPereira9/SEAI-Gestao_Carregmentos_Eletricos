@@ -1,12 +1,14 @@
 import json
 import socket
 import threading
+import struct
 import os
 import sys
 #cd = os.path.dirname(os.path.realpath(__file__))
 #pd = os.path.dirname(cd)
 #sys.path.append(pd)
 #from Algoritmo import control as ctrl
+import common
 from Controlo.Algoritmo import control as ctrl
 
 HEADER = 64
@@ -15,13 +17,6 @@ SERVER = socket.gethostbyname(socket.gethostname())
 ADDR = (SERVER, PORT)
 FORMAT = 'utf-8'
 DISCONNECT_MESSAGE = "!DISCONNECT"
-
-# Create socket
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # AF_INET - IPV4 and SOCK_STREAM has by default TCP
-
-# Bind socket
-s.bind(ADDR)
-
 
 # Function to establish new connections
 def start_server():
@@ -42,7 +37,14 @@ def handle_client(conn, addr):
     connected = True
     # Decode msgs while connected
     while connected:
-        msg_length = conn.recv(HEADER).decode(FORMAT)
+        msg = common.receive_json_message(conn)
+        if msg:
+            if msg == DISCONNECT_MESSAGE:
+                connected = False
+            else:
+                # Tratar a mensagem
+                handle_msg(conn, msg)
+        '''msg_length = conn.recv(HEADER).decode(FORMAT)
         if msg_length:  # Verifify that it is not null
             # Decode the message
             msg_length = int(msg_length)
@@ -55,45 +57,50 @@ def handle_client(conn, addr):
                 # Tratar a mensagem
                 handle_msg(conn, msg)
 
-            # print(f"[{addr}] {msg}")
+            # print(f"[{addr}] {msg}")'''
 
     # CLose connection
     conn.close()
 
 
 # Function to handle messages
-def handle_msg(conn, msg):
-    json_data = json.loads(msg)  # Load msg as json - dictionary
+def handle_msg(conn, json_data):
+    # print("Message received:\n ", json_data)
 
-    # print(json_data)
-
+    # Messages from STUB
     if json_data['module'] == 'stub':
-        # Como é que o sistema trata as mesnagens vindas do controlo
-        # update charger state
+        print("Message received:\n ", json_data)
+        # Update charger info
         x = ctrl.run_control(json_data['module'], json_data['chargerID'], json_data['stateOcupation'], json_data['newConnection'],
                         json_data['chargingMode'], json_data['voltageMode'], json_data['instPower'], json_data['maxPower'])
-        # enviar info para carregador
-        # x = json.dumps(x)
-        send_msg(conn, x)
 
+        # Enviar info para carregador
+        print("Sending message... :", x)
+        print()
+        common.send_json_message(conn, x)
+
+    # Messages from INTERFACE
     elif json_data['module'] == 'interface':
-        conn.send("És interface".encode(FORMAT))
-        # Como é que o sistema trata as mesnagens vindas da interface
-
-        x = ctrl.run_control(json_data['module'], json_data['chargerID'], json_data['state_occupation'],
+        #print("Message received from INTERFACE:\n ", json_data)
+        print("------------------")
+        conn.send("Reponding to INTERFACE.".encode(FORMAT))
+        # Update info from Interface
+        ctrl.run_control(json_data['module'], json_data['chargerID'], json_data['stateOcupation'],
                              json_data['newConnection'],
                              json_data['chargingMode'], json_data['voltageMode'], json_data['instPower'],
                              json_data['maxPower'])
 
-        if json_data['state'] == 0:
-            print("[", json_data['ID'], "]", " Livre.")
-        elif json_data['state'] == 1:
-            print("[", json_data['ID'], "]", " Carregamento Normal.")
-        elif json_data['state'] == 2:
-            print("[", json_data['ID'], "]", " Carregamento Rápido.")
-        elif json_data['state'] == -1:
-            print("[", json_data['ID'], "]", " Interrupção.")
+        '''
+        if json_data['chargingMode'] == 0:
+            print("[", json_data['chargerID'], "]", " Carregamento: Normal.")
+        elif json_data['chargingMode'] == 1:
+            print("[", json_data['chargerID'], "]", " Carregamento: Rápido.")
+        elif json_data['chargingMode'] == 2:
+            print("[", json_data['chargerID'], "]", " Carregamento: Livre.")
+        elif json_data['chargingMode'] == -1:
+            print("[", json_data['chargerID'], "]", " Carregamento: Interrupção.")'''
 
+    # Messages from MANAGEMENT
     elif json_data['module'] == 'management':
         conn.send("És gestão".encode(FORMAT))
         # Como é que o sistema trata as mensagens vindas da gestão
@@ -116,27 +123,11 @@ def send_msg(conn, msg):
     conn.send(encoded_header)
     conn.send(encoded_msg)
 
+
+# Create socket
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # AF_INET - IPV4 and SOCK_STREAM has by default TCP
+# Bind socket
+s.bind(ADDR)
+#Start server
 print("Server is starting .....")
 start_server()
-
-# Message to receive from Interface and Gestão
-# ID: 2020(xx);
-# State: (2/1/0/-1);
-# 2 - Rápido
-# 1 - Normal
-# 0 - Desligado
-# -1 - Interrupção
-
-
-# Message to get from Carregadores
-# charger = {
-# from: 0;
-# "chargerID" : 202001, -> Year + Order
-# "stateOcupation" : 0, -> 0 Free, 1 Occupied
-# "newConnection" : 0, -> 1 New Car Connected, 0
-# "chargingMode" : 0, -> 0 NormalCharging, 1 FastCharging
-# "voltageMode": 0, -> 0 DC, 1 AC
-# "instCurrent": 0, -> Instantaneous Current
-# "maxCurrent": 0, -> Max Current Allowed
-# "voltage": 230 -> Applied Voltage = Constant
-# }

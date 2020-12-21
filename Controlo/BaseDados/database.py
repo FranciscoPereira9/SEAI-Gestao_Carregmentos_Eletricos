@@ -9,17 +9,20 @@ class database:
     port = "5432"
     host = "db.fe.up.pt"
 
-    def start_charging(self, charger_id, max_curr, charge_type):
-
+    def start_charging(self, charger_id, max_curr, charge_type_int, voltage_mode, new_connection, state_occupation_int):
+        state_occupation = True if state_occupation_int == 1 else False
+        print(state_occupation)
+        print(state_occupation_int)
+        charge_type = True if charge_type_int == 1 else False
         try:
             conn = self.connect()
             cursor = conn.cursor()
 
             # INSERE EM CHARGING
             now = datetime.now()
-            query = 'insert into "seai".charging (charger_id, starting_time, charge_type, starting_date, avg_power) ' \
-                    'values (%s, %s, %s, %s, 0)'
-            cursor.execute(cursor.mogrify(query, (charger_id, now.time(), charge_type, now.date())))
+            query = 'insert into "seai".charging (charger_id, starting_time, charge_type, starting_date, avg_power, ' \
+                    'voltage_mode) values (%s, %s, %s, %s, 0, %s) '
+            cursor.execute(cursor.mogrify(query, (charger_id, now.time(), charge_type, now.date(), voltage_mode)))
 
             conn.commit()
 
@@ -35,8 +38,14 @@ class database:
             conn.commit()
 
             # ATUALIZA CARREGADOR
-            query = 'update "seai".charger set max_curr=%s, charging_id=%s, charging_mode=%s where charger_id=%s'
-            cursor.execute(cursor.mogrify(query, (max_curr, charging_id, charge_type, charger_id)))
+            print(state_occupation)
+            query = 'update "seai".charger set max_curr=%s, charging_id=%s, charging_mode=%s, state_occupation=%s, ' \
+                    'new_connection=%s where charger_id=%s '
+
+            print(cursor.mogrify(query, (max_curr, charging_id, charge_type, state_occupation,
+                                                  new_connection, charger_id)))
+            cursor.execute(cursor.mogrify(query, (max_curr, charging_id, charge_type, state_occupation,
+                                                  new_connection, charger_id)))
             conn.commit()
 
         except (Exception, psycopg2.DatabaseError) as error:
@@ -47,13 +56,14 @@ class database:
                 conn.close()
         return
 
-    def stop_charging(self, charger_id, fori):
+    def stop_charging(self, charger_id, fori, state_occupation_int):
+        state_occupation = True if state_occupation_int == 1 else False
 
         try:
             conn = self.connect()
             cursor = conn.cursor()
 
-            self.new_measure(charger_id, 0, 0)
+            self.new_measure(charger_id, 0, 0, 0)
 
             now = datetime.now()
 
@@ -66,9 +76,13 @@ class database:
             conn.commit()
 
             # FAZ UPDATE NO CARREGADOR
-            query = 'update "seai".charger set voltage_inst=0, current_inst=0, charging_id=0, max_curr=0 where ' \
-                    'charger_id=%s'
-            cursor.execute(cursor.mogrify(query, (charger_id,)))
+            # query = 'update "seai".charger set voltage_inst=0, current_inst=0, charging_id=0, max_curr=0 where ' \
+            #         'charger_id=%s'
+            # cursor.execute(cursor.mogrify(query, (charger_id,)))
+            # conn.commit()
+            self.update_charger_measures(0, 0, charger_id, 0)
+            query = 'update "seai".charger set charging_id=0, state_occupation=%s where charger_id=%s'
+            cursor.execute(cursor.mogrify(query, (state_occupation, charger_id)))
             conn.commit()
 
         except (Exception, psycopg2.DatabaseError) as error:
@@ -80,7 +94,7 @@ class database:
                 conn.close()
         return
 
-    def new_measure(self, charger_id, current, voltage):
+    def new_measure(self, charger_id, current, voltage, max_curr):
 
         try:
             conn = self.connect()
@@ -107,7 +121,8 @@ class database:
             # print(avg_power)
 
             # FAZ UPDATE CARREGADOR
-            self.update_charger_measures(voltage, current, charger_id)
+            # print(voltage, current, max_curr, charger_id)
+            self.update_charger_measures(voltage, current, charger_id, max_curr)
 
             # FAZ UPDATE CARREGAMENTO
             query = 'update "seai".charging set avg_power=%s where id=%s'
@@ -162,6 +177,61 @@ class database:
                 conn.close()
         return
 
+    def new_connection(self, charger_id, connection):
+        try:
+            conn = self.connect()
+            cursor = conn.cursor()
+
+            query = 'update "seai".charger set new_connection=%s where charger_id=%s'
+            cursor.execute(cursor.mogrify(query, (connection, charger_id)))
+            conn.commit()
+
+        except (Exception, psycopg2.DatabaseError) as error:
+            print("Error while inserting new connection", error)
+
+        finally:
+            if conn:
+                cursor.close()
+                conn.close()
+        return
+
+    def update_green_power(self, charger_id, green_power_state):
+        try:
+            conn = self.connect()
+            cursor = conn.cursor()
+
+            query = 'update "seai".charger set green_power=%s where charger_id=%s'
+            cursor.execute(cursor.mogrify(query, (green_power_state, charger_id)))
+            conn.commit()
+
+        except (Exception, psycopg2.DatabaseError) as error:
+            print("Error while updating green power", error)
+
+        finally:
+            if conn:
+                cursor.close()
+                conn.close()
+        return
+
+    def update_fc_availability(self, charger_id, fc_state_int):
+        fc_state = True if fc_state_int == 1 else False
+        try:
+            conn = self.connect()
+            cursor = conn.cursor()
+
+            query = 'update "seai".charger set green_power=%s where charger_id=%s'
+            cursor.execute(cursor.mogrify(query, (fc_state, charger_id)))
+            conn.commit()
+
+        except (Exception, psycopg2.DatabaseError) as error:
+            print("Error while updating green power", error)
+
+        finally:
+            if conn:
+                cursor.close()
+                conn.close()
+        return
+
 
     ##########################################################################################
     #######################                                             ######################
@@ -183,14 +253,14 @@ class database:
         finally:
             return conn
 
-    def update_charger_measures(self, voltage, current, charger_id):
-
+    def update_charger_measures(self, voltage, current, charger_id, max_curr):
+        # print(voltage, current, charger_id, max_curr)
         try:
             conn = self.connect()
             cursor = conn.cursor()
 
-            query = 'update "seai".charger set voltage_inst=%s, current_inst=%s where charger_id=%s'
-            cursor.execute(cursor.mogrify(query, (voltage, current, charger_id)))
+            query = 'update "seai".charger set voltage_inst=%s, current_inst=%s, max_curr=%s where charger_id=%s'
+            cursor.execute(cursor.mogrify(query, (voltage, current, max_curr, charger_id)))
             conn.commit()
 
         except (Exception, psycopg2.DatabaseError) as error:

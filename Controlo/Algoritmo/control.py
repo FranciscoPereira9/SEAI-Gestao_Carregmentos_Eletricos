@@ -9,10 +9,10 @@
 import sys
 sys.path.append('../')
 
-from BaseDados.database import database
+from Controlo.BaseDados.database import database
 db = database()
 
-from Algoritmo import chargers_config
+from Controlo.Algoritmo import chargers_config
 
 # Load Chargers Configs from chargers_config
 chargers = chargers_config.chargersSet
@@ -69,7 +69,7 @@ def updateChargersState(module, ID, state_occupation, new_connection, charging_m
         if( (new_connection == 1) and (state_occupation == 0) ):
             chargers.get(chargerKey).update({"newConnection": new_connection})
             chargers.get(chargerKey).update({"voltageMode": voltage_mode})
-            chargers.get(chargerKey).update({"chargingMode": charging_mode})
+            #chargers.get(chargerKey).update({"chargingMode": charging_mode})
             # Update DB - New Charger
             print("NEW CONNECTION \n")
             db.new_connection(ID, new_connection)
@@ -103,7 +103,7 @@ def updateChargersState(module, ID, state_occupation, new_connection, charging_m
     if(module == 'interface'):
         # Interface atualiza o modo de carregamento
         chargers.get(chargerKey).update({"chargingMode": charging_mode})
-        
+        chargers.get(chargerKey).update({"newConnection": new_connection})
         if (charging_mode == 2):
             # reset as variaveis do carregador
             resetCharger(chargerKey)
