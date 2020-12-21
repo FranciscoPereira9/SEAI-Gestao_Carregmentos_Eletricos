@@ -3,10 +3,11 @@ import socket
 import threading
 import os
 import sys
-cd = os.path.dirname(os.path.realpath(__file__))
-pd = os.path.dirname(cd)
-sys.path.append(pd)
-from Algoritmo import control as ctrl
+#cd = os.path.dirname(os.path.realpath(__file__))
+#pd = os.path.dirname(cd)
+#sys.path.append(pd)
+#from Algoritmo import control as ctrl
+from Controlo.Algoritmo import control as ctrl
 
 HEADER = 64
 PORT = 5050
