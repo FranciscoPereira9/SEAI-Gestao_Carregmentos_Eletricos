@@ -14,8 +14,8 @@ msg = {
     "module": 'interface', #<-
     "chargerID": 202001, #<-
     "stateOcupation": 0,
-    "newConnection": 1, #<-
-    "chargingMode": 1, #<-
+    "newConnection": 0, #<-
+    "chargingMode": 0, #<-
     "voltageMode": 0,
     "instPower": 0,
     "maxPower": 0,

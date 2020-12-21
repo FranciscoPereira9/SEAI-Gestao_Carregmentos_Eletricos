@@ -172,7 +172,10 @@ def updateMaxPowers():
                 chargerID = chargers.get(key).get("chargerID")
                 print("START CHARGING FAST DC \n")
                 # start_charging(self, charger_id, max_curr, charge_type_int, voltage_mode, new_connection, state_occupation_int)
-                db.start_charging(chargerID, fastDCPow, 1, 0, 0, 1)
+                try:
+                    db.start_charging(chargerID, fastDCPow, 1, 0, 0, 1)
+                except:
+                    print("An exception occurred -> DB")
                 
             # Atualizacao da nova corrente maxima AC
             elif ( chargers.get(key).get("voltageMode") == 1 ):
@@ -184,7 +187,10 @@ def updateMaxPowers():
                 # Atualiza DB - Rapido AC
                 chargerID = chargers.get(key).get("chargerID")
                 print("START CHARGING FAST AC\n")
-                db.start_charging(chargerID, fastACPow, 1, 1, 0, 1)            
+                try:
+                    db.start_charging(chargerID, fastACPow, 1, 1, 0, 1)
+                except:
+                    print("An exception occurred -> DB")
         
         # Atribui corrente maxima possivel aos carregadores normais
         elif ( (chargers.get(key).get("newConnection") == 1) and (chargers.get(key).get("chargingMode") == 0) ):
@@ -198,7 +204,10 @@ def updateMaxPowers():
             chargerID = chargers.get(key).get("chargerID")
             voltageMode = chargers.get(key).get("voltageMode")
             print("START CHARGING NORMAL \n")
-            db.start_charging(chargerID, normalPower, 0, voltageMode, 0, 1)
+            try:
+                db.start_charging(chargerID, normalPower, 0, voltageMode, 0, 1)
+            except:
+                print("An exception occurred -> DB")
     
   
 def updateFastChargAvail():

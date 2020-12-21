@@ -1,15 +1,18 @@
 import json
 import socket
 import threading
+from threading import Lock
 import struct
 import os
 import sys
+import common
+from Controlo.Algoritmo import control as ctrl
+from Controlo.Algoritmo import chargers_config as config
+
 #cd = os.path.dirname(os.path.realpath(__file__))
 #pd = os.path.dirname(cd)
 #sys.path.append(pd)
 #from Algoritmo import control as ctrl
-import common
-from Controlo.Algoritmo import control as ctrl
 
 HEADER = 64
 PORT = 5050
@@ -17,6 +20,7 @@ SERVER = socket.gethostbyname(socket.gethostname())
 ADDR = (SERVER, PORT)
 FORMAT = 'utf-8'
 DISCONNECT_MESSAGE = "!DISCONNECT"
+lock = Lock()
 
 # Function to establish new connections
 def start_server():
@@ -71,11 +75,16 @@ def handle_msg(conn, json_data):
     if json_data['module'] == 'stub':
         print("Message received:\n ", json_data)
         # Update charger info
-        x = ctrl.run_control(json_data['module'], json_data['chargerID'], json_data['stateOcupation'], json_data['newConnection'],
+        lock.acquire()
+        try:
+            x = ctrl.run_control(json_data['module'], json_data['chargerID'], json_data['stateOcupation'], json_data['newConnection'],
                         json_data['chargingMode'], json_data['voltageMode'], json_data['instPower'], json_data['maxPower'])
+        finally:
+            lock.release()
 
+        print("Config Charger 1 --------------------- ", config.charger1)
         # Enviar info para carregador
-        print("Sending message... :", x)
+        #print("Sending message... :", x)
         print()
         common.send_json_message(conn, x)
 
@@ -85,10 +94,15 @@ def handle_msg(conn, json_data):
         print("------------------")
         conn.send("Reponding to INTERFACE.".encode(FORMAT))
         # Update info from Interface
-        ctrl.run_control(json_data['module'], json_data['chargerID'], json_data['stateOcupation'],
+        lock.acquire()
+        try:
+            ctrl.run_control(json_data['module'], json_data['chargerID'], json_data['stateOcupation'],
                              json_data['newConnection'],
                              json_data['chargingMode'], json_data['voltageMode'], json_data['instPower'],
                              json_data['maxPower'])
+        finally:
+            lock.release()
+
 
         '''
         if json_data['chargingMode'] == 0:
