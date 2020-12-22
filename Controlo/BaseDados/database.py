@@ -64,7 +64,7 @@ class database:
             conn = self.connect()
             cursor = conn.cursor()
             # print(1)
-            self.new_measure(charger_id, 0, 0, 0)
+            self.new_measure(charger_id, 400, 0, 0)
 
             now = datetime.now()
 
@@ -273,6 +273,48 @@ class database:
         return
 
 
+    def reset_chargers(self):
+        try:
+            conn = self.connect()
+            cursor = conn.cursor()
+
+            query = 'update "seai".charger set voltage_inst=400, current_inst=0, charging_id=0,'\
+                    'fc_availability=true, max_curr=0, charging_mode=false, operator_interr=false,' \
+                    'emergency_interr=false, state_occupation=false, new_connection=0, green_power=0'
+            cursor.execute(query)
+            conn.commit()
+        except(Exception, psycopg2.DatabaseError) as error:
+            print("Error while reseting", error)
+
+        finally:
+            if conn:
+                cursor.close()
+                conn.close()
+
+        return
+
+    def clean_historic_charging(self):
+        try:
+            conn = self.connect()
+            cursor = conn.cursor()
+
+            query = 'delete from "seai".historic'
+            cursor.execute(query)
+            conn.commit()
+            query = 'delete from "seai".charging'
+            cursor.execute(query)
+            conn.commit()
+        except(Exception, psycopg2.DatabaseError) as error:
+            print("Error while cleaning historic and charging", error)
+
+        finally:
+            if conn:
+                cursor.close()
+                conn.close()
+
+        return
+
+
     ##########################################################################################
     #######################                                             ######################
     #######################          FUNÇÕES AUXILIARES                 ######################
@@ -475,5 +517,8 @@ class database:
                 cursor.close()
                 conn.close()
         return charger_id
+
+
+
 
 
