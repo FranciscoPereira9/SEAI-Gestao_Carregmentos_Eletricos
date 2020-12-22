@@ -10,9 +10,9 @@ normalPow = 22 * 1000
 # CHARGER DEFINITION
 # charger = {
 #   "chargerID" : 202001,   -> Year + Order
-#   "stateOcupation" : 0,   -> 0 Free, 1 Occupied
+#   "stateOccupation" : 0,   -> 0 Free, 1 Occupied
 #   "newConnection" : 0,    -> 1 New Car Connected, 0 
-#   "chargingMode" : 0,     -> 0 NormalCharging, 1 FastCharging, 2 NoCharging
+#   "chargingMode" : 2,     -> 0 NormalCharging, 1 FastCharging, 2 NoCharging
 #   "voltageMode":  0,      -> 0 DC, 1 AC
 #   "instPower": 0,       -> Instantaneous Power
 #   "maxPower": 0,        -> Max Power Allowed
@@ -22,7 +22,7 @@ normalPow = 22 * 1000
 # STATE NOT CONNECTED
 # charger = {
 #   "chargerID" : X,        -> Year + Order
-#   "stateOcupation" : 0,   -> 0 Free, 1 Occupied
+#   "stateOccupation" : 0,   -> 0 Free, 1 Occupied
 #   "newConnection" : 0,    -> 1 New Car Connected, 0 
 #   "chargingMode" : 2,     -> 2 NoCharging
 #   "voltageMode":  0,      -> 0 DC, 1 AC
@@ -34,7 +34,7 @@ normalPow = 22 * 1000
 # STATE NEW CONECTION
 # charger = {
 #   "chargerID" : X,        -> Year + Order
-#   "stateOcupation" : 0,   -> 0 Free
+#   "stateOccupation" : 0,   -> 0 Free
 #   "newConnection" : 1,    -> 1 New Car Connected
 #   "chargingMode" : 2,     -> 2 NoCharging
 #   "voltageMode":  0 or 1, -> 0 DC, 1 AC
@@ -46,7 +46,7 @@ normalPow = 22 * 1000
 # STATE CONNECTED and CHARGING
 # charger = {
 #   "chargerID" : X,        -> Year + Order
-#   "stateOcupation" : 1,   -> 1 Occupied
+#   "stateOccupation" : 1,   -> 1 Occupied
 #   "newConnection" : 0,    -> 0 Not new car connected
 #   "chargingMode" : 0 or 1,-> 0 NormalCharging, 1 FastCharging
 #   "voltageMode":  0 or 1, -> 0 DC, 1 AC
@@ -57,7 +57,7 @@ normalPow = 22 * 1000
 
 charger1 = {
   "chargerID" : 202001,
-  "stateOcupation" : 0,
+  "stateOccupation" : 0,
   "newConnection" : 0,
   "chargingMode" : 2,
   "voltageMode":  0,
@@ -68,9 +68,9 @@ charger1 = {
 
 charger2 = {
   "chargerID" : 202002,
-  "stateOcupation" : 0,
+  "stateOccupation" : 0,
   "newConnection" : 0,
-  "chargingMode" : 0,
+  "chargingMode" : 2,
   "voltageMode":  0,
   "instPower": 0,
   "maxPower": 0,
@@ -79,9 +79,9 @@ charger2 = {
 
 charger3 = {
   "chargerID" : 202003,
-  "stateOcupation" : 0,
+  "stateOccupation" : 0,
   "newConnection" : 0,
-  "chargingMode" : 0,
+  "chargingMode" : 2,
   "voltageMode":  0,
   "instPower": 0,
   "maxPower": 0,
@@ -90,9 +90,9 @@ charger3 = {
 
 charger4 = {
   "chargerID" : 202004,
-  "stateOcupation" : 0,
+  "stateOccupation" : 0,
   "newConnection" : 0,
-  "chargingMode" : 0,
+  "chargingMode" : 2,
   "voltageMode":  0,
   "instPower": 0,
   "maxPower": 0,
@@ -101,9 +101,9 @@ charger4 = {
 
 charger5 = {
   "chargerID" : 202005,
-  "stateOcupation" : 0,
+  "stateOccupation" : 0,
   "newConnection" : 0,
-  "chargingMode" : 0,
+  "chargingMode" : 2,
   "voltageMode":  0,
   "instPower": 0,
   "maxPower": 0,
@@ -112,9 +112,9 @@ charger5 = {
 
 charger6 = {
   "chargerID" : 202006,
-  "stateOcupation" : 0,
+  "stateOccupation" : 0,
   "newConnection" : 0,
-  "chargingMode" : 0,
+  "chargingMode" : 2,
   "voltageMode":  0,
   "instPower": 0,
   "maxPower": 0,
@@ -123,9 +123,9 @@ charger6 = {
 
 charger7 = {
   "chargerID" : 202007,
-  "stateOcupation" : 0,
+  "stateOccupation" : 0,
   "newConnection" : 0,
-  "chargingMode" : 0,
+  "chargingMode" : 2,
   "voltageMode":  0,
   "instPower": 0,
   "maxPower": 0,
@@ -134,9 +134,9 @@ charger7 = {
 
 charger8 = {
   "chargerID" : 202008,
-  "stateOcupation" : 0,
+  "stateOccupation" : 0,
   "newConnection" : 0,
-  "chargingMode" : 0,
+  "chargingMode" : 2,
   "voltageMode":  0,
   "instPower": 0,
   "maxPower": 0,
@@ -145,9 +145,9 @@ charger8 = {
 
 charger9 = {
   "chargerID" : 202009,
-  "stateOcupation" : 0,
+  "stateOccupation" : 0,
   "newConnection" : 0,
-  "chargingMode" : 0,
+  "chargingMode" : 2,
   "voltageMode":  0,
   "instPower": 0,
   "maxPower": 0,
@@ -156,9 +156,9 @@ charger9 = {
 
 charger10 = {
   "chargerID" : 202010,
-  "stateOcupation" : 0,
+  "stateOccupation" : 0,
   "newConnection" : 0,
-  "chargingMode" : 0,
+  "chargingMode" : 2,
   "voltageMode":  0,
   "instPower": 0,
   "maxPower": 0,
