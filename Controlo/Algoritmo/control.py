@@ -3,11 +3,11 @@
 
 # TODO
 # - Interrupcao pela Manutencao
-# - Atualização da DB
-# - "MANDAR" CARREGADORES PARAR
+# - Comunicacao com o stub solar
 
 import sys
 sys.path.append('../')
+import threading
 
 from Controlo.BaseDados.database import database
 db = database()
@@ -48,7 +48,7 @@ def run_control(module, ID, state_occupation, new_connection, charging_mode, vol
     updateGreenChargAvail()
     
     # update database
-    # updateFlagsDB()
+    updateFlagsDB()
                 
     chargerKey = dictionaryKeyFromID(ID)
     # print(chargers.get(chargerKey))
@@ -114,14 +114,13 @@ def updateChargersState(module, ID, state_occupation, new_connection, charging_m
         if (charging_mode == 2):
             # reset as variaveis do carregador
             resetCharger(chargerKey)
-            # Update DB
+            # Update DB - fori = true if interrompido, false se terminado
             fori = True if chargers.get(chargerKey).get("instPower") > 0 else False
             try:
                 db.stop_charging(ID, fori, 0) 
             except:
                 print("An exception occurred -> DB")
                         
-
 
 def updateMaxPowers():
     totalPower = 0
@@ -246,17 +245,18 @@ def updateGreenChargAvail():
 
 
 def updateFlagsDB():
-    # Update Green Charging on DB
-    try:
-        db.update_all_green_power(greenChargAvail)
-    except:
-        print("An exception occurred -> DB")
-        
-    # Update Fast Charging on DBtry:
-    try:
-        db.update_all_fc_availability(fastChargAvail)
-    except:
-        print("An exception occurred -> DB") 
+    # Function to Update Flags
+    # db.update_all_green_power(greenChargAvail)
+    # db.update_all_fc_availability(fastChargAvail)
+    
+    # Thread to Update Green Charging on DB
+    gp = threading.Thread(target = db.update_all_green_power, args = (greenChargAvail, ))
+    # Thread to Update Fast Charging on DB
+    fc = threading.Thread(target = db.update_all_fc_availability, args = (fastChargAvail, ))
+    
+    # Start Threads
+    gp.start()
+    fc.start()
     
     
 def startUp():
@@ -334,6 +334,7 @@ def countNewChargers():
     countNewNormal = countNewActive - countNewFastAC - countNewFastDC
                 
     return countNewActive, countNewFastDC, countNewFastAC, countNewNormal
+
 
 # EXAMPLE SEQUENCE WITH SUCCESS
 # run_control(module, ID, state_occupation, new_connection, charging_mode, voltage_mode, inst_power, max_power):
