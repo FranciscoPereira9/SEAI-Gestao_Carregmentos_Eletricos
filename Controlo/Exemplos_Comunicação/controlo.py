@@ -137,6 +137,8 @@ def send_msg(conn, msg):
     conn.send(encoded_header)
     conn.send(encoded_msg)
 
+# StartUp Routine
+ctrl.startUp()
 
 # Create socket
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # AF_INET - IPV4 and SOCK_STREAM has by default TCP
