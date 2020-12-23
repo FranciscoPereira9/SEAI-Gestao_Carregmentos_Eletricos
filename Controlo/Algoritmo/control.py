@@ -52,21 +52,7 @@ def run_control(module, ID, state_occupation, new_connection, charging_mode, vol
                 
     chargerKey = dictionaryKeyFromID(ID)
     # print(chargers.get(chargerKey))
-    return chargers.get(chargerKey)
-    
-
-def updateFlagsDB():
-    # Update Green Charging on DB
-    try:
-        db.update_all_green_power(greenChargAvail)
-    except:
-        print("An exception occurred -> DB")
-        
-    # Update Fast Charging on DBtry:
-    try:
-        db.update_all_fc_availability(fastChargAvail)
-    except:
-        print("An exception occurred -> DB")    
+    return chargers.get(chargerKey)   
         
         
 def updateChargersState(module, ID, state_occupation, new_connection, charging_mode, voltage_mode, inst_power, max_power):
@@ -257,7 +243,39 @@ def updateGreenChargAvail():
         greenChargAvail = 0
     else:
         greenChargAvail = 1
+
+
+def updateFlagsDB():
+    # Update Green Charging on DB
+    try:
+        db.update_all_green_power(greenChargAvail)
+    except:
+        print("An exception occurred -> DB")
         
+    # Update Fast Charging on DBtry:
+    try:
+        db.update_all_fc_availability(fastChargAvail)
+    except:
+        print("An exception occurred -> DB") 
+    
+    
+def startUp():
+    # Resets Chargers on DB
+    try:
+        db.reset_chargers()
+    except:
+        print("An exception occurred -> startup DB") 
+        
+    # Cleans DB History
+    try:
+        db.clean_historic_charging()
+    except:
+        print("An exception occurred -> clean historic DB") 
+        
+    # Resets Dict
+    for key, dict in chargers.items():
+        resetCharger(key)
+    
   
 def resetCharger(chargerKey):
   # Resets Charger Variables When is turned Off
