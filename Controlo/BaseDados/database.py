@@ -3,7 +3,6 @@ from datetime import datetime
 
 
 # TODO: start_charging()-Acrescentar forma dinâmica de definir preço/kwh quando se inicia carregamento
-# Atualemnte cálculo de total_cost está a considerar que potência está em kw. Ajustar se assim não for.
 
 class database:
     user = "up201504961"
@@ -536,7 +535,7 @@ class database:
             row = cursor.fetchall()[0]
             power = float(row[0])
 
-            total_cost = power * delta_time / 3600
+            total_cost = power / 1000 * delta_time / 3600
         except (Exception, psycopg2.DatabaseError) as error:
             print("Error while new_measure", error)
 
