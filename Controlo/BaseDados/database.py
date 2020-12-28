@@ -2,6 +2,9 @@ import psycopg2
 from datetime import datetime
 
 
+# TODO: start_charging()-Acrescentar forma dinâmica de definir preço/kwh quando se inicia carregamento
+# Atualemnte cálculo de total_cost está a considerar que potência está em kw. Ajustar se assim não for.
+
 class database:
     user = "up201504961"
     database = "up201504961"
@@ -21,7 +24,7 @@ class database:
             # INSERE EM CHARGING
             now = datetime.now()
             query = 'insert into "seai".charging (charger_id, starting_time, charge_type, starting_date, avg_power, ' \
-                    'voltage_mode) values (%s, %s, %s, %s, 0, %s) '
+                    'voltage_mode, priceper_kwh) values (%s, %s, %s, %s, 0, %s, 0.2) '
             cursor.execute(cursor.mogrify(query, (charger_id, now.time(), charge_type, now.date(), voltage_mode)))
 
             conn.commit()
@@ -71,9 +74,13 @@ class database:
             # BUSCA ID CARREGAMENTO
             charging_id = self.get_charging_id(charger_id)
 
+            total_cost = 0
+            if not fori:
+                total_cost = self.get_total_cost(charging_id)
+
             # FAZ UPDATE EM CHARGING
-            query = 'update "seai".charging set stoping_time=%s, fori=%s, ending_date=%s where id=%s'
-            cursor.execute(cursor.mogrify(query, (now.time(), fori, now.date(), charging_id)))
+            query = 'update "seai".charging set stoping_time=%s, fori=%s, ending_date=%s, total_cost=%s where id=%s'
+            cursor.execute(cursor.mogrify(query, (now.time(), fori, now.date(), total_cost, charging_id)))
             conn.commit()
 
             # FAZ UPDATE NO CARREGADOR
@@ -114,8 +121,6 @@ class database:
                     '(%s, %s, %s, %s, %s, %s);'
             cursor.execute(cursor.mogrify(query, (charger_id, charging_id, current, voltage, now.time(), now.date())))
             conn.commit()
-
-
 
             # CÁLCULO POTÊNCIA MÉDIA
             avg_power = self.get_avg_power2(charging_id, intervalo_total_s, intervalo_atual_s)
@@ -272,13 +277,12 @@ class database:
                 conn.close()
         return
 
-
     def reset_chargers(self):
         try:
             conn = self.connect()
             cursor = conn.cursor()
 
-            query = 'update "seai".charger set voltage_inst=400, current_inst=0, charging_id=0,'\
+            query = 'update "seai".charger set voltage_inst=400, current_inst=0, charging_id=0,' \
                     'fc_availability=true, max_curr=0, charging_mode=false, operator_interr=false,' \
                     'emergency_interr=false, state_occupation=false, new_connection=0, green_power=0'
             cursor.execute(query)
@@ -313,7 +317,6 @@ class database:
                 conn.close()
 
         return
-
 
     ##########################################################################################
     #######################                                             ######################
@@ -518,7 +521,27 @@ class database:
                 conn.close()
         return charger_id
 
+    def get_total_cost(self, charging_id):
 
+        try:
+            conn = self.connect()
+            cursor = conn.cursor()
 
+            now = datetime.now()
+            delta_time = self.get_total_interval(charging_id, now)
 
+            query = 'select avg_power from "seai".charging where id=%s'
+            cursor.execute(cursor.mogrify(query, (charging_id,)))
 
+            row = cursor.fetchall()[0]
+            power = float(row[0])
+
+            total_cost = power * delta_time / 3600
+        except (Exception, psycopg2.DatabaseError) as error:
+            print("Error while new_measure", error)
+
+        finally:
+            if conn:
+                cursor.close()
+                conn.close()
+        return total_cost
