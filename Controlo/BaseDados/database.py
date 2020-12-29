@@ -51,7 +51,7 @@ class database:
             conn.commit()
 
         except (Exception, psycopg2.DatabaseError) as error:
-            print("Error while updating info on start charging", error)
+            print("Error while start_charging()", error)
         finally:
             if conn:
                 cursor.close()
@@ -93,7 +93,7 @@ class database:
             conn.commit()
 
         except (Exception, psycopg2.DatabaseError) as error:
-            print("Error while updating info on start charging", error)
+            print("Error while stop_charging()", error)
 
         finally:
             if conn:
@@ -135,7 +135,7 @@ class database:
             conn.commit()
 
         except (Exception, psycopg2.DatabaseError) as error:
-            print("Error while new_measure", error)
+            print("Error while new_measure()", error)
 
         finally:
             if conn:
@@ -152,7 +152,7 @@ class database:
             # PARA CARREGAMENTO
             self.stop_charging(charger_id, 1, state_occupation_int)
         except (Exception, psycopg2.DatabaseError) as error:
-            print("Error while new_measure", error)
+            print("Error while charger_interr()", error)
 
         finally:
             if conn:
@@ -173,7 +173,7 @@ class database:
                 self.charger_interr(i, state_occupation_int)
 
         except (Exception, psycopg2.DatabaseError) as error:
-            print("Error while charger_emer", error)
+            print("Error while charger_emer()", error)
 
         finally:
             if conn:
@@ -191,7 +191,7 @@ class database:
             conn.commit()
 
         except (Exception, psycopg2.DatabaseError) as error:
-            print("Error while inserting new connection", error)
+            print("Error while inserting new_connection()", error)
 
         finally:
             if conn:
@@ -209,7 +209,7 @@ class database:
             conn.commit()
 
         except (Exception, psycopg2.DatabaseError) as error:
-            print("Error while updating green power", error)
+            print("Error while update_green_power()", error)
 
         finally:
             if conn:
@@ -229,7 +229,7 @@ class database:
                 self.update_green_power(i, green_power_state)
 
         except (Exception, psycopg2.DatabaseError) as error:
-            print("Error while updating all green power", error)
+            print("Error while update_all_green_power", error)
 
         finally:
             if conn:
@@ -248,7 +248,7 @@ class database:
             conn.commit()
 
         except (Exception, psycopg2.DatabaseError) as error:
-            print("Error while updating green power", error)
+            print("Error while update_fc_availability", error)
 
         finally:
             if conn:
@@ -268,7 +268,7 @@ class database:
                 self.update_fc_availability(i, fc_state_int)
 
         except (Exception, psycopg2.DatabaseError) as error:
-            print("Error while updating all green power", error)
+            print("Error while update_all_fc_availability", error)
 
         finally:
             if conn:
@@ -287,7 +287,7 @@ class database:
             cursor.execute(query)
             conn.commit()
         except(Exception, psycopg2.DatabaseError) as error:
-            print("Error while reseting", error)
+            print("Error while reset_chargers()", error)
 
         finally:
             if conn:
@@ -308,7 +308,7 @@ class database:
             cursor.execute(query)
             conn.commit()
         except(Exception, psycopg2.DatabaseError) as error:
-            print("Error while cleaning historic and charging", error)
+            print("Error while clean_historic_charging()", error)
 
         finally:
             if conn:
@@ -316,6 +316,30 @@ class database:
                 conn.close()
 
         return
+
+    def check_availability(self, charger_id):
+        try:
+            conn = self.connect()
+            cursor = conn.cursor()
+
+            query = 'select state_occupation from "seai".charger where charger_id=%s'
+            cursor.execute(cursor.mogrify(query, (charger_id, )))
+            state_occupation = cursor.fetchall()[0][0]
+            state_occupation_int = 0
+            if state_occupation:
+                state_occupation_int = 1
+            else:
+                state_occupation_int = 0
+            # state_occupation_int = 1 if state_occupation else 0
+        except(Exception, psycopg2.DatabaseError) as error:
+            print("Error while check_availability()", error)
+
+        finally:
+            if conn:
+                cursor.close()
+                conn.close()
+
+        return state_occupation_int
 
     ##########################################################################################
     #######################                                             ######################
@@ -489,7 +513,7 @@ class database:
 
 
         except (Exception, psycopg2.DatabaseError) as error:
-            print("Error while new_measure", error)
+            print("Error while get_active_chargers_id()", error)
 
         finally:
             if conn:
@@ -512,7 +536,7 @@ class database:
                 # print(charger_id)
 
         except (Exception, psycopg2.DatabaseError) as error:
-            print("Error while new_measure", error)
+            print("Error while get_all_chargers_id()", error)
 
         finally:
             if conn:
@@ -537,7 +561,7 @@ class database:
 
             total_cost = power / 1000 * delta_time / 3600
         except (Exception, psycopg2.DatabaseError) as error:
-            print("Error while new_measure", error)
+            print("Error while get_total_cost()", error)
 
         finally:
             if conn:
