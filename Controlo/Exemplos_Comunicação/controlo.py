@@ -47,7 +47,14 @@ def handle_client(conn, addr):
                 connected = False
             else:
                 # Tratar a mensagem
-                handle_msg(conn, msg)
+                lock.acquire()
+                print(f"Aquire from: {addr}.")
+                try:
+                    handle_msg(conn, msg)
+                finally:
+                    print("Release.\n")
+                    lock.release()
+
         '''msg_length = conn.recv(HEADER).decode(FORMAT)
         if msg_length:  # Verifify that it is not null
             # Decode the message
@@ -75,44 +82,34 @@ def handle_msg(conn, json_data):
     if json_data['module'] == 'stub':
         print("Message received:\n ", json_data)
         # Update charger info
-        lock.acquire()
-        try:
-            x = ctrl.run_control(json_data['module'], json_data['chargerID'], json_data['stateOcupation'], json_data['newConnection'],
+        #lock.acquire()
+        #try:
+        x = ctrl.run_control(json_data['module'], json_data['chargerID'], json_data['stateOcupation'], json_data['newConnection'],
                         json_data['chargingMode'], json_data['voltageMode'], json_data['instPower'], json_data['maxPower'])
-        finally:
-            lock.release()
-
-        print("Config Charger 1 --------------------- ", config.charger1)
-        # Enviar info para carregador
-        #print("Sending message... :", x)
-        print()
+            # Enviar info para carregador
+            # print("Sending message... :", x)
         common.send_json_message(conn, x)
+        #finally:
+        #    lock.release()
+
+
+
+
+
 
     # Messages from INTERFACE
     elif json_data['module'] == 'interface':
-        #print("Message received from INTERFACE:\n ", json_data)
-        print("------------------")
-        conn.send("Reponding to INTERFACE.".encode(FORMAT))
+        print("Message received:\n ", json_data)
+        #conn.send("Reponding to INTERFACE.".encode(FORMAT))
         # Update info from Interface
-        lock.acquire()
-        try:
-            ctrl.run_control(json_data['module'], json_data['chargerID'], json_data['stateOcupation'],
+        #lock.acquire()
+        #try:
+        ctrl.run_control(json_data['module'], json_data['chargerID'], json_data['stateOcupation'],
                              json_data['newConnection'],
                              json_data['chargingMode'], json_data['voltageMode'], json_data['instPower'],
                              json_data['maxPower'])
-        finally:
-            lock.release()
-
-
-        '''
-        if json_data['chargingMode'] == 0:
-            print("[", json_data['chargerID'], "]", " Carregamento: Normal.")
-        elif json_data['chargingMode'] == 1:
-            print("[", json_data['chargerID'], "]", " Carregamento: Rápido.")
-        elif json_data['chargingMode'] == 2:
-            print("[", json_data['chargerID'], "]", " Carregamento: Livre.")
-        elif json_data['chargingMode'] == -1:
-            print("[", json_data['chargerID'], "]", " Carregamento: Interrupção.")'''
+        #finally:
+         #   lock.release()
 
     # Messages from MANAGEMENT
     elif json_data['module'] == 'management':
@@ -124,18 +121,6 @@ def handle_msg(conn, json_data):
             print("Funcionamento Normal.")
 
 
-
-def send_msg(conn, msg):
-    # Encode msg and header
-    print('X = ', msg)
-    msg = json.dumps(msg)
-    encoded_msg = msg.encode(FORMAT)
-    msg_length = len(encoded_msg)
-    encoded_header = str(msg_length).encode(FORMAT)
-    encoded_header += b' ' * (HEADER - len(encoded_header))
-    # Send msgs to server
-    conn.send(encoded_header)
-    conn.send(encoded_msg)
 
 # StartUp Routine
 ctrl.startUp()

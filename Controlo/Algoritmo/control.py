@@ -48,7 +48,7 @@ def run_control(module, ID, state_occupation, new_connection, charging_mode, vol
     updateGreenChargAvail()
     
     # update database
-    updateFlagsDB()
+    #updateFlagsDB()
                 
     chargerKey = dictionaryKeyFromID(ID)
     # print(chargers.get(chargerKey))
@@ -67,22 +67,22 @@ def updateChargersState(module, ID, state_occupation, new_connection, charging_m
     #    - chargingMode = 2 -> Sem tipo de carregamento atribuido
     if(module == 'stub'):
         # New Connection
-        if( (new_connection == 1) and (state_occupation == 0) and (charging_mode == 2) ):
+        if( (new_connection == 1) and (state_occupation == 0) and (charging_mode == 2)): # and (chargers.get(chargerKey).get("stateOccupation")==0))
             chargers.get(chargerKey).update({"newConnection": new_connection})
             chargers.get(chargerKey).update({"voltageMode": voltage_mode})
             # chargers.get(chargerKey).update({"chargingMode": charging_mode})
             # Update DB - New Charger
-            print("NEW CONNECTION \n")
+            #print("NEW CONNECTION \n")
             try:
                 db.new_connection(ID, new_connection)
             except:
                 print("An exception occurred -> DB")
             
         # Measure Update
-        if( (new_connection == 0) and (state_occupation == 1) and (charging_mode != 2)):
+        elif( (new_connection == 0) and (state_occupation == 1) and (charging_mode != 2)):
             chargers.get(chargerKey).update({"instPower": inst_power})
             # Update DB - New Measure
-            print("NEW MEASURE \n")
+            print("NEW MEASURE ")
             try:
                 db.new_measure(ID, inst_power, chargers.get(chargerKey).get("voltage"), max_power)
             except:
@@ -177,7 +177,7 @@ def updateMaxPowers():
                 chargers.get(key).update({"stateOccupation": 1 })
                 # Atualiza db - Rapido DC
                 chargerID = chargers.get(key).get("chargerID")
-                print("START CHARGING FAST DC \n")
+                print("START CHARGING FAST DC")
                 # start_charging(self, charger_id, max_curr, charge_type_int, voltage_mode, new_connection, state_occupation_int)
                 try:
                     db.start_charging(chargerID, fastDCPow, 1, 0, 0, 1)
