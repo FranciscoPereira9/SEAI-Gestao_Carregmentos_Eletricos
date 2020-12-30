@@ -4,7 +4,7 @@ import struct
 
 HEADER = 64
 PORT = 5050
-SERVER = "172.29.0.15"
+SERVER = "172.29.0.87"
 ADDR = (SERVER, PORT)
 FORMAT = 'utf-8'
 DISCONNECT_MESSAGE = "!DISCONNECT"
@@ -12,8 +12,8 @@ DISCONNECT_MESSAGE = "!DISCONNECT"
  #Define message to send
 msg = {
     "module": 'interface', #<-
-    "chargerID": 202002, #<-
-    "stateOcupation": 0,
+    "chargerID": 202001, #<-
+    "stateOccupation": 0,
     "newConnection": 0, #<-
     "chargingMode": 1, #<-
     "voltageMode": 0,
