@@ -84,7 +84,7 @@ def handle_msg(conn, json_data):
         # Update charger info
         #lock.acquire()
         #try:
-        x = ctrl.run_control(json_data['module'], json_data['chargerID'], json_data['stateOcupation'], json_data['newConnection'],
+        x = ctrl.run_control(json_data['module'], json_data['chargerID'], json_data['stateOccupation'], json_data['newConnection'],
                         json_data['chargingMode'], json_data['voltageMode'], json_data['instPower'], json_data['maxPower'])
             # Enviar info para carregador
             # print("Sending message... :", x)
@@ -104,7 +104,7 @@ def handle_msg(conn, json_data):
         # Update info from Interface
         #lock.acquire()
         #try:
-        ctrl.run_control(json_data['module'], json_data['chargerID'], json_data['stateOcupation'],
+        ctrl.run_control(json_data['module'], json_data['chargerID'], json_data['stateOccupation'],
                              json_data['newConnection'],
                              json_data['chargingMode'], json_data['voltageMode'], json_data['instPower'],
                              json_data['maxPower'])
