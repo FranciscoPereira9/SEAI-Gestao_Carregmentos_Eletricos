@@ -4,16 +4,18 @@ import struct
 
 HEADER = 64
 PORT = 5050
-SERVER = "172.29.0.87"
+SERVER = "172.29.0.18"
 ADDR = (SERVER, PORT)
 FORMAT = 'utf-8'
-DISCONNECT_MESSAGE = "!DISCONNECT"
+DISCONNECT_MESSAGE = {
+    "module": 'disconnected'
+}
 
  #Define message to send
-msg = {
+msg1 = {
     "module": 'interface', #<-
     "chargerID": 202001, #<-
-    "stateOccupation": 0,
+    "stateOcupation": 0,
     "newConnection": 0, #<-
     "chargingMode": 1, #<-
     "voltageMode": 0,
@@ -21,6 +23,40 @@ msg = {
     "maxPower": 0,
     "voltage": 0
 }
+msg2 = {
+    "module": 'interface', #<-
+    "chargerID": 202002, #<-
+    "stateOcupation": 0,
+    "newConnection": 0, #<-
+    "chargingMode": 1, #<-
+    "voltageMode": 0,
+    "instPower": 0,
+    "maxPower": 0,
+    "voltage": 0
+}
+msg3 = {
+    "module": 'interface', #<-
+    "chargerID": 202003, #<-
+    "stateOcupation": 0,
+    "newConnection": 0, #<-
+    "chargingMode": 1, #<-
+    "voltageMode": 0,
+    "instPower": 0,
+    "maxPower": 0,
+    "voltage": 0
+}
+msg4 = {
+    "module": 'interface', #<-
+    "chargerID": 202004, #<-
+    "stateOcupation": 0,
+    "newConnection": 0, #<-
+    "chargingMode": 0, #<-
+    "voltageMode": 0,
+    "instPower": 0,
+    "maxPower": 0,
+    "voltage": 0
+}
+msg=msg4
 
 def receive_json_message(sock, timeout=None):
     sock.settimeout(timeout)
@@ -51,8 +87,8 @@ def send_json_message(sock, json_data):
 
     # print("Sending packet... (identifier:{}, {:.2f}kWh, {:.2f}%)".format(*values))
     sock.send(header)
-    print(data)
     sock.send(bytes(data, "utf-8"))
+    print(data)
 
 
 # Criar socket
@@ -63,4 +99,5 @@ client.connect(ADDR)
 
 # Send message to CONTROLO
 send_json_message(client, msg)
+send_json_message(client, DISCONNECT_MESSAGE)
 #print(client.recv(2048).decode(FORMAT))
