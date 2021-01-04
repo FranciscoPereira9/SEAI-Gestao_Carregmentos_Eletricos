@@ -85,10 +85,8 @@ def handle_msg(conn, json_data):
     elif json_data['module'] == 'management':
         print("Message MANAGEMENT:\n ", json_data)
         # Como é que o sistema trata as mensagens vindas da gestão
-        if json_data['state'] == -1:
+        if json_data['202001'] == 1:
             print("Interrupção.")
-        else:
-            print("Funcionamento Normal.")
 
 
 # StartUp Routine
