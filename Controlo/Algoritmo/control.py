@@ -41,13 +41,6 @@ def run_control(module, ID, state_occupation, new_connection, charging_mode, vol
     # Atualiza o dicionario
     updateChargersState(module, ID, state_occupation, new_connection, charging_mode, voltage_mode, inst_power, max_power)
     
-    # Update Flags
-    updateFastChargAvail()
-    updateGreenChargAvail()
-    
-    # update database
-    # updateFlagsDB()
-                
     chargerKey = dictionaryKeyFromID(ID)
     return chargers.get(chargerKey)   
         
@@ -63,6 +56,10 @@ def updateChargersState(module, ID, state_occupation, new_connection, charging_m
     if(module == 'stub'):
         # NEW CONNECTION
         if ( (new_connection == 1) and (state_occupation == 0) and (charging_mode == 2) ):
+            # Update Flags DB - 1 time
+            if((new_connection == 1) and chargers.get(chargerKey).get("newConnection") == 0):
+                updateFlagsDB(ID)
+                
             # Still waiting for interface reply and not interrupted
             if ((chargers.get(chargerKey).get("chargingMode") == 2) and (chargersEmer[chargerKey] == 1)):
                 chargers.get(chargerKey).update({"newConnection": new_connection})
@@ -90,15 +87,28 @@ def updateChargersState(module, ID, state_occupation, new_connection, charging_m
                 
             # Everything working normal
             elif((chargers.get(chargerKey).get("chargingMode") != 2) and (chargersEmer[chargerKey] == 1)):
-                chargers.get(chargerKey).update({"instPower": inst_power})
-                # Update Power
-                updateMaxPowers()
-                # Update DB - New Measure
-                print("NEW MEASURE \n")
-                try:
-                    db.new_measure(ID, inst_power, chargers.get(chargerKey).get("voltage"), max_power)
-                except:
-                    print("An exception occurred -> DB")
+                # Charging continues
+                if(inst_power > 0):
+                    chargers.get(chargerKey).update({"instPower": inst_power})
+                    # Update Power
+                    updateMaxPowers()
+                    # Update DB - New Measure
+                    print("NEW MEASURE \n")
+                    try:
+                        db.new_measure(ID, inst_power, chargers.get(chargerKey).get("voltage"), max_power)
+                    except:
+                        print("An exception occurred -> DB")
+                
+                # charging terminated - power = 0
+                elif(inst_power <= 0):
+                    # reset as variaveis do carregador
+                    resetCharger(chargerKey)
+                    print("TESTE")
+                    # Update DB - fori = true if interrompido, false se terminado
+                    try:
+                        db.stop_charging(ID, False, 0) 
+                    except:
+                        print("An exception occurred -> DB")
         
     
     # PROVENIENTE DA GESTAO
@@ -106,7 +116,7 @@ def updateChargersState(module, ID, state_occupation, new_connection, charging_m
     #       - 0 -> charging stopped, resetChargers
     #       - 1 -> charger restarted
     if(module == 'management'):
-        if(state_occupation == 0):
+        if((state_occupation == 0) and (chargers.get(chargerKey).get("stateOccupation") != state_occupation)):
             # Stops 1 charger
             chargersEmer[chargerKey] = 0
             # Resets Chargewr Variables
@@ -117,7 +127,7 @@ def updateChargersState(module, ID, state_occupation, new_connection, charging_m
             except:
                 print("An exception occurred -> DB")
         
-        elif(state_occupation == 1):
+        elif(state_occupation == 1 and (chargers.get(chargerKey).get("stateOccupation") != state_occupation)):
             # Restarts 1 charger
             chargersEmer[chargerKey] = 1
             resetCharger(chargerKey)
@@ -182,8 +192,7 @@ def updateMaxPowers():
     # if ( (chargersCount[3] + newChargersCount[3] ) > 0 ):
     if ( newChargersCount[3] > 0 ):
         normalPower = (availablePower - (newChargersCount[1]) * fastDCPow  \
-                       - (newChargersCount[2]) * fastACPow ) \
-                       / (newChargersCount[3] )
+                       - (newChargersCount[2]) * fastACPow ) / (newChargersCount[3] )
                        
     # Garante-se que nao se ultrapassa a pMax normal
     if ( normalPower > normalMaxPow ):
@@ -287,19 +296,19 @@ def emer(state):
     updateAllChargers.start()
 
 
-def updateFlagsDB():
+def updateFlagsDB(ID):
     # Function to Update Flags
     # db.update_all_green_power(greenChargAvail)
     # db.update_all_fc_availability(fastChargAvail)
-    
-    # Thread to Update Green Charging on DB
-    gc = threading.Thread(target = db.update_all_green_power, args = (greenChargAvail, ))
-    # Thread to Update Fast Charging on DB
-    fc = threading.Thread(target = db.update_all_fc_availability, args = (fastChargAvail, ))
-    
-    # Start Threads
-    gc.start()
-    fc.start()
+    try:
+        db.update_fc_availability(ID, fastChargAvail)
+    except:
+        print("An exception occurred -> updateFlagsDB - FC") 
+        
+    try:
+        db.update_green_power(ID, greenChargAvail)
+    except:
+        print("An exception occurred -> updateFlagsDB - GC")
     
     
 def startUp():
