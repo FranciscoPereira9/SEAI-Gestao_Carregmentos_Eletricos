@@ -1,13 +1,16 @@
 package pt.atp.app_seai_g
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+
+// Activity to register the user
 
 
 class ActivityRegister : AppCompatActivity() {
@@ -18,6 +21,8 @@ class ActivityRegister : AppCompatActivity() {
     private var confirmPasswordTV: EditText? = null
     private var regBtn: Button? = null
     private var mAuth: FirebaseAuth? = null
+    // Access a Cloud Firestore instance from your Activity
+    private val db = FirebaseFirestore.getInstance()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,6 +33,27 @@ class ActivityRegister : AppCompatActivity() {
         regBtn!!.setOnClickListener{
             registerNewUser()
         }
+    }
+
+    private fun writeNewUserDatabase(name: String, email: String) {
+        // Create a new user with a first and last name
+        val user = hashMapOf(
+                "name" to name,
+                "email" to email,
+                "numCharges" to 0
+        )
+
+        // Add a new document with a generated ID
+        db.collection("users").document(email)
+                .set(user)
+                .addOnSuccessListener {
+                    Toast.makeText(applicationContext, getString(R.string.successRegister), Toast.LENGTH_LONG).show()
+                    val intent = Intent(this, ActivityLogin::class.java)
+                    startActivity(intent)
+                }
+                .addOnFailureListener {
+                    Toast.makeText(applicationContext, getString(R.string.error_registering), Toast.LENGTH_LONG).show()
+                }
     }
 
     private fun registerNewUser() {
@@ -56,9 +82,7 @@ class ActivityRegister : AppCompatActivity() {
         mAuth!!.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    Toast.makeText(applicationContext, getString(R.string.successRegister), Toast.LENGTH_LONG).show()
-                    val intent = Intent(this, ActivityLogin::class.java)
-                    startActivity(intent)
+                    writeNewUserDatabase(name,email)
                 } else {
                     Toast.makeText(applicationContext, getString(R.string.failRegister), Toast.LENGTH_LONG).show()
                 }

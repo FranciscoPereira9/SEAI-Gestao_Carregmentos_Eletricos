@@ -1,14 +1,19 @@
 package pt.atp.app_seai_g
 
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 import android.app.PendingIntent
+import android.content.Intent
 import android.content.IntentFilter
 import android.nfc.NdefMessage
 import android.nfc.NfcAdapter
+import android.os.Bundle
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import org.jetbrains.anko.doAsync
+import org.json.JSONObject
+import pt.atp.app_seai_g.Data.Request
+
+// Activity to read NFC
 
 const val MIME_TEXT_PLAIN = "text/plain"
 
@@ -16,18 +21,19 @@ class ReceiverActivity : AppCompatActivity() {
 
     private var nfcIDCharger: TextView? = null
     private var nfcAdapter: NfcAdapter? = null
-    private val isNfcSupported: Boolean = this.nfcAdapter != null
+//    private val isNfcSupported: Boolean = this.nfcAdapter != null
+    private var message: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_receiver_nfc)
         this.nfcAdapter = NfcAdapter.getDefaultAdapter(this)
-        if (!isNfcSupported) {
-            Toast.makeText(this, "Nfc is not supported on this device", Toast.LENGTH_SHORT).show()
+        /*if (!isNfcSupported) {
+            Toast.makeText(this, getString(R.string.nfcNotSupported), Toast.LENGTH_SHORT).show()
             this.finish()
-        }
+        }*/
         if (!nfcAdapter!!.isEnabled) {
-            Toast.makeText(this, "NFC disabled on this device. Turn on to proceed", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.nfcDisabled), Toast.LENGTH_SHORT).show()
         }
         initViews()
     }
@@ -60,7 +66,7 @@ class ReceiverActivity : AppCompatActivity() {
             try {
                 this?.addDataType(MIME_TEXT_PLAIN)
             } catch (ex: IntentFilter.MalformedMimeTypeException) {
-                throw RuntimeException("Check your MIME type")
+                throw RuntimeException(getString(R.string.mimeType))
             }
         }
         adapter?.enableForegroundDispatch(activity, pendingIntent, filters, techList)
@@ -90,8 +96,16 @@ class ReceiverActivity : AppCompatActivity() {
         }
     }
     private fun confirmIdCharger(chargerID: String){
-        //TODO verify if id charger is ready to use (value available in database)
-        sendID(chargerID)
+        doAsync {
+            message = Request("http://127.0.0.1:5000/readytocharge/$chargerID").run()
+            val obj = JSONObject(message.toString())
+            val flag = obj.getString("flag")
+            if (flag=="1"){
+                sendID(chargerID)
+            } else{
+                Toast.makeText(applicationContext,getString(R.string.insert_valid_id1) +" " + chargerID + " " + getString(R.string.insert_valid_id2),Toast.LENGTH_LONG).show()
+            }
+        }
     }
 
     private fun sendID(chargerID: String){

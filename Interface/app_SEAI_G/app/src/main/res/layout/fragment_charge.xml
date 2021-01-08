@@ -22,14 +22,13 @@
         app:layout_constraintVertical_bias="1.0"/>
 
     <TextView
-        android:id="@+id/chargertitle"
+        android:id="@+id/chargerTitle"
         android:text="@string/titleID"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="10dp"
-        android:textColor="@color/black"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.019"
@@ -38,25 +37,24 @@
         tools:ignore="MissingConstraints" />
 
     <TextView
-        android:id="@+id/idtext"
-        android:text="@string/idtext"
+        android:id="@+id/idText"
+        android:text="@string/idText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="10dp"
-        android:textColor="@color/black"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.019"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chargertitle"
+        app:layout_constraintTop_toBottomOf="@+id/chargerTitle"
         tools:ignore="MissingConstraints" />
 
 
     <EditText
-        android:id="@+id/idcarregador"
-        android:hint="@string/idcarregador"
+        android:id="@+id/idCharger"
+        android:hint="@string/idCharger"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
@@ -68,13 +66,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/idtext"
+        app:layout_constraintTop_toBottomOf="@+id/idText"
         app:layout_constraintHorizontal_bias="0.0"
         android:autofillHints=""
         android:inputType="number" />
 
     <Button
-        android:id="@+id/button_sendid"
+        android:id="@+id/button_sendId"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
@@ -86,28 +84,27 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/idcarregador"
+        app:layout_constraintTop_toBottomOf="@+id/idCharger"
         app:layout_constraintVertical_bias="0.00" />
 
     <TextView
-        android:id="@+id/idqrcode"
-        android:text="@string/idqrcode"
+        android:id="@+id/idQRCode"
+        android:text="@string/idQRCode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="20dp"
-        android:textColor="@color/black"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.019"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_sendid"
+        app:layout_constraintTop_toBottomOf="@+id/button_sendId"
         tools:ignore="MissingConstraints" />
 
     <Button
-        android:id="@+id/button_qrcode"
-        android:text="@string/scanQRcode"
+        android:id="@+id/button_QRCode"
+        android:text="@string/scanQRCode"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
@@ -118,28 +115,27 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/idqrcode"
+        app:layout_constraintTop_toBottomOf="@+id/idQRCode"
         app:layout_constraintVertical_bias="0.000" />
 
     <TextView
-        android:id="@+id/idnfc"
-        android:text="@string/idnfc"
+        android:id="@+id/idNFC"
+        android:text="@string/idNFC"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="20dp"
-        android:textColor="@color/black"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.019"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_qrcode"
+        app:layout_constraintTop_toBottomOf="@+id/button_QRCode"
         tools:ignore="MissingConstraints" />
 
     <Button
         android:id="@+id/button_nfc"
-        android:text="@string/NFCreader"
+        android:text="@string/NFCreate"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
@@ -150,9 +146,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/idnfc"
+        app:layout_constraintTop_toBottomOf="@+id/idNFC"
         app:layout_constraintVertical_bias="0.000" />
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

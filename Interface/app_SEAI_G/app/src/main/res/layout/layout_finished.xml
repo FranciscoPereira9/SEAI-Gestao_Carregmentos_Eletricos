@@ -22,7 +22,7 @@
         app:layout_constraintVertical_bias="1.0"/>
 
     <TextView
-        android:id="@+id/textfinished"
+        android:id="@+id/textFinished"
         android:layout_width="257dp"
         android:layout_height="94dp"
         android:layout_marginStart="50dp"
@@ -39,33 +39,30 @@
         tools:ignore="MissingConstraints" />
 
     <TextView
-        android:id="@+id/textready"
+        android:id="@+id/textReady"
         android:text="@string/ready"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="40dp"
-        android:textColor="@color/black"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.019"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textfinished"
+        app:layout_constraintTop_toBottomOf="@+id/textFinished"
         tools:ignore="MissingConstraints" />
 
     <TextView
-        android:id="@+id/textotalprice"
-        android:text="@string/totalprice"
+        android:id="@+id/textTotalPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
-        android:textColor="@color/black"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.019"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textready"
+        app:layout_constraintTop_toBottomOf="@+id/textReady"
         tools:ignore="MissingConstraints" />
 
     <Button

@@ -10,19 +10,31 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.zxing.integration.android.IntentIntegrator
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
+import org.json.JSONObject
+import pt.atp.app_seai_g.Data.Request
+import pt.atp.app_seai_g.MyApplication.Companion.urlStart
 
+// Fragment to insert charger id
+//     - verify id charger
+//          - if charger is available
+//          - the vehicle is connected
+//     - begin charging (ActivityCharging)
 
 class FragmentCharge : Fragment(R.layout.fragment_charge) {
+
+    private var message: String? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
 
         val rootView: View = inflater.inflate(R.layout.fragment_charge,container,false)
-        val buttonSendId: Button = rootView.findViewById(R.id.button_sendid)
-        val buttonQrCode: Button = rootView.findViewById(R.id.button_qrcode)
+        val buttonSendId: Button = rootView.findViewById(R.id.button_sendId)
+        val buttonQrCode: Button = rootView.findViewById(R.id.button_QRCode)
         val buttonNFC: Button = rootView.findViewById(R.id.button_nfc)
 
         buttonSendId.setOnClickListener {
-            val chargerIdText: EditText = rootView.findViewById(R.id.idcarregador)
+            val chargerIdText: EditText = rootView.findViewById(R.id.idCharger)
             confirmIdCharger(chargerIdText.text.toString())
         }
 
@@ -59,8 +71,18 @@ class FragmentCharge : Fragment(R.layout.fragment_charge) {
     }
 
     private fun confirmIdCharger(chargerID: String){
-        //TODO verify if id charger is ready to use (value available in database)
-        sendID(chargerID)
+        doAsync {
+            message = Request("$urlStart/readytocharge/$chargerID").run()
+            uiThread{
+                val obj = JSONObject(message.toString())
+                //Toast.makeText(context,message,Toast.LENGTH_LONG).show()
+                if (obj.getString("flag")=="1"){
+                    sendID(chargerID)
+                } else{
+                    Toast.makeText(context,getString(R.string.insert_valid_id1) +" " + chargerID + " " + getString(R.string.insert_valid_id2),Toast.LENGTH_LONG).show()
+                }
+            }
+        }
     }
 
     private fun sendID(chargerID: String){

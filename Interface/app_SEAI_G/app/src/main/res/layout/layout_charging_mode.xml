@@ -7,7 +7,7 @@
     tools:context=".ActivityCharging">
 
     <TextView
-        android:id="@+id/chargerid"
+        android:id="@+id/chargerId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
@@ -36,14 +36,13 @@
         app:layout_constraintVertical_bias="1.0"/>
 
     <TextView
-        android:id="@+id/textchargemode"
-        android:text="@string/selectmode"
+        android:id="@+id/textChargeMode"
+        android:text="@string/selectMode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="20dp"
-        android:textColor="@color/black"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.019"
@@ -52,8 +51,8 @@
         tools:ignore="MissingConstraints" />
 
     <Button
-        android:id="@+id/chargenormal"
-        android:text="@string/normalcharging"
+        android:id="@+id/chargeNormal"
+        android:text="@string/normalCharging"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
@@ -64,12 +63,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textchargemode"
+        app:layout_constraintTop_toBottomOf="@+id/textChargeMode"
         app:layout_constraintVertical_bias="0.000" />
 
     <Button
-        android:id="@+id/chargefast"
-        android:text="@string/fastcharging"
+        android:id="@+id/chargeFast"
+        android:text="@string/fastCharging"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
@@ -80,55 +79,94 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chargenormal"
+        app:layout_constraintTop_toBottomOf="@+id/chargeNormal"
+        app:layout_constraintVertical_bias="0.000" />
+
+    <Button
+        android:id="@+id/chargeGreen"
+        android:text="@string/greenCharging"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="50dp"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chargeFast"
         app:layout_constraintVertical_bias="0.000" />
 
     <TextView
-        android:id="@+id/textprices"
-        android:text="@string/textprices"
+        android:id="@+id/textPrices"
+        android:text="@string/textPrices"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="20dp"
-        android:textColor="@color/black"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.019"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chargefast"
+        app:layout_constraintTop_toBottomOf="@+id/chargeGreen"
         tools:ignore="MissingConstraints" />
 
     <TextView
-        android:id="@+id/pricenormal"
-        android:text="@string/textpricenormal"
+        android:id="@+id/priceNormal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="20dp"
-        android:textColor="@color/black"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.019"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textprices"
+        app:layout_constraintTop_toBottomOf="@+id/textPrices"
         tools:ignore="MissingConstraints" />
 
     <TextView
-        android:id="@+id/pricefast"
-        android:text="@string/textpricefast"
+        android:id="@+id/priceFast"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="20dp"
-        android:textColor="@color/black"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.019"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pricenormal"
+        app:layout_constraintTop_toBottomOf="@+id/priceNormal"
         tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/priceGreen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="20dp"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.019"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/priceFast"
+        tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/returnButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="16dp"
+        android:text="@string/returnButton"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
