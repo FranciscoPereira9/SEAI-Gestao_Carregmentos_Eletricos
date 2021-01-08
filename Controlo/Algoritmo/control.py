@@ -31,6 +31,8 @@ fastChargAvail = 1 # 1 - Available ; 0 - Not Available
 # Flag - Green Charging Availability
 greenChargAvail = 1 # 1 - Available ; 0 - Not Available
 
+from threading import Lock
+lock = Lock()
 
 # Individual Functions
 def run_control(module, ID, state_occupation, new_connection, charging_mode, voltage_mode, inst_power, max_power):
@@ -38,8 +40,15 @@ def run_control(module, ID, state_occupation, new_connection, charging_mode, vol
     updateFastChargAvail()
     updateGreenChargAvail()
     
+    lock.acquire()
+    try:
+        # Atualiza o dicionario
+        updateChargersState(module, ID, state_occupation, new_connection, charging_mode, voltage_mode, inst_power, max_power)
+    finally:
+        lock.release()
+        
     # Atualiza o dicionario
-    updateChargersState(module, ID, state_occupation, new_connection, charging_mode, voltage_mode, inst_power, max_power)
+    # updateChargersState(module, ID, state_occupation, new_connection, charging_mode, voltage_mode, inst_power, max_power)
     
     chargerKey = dictionaryKeyFromID(ID)
     return chargers.get(chargerKey)   
@@ -103,13 +112,26 @@ def updateChargersState(module, ID, state_occupation, new_connection, charging_m
                 elif(inst_power <= 0):
                     # reset as variaveis do carregador
                     resetCharger(chargerKey)
-                    print("TESTE")
+                    print("CHARGING STOPPED")
                     # Update DB - fori = true if interrompido, false se terminado
                     try:
                         db.stop_charging(ID, False, 0) 
                     except:
                         print("An exception occurred -> DB")
         
+        # BATTERY FULL - STOPPED CHARGING
+        # ERROR: Após a interface parar já não se pode correr "stop.charging" de novo
+        '''
+        elif( (new_connection == 0) and (state_occupation == 1) and (charging_mode == 2) ):
+             # reset as variaveis do carregador
+            resetCharger(chargerKey)
+            print("CHARGING STOPPED")
+            # Update DB - fori = true if interrompido, false se terminado
+            try:
+                db.stop_charging(ID, False, 0) 
+            except:
+                print("An exception occurred -> DB")
+        '''
     
     # PROVENIENTE DA GESTAO
     # Se 'all':
@@ -148,10 +170,10 @@ def updateChargersState(module, ID, state_occupation, new_connection, charging_m
         
         # Charging Stopped
         elif ((charging_mode == 2) or (chargersEmer[chargerKey] == 0)):
-            # reset as variaveis do carregador
-            resetCharger(chargerKey)
             # Update DB - fori = true if interrompido, false se terminado
             fori = True if chargers.get(chargerKey).get("instPower") > 0 else False
+            # reset as variaveis do carregador
+            resetCharger(chargerKey)
             try:
                 db.stop_charging(ID, fori, 0) 
             except:
@@ -182,7 +204,7 @@ def updateMaxPowers():
     normalPower = 0
     # So se calcula caso haja carregamentos normais
     """
-    OLD VERSION:
+    # OLD VERSION:
     if ( (chargersCount[3] + newChargersCount[3] ) > 0 ):
         normalPower = (availablePower - (chargersCount[1] + newChargersCount[1]) * fastDCPow  \
                        - (chargersCount[2] + newChargersCount[2]) * fastACPow ) \
