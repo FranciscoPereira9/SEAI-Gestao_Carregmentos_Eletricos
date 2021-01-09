@@ -34,8 +34,8 @@ $sql = "SELECT * FROM seai.operator WHERE username = '$uname' AND password = '$p
     if ($row['username'] === $uname && $row['password'] === $pass) {
       $_SESSION['username'] = $row['username'];
       $_SESSION['id'] = $row['id'];
-
-
+      $_SESSION ['chargers'] = ['module'=>'management','202001' => 1, '202002' => 0, '202003' => 1, '202004' => 0, '202005' => 1, '202006' => 0, '202007' => 1, '202008' => 0, '202009' => 1, '202010' => 1];
+      echo $_SESSION ['chargers'];
       header("Location: home.php");
       exit();
     } else {

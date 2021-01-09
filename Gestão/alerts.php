@@ -69,7 +69,7 @@ if ($teste == "202010") {
 
  ?>
 <?php
-$sql = "SELECT * FROM seai.emergency ORDER BY charger_id DESC LIMIT 1";
+$sql = "SELECT * FROM seai.emergency ORDER BY id DESC LIMIT 1";
 $result = pg_query($conn, $sql);
 if (pg_num_rows($result)>0) {
   while ($row = pg_fetch_assoc($result)) {
@@ -77,7 +77,6 @@ if (pg_num_rows($result)>0) {
     $teste1 = $row['charger_id'];
   }
   }
-
 
 
  ?>
@@ -96,9 +95,7 @@ if (pg_num_rows($result)>0) {
              $result = pg_query($conn, $sql);
 
            }
-           else {
-             echo "AAA";
-           }
+
 
                         $sql = "SELECT * FROM seai.emergency";
                         $result = pg_query($conn, $sql);
@@ -112,7 +109,7 @@ if (pg_num_rows($result)>0) {
 
 
 
-                   echo $teste1;    echo $id_mod;
+
 
 
 

@@ -147,8 +147,13 @@ ul a:hover{
 .db{
   color: transparent;
 }
-.turn_off{
-  width: 60px;
+#turn_off{
+padding-top: 5px;
+color: red;
+}
+
+#turn_on{
+color: green;
 }
 
 span{
@@ -199,7 +204,9 @@ span{
   color: black;
 }
 
-
+#onn{
+  color: green;
+}
 .fa-exclamation-triangle{
   color:red;
 }
@@ -351,7 +358,7 @@ justify-content: center;
   overflow-y: scroll;
   max-height:700px;
   padding: 15px;
-  margin-left: 150px;
+  margin-left: 190px;
   margin-top: 10px;
 
 
@@ -364,6 +371,7 @@ table{
   margin: auto;
   padding: 30px;
   margin-top: 14px;
+
 
 }
 .emergency_table{
@@ -380,12 +388,14 @@ tr:nth-child(even) {
   background-color: #ccc;
 }
 .top{
-  width: 100%;
-  background-color: blue;
+  width: 70%;
+  border-bottom: 3px solid #90EE90;
   align-items: center;
   text-align: center;
   justify-content: center;
   margin-top: 70px;
+  height: 30px;
+  margin-left: 15%;
 }
 .emergency{
   width: 100%;
