@@ -394,7 +394,7 @@ class database:
             conn.commit()
 
         except (Exception, psycopg2.DatabaseError) as error:
-            print("Error while update_charger_measures()", error)
+            print("Error while updating charger table 1", error)
 
         finally:
             if conn:
@@ -413,7 +413,7 @@ class database:
             charging_id = cursor.fetchone()[0]
 
         except (Exception, psycopg2.DatabaseError) as error:
-            print("Error while get_charging_id()", error)
+            print("Error while updating charger table 2", error)
 
         finally:
             if conn:
@@ -434,7 +434,7 @@ class database:
             intervalo_total_s = float(intervalo_total.total_seconds())
 
         except (Exception, psycopg2.DatabaseError) as error:
-            print("Error while get_total_interval()", error)
+            print("Error while updating charger table 3", error)
 
         finally:
             if conn:
@@ -456,7 +456,7 @@ class database:
             intervalo_atual_s = float(intervalo_atual.total_seconds())
 
         except (Exception, psycopg2.DatabaseError) as error:
-            print("Error while get_actual_interval()", error)
+            print("Error while updating charger table 5", error)
 
         finally:
             if conn:
@@ -484,7 +484,7 @@ class database:
 
 
         except (Exception, psycopg2.DatabaseError) as error:
-            print("Error while get_avg_power()", error)
+            print("Error while updating charger table 6", error)
 
         finally:
             if conn:
@@ -511,7 +511,7 @@ class database:
 
 
         except (Exception, psycopg2.DatabaseError) as error:
-            print("Error while get_avg_power2()", error)
+            print("Error while updating charger table 7", error)
 
         finally:
             if conn:

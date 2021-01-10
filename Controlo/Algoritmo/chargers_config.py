@@ -177,3 +177,19 @@ chargersSet = {
   "charger9" : charger9,
   "charger10" : charger10
 }
+
+
+# 1-> Operational, 0-> Stopped
+
+chargersEmer = {
+  "charger1" : 1,
+  "charger2" : 1,
+  "charger3" : 1,
+  "charger4" : 1,
+  "charger5" : 1,
+  "charger6" : 1,
+  "charger7" : 1,
+  "charger8" : 1,
+  "charger9" : 1,
+  "charger10" : 1
+}
