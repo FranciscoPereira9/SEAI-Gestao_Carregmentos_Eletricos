@@ -276,6 +276,28 @@ class database:
                 conn.close()
         return
 
+    def update_charge_state(self, charger_id, charge_state):
+
+        try:
+            conn = self.connect()
+            cursor = conn.cursor()
+
+            charging_id = self.get_charging_id(charger_id)
+            # print(charger_id)
+            query = 'update "seai".charging set charge_state=%s where id=%s'
+            cursor.execute(cursor.mogrify(query, (charge_state, charging_id)))
+            conn.commit()
+
+        except (Exception, psycopg2.DatabaseError) as error:
+            print("Error while update_all_fc_availability", error)
+
+        finally:
+            if conn:
+                cursor.close()
+                conn.close()
+        return
+
+
     def reset_chargers(self):
         try:
             conn = self.connect()
@@ -559,7 +581,7 @@ class database:
             row = cursor.fetchall()[0]
             power = float(row[0])
 
-            total_cost = power / 1000 * delta_time / 3600
+            total_cost = round(power / 1000 * delta_time / 3600, 2)
         except (Exception, psycopg2.DatabaseError) as error:
             print("Error while get_total_cost()", error)
 
@@ -568,3 +590,4 @@ class database:
                 cursor.close()
                 conn.close()
         return total_cost
+
