@@ -223,9 +223,7 @@ class database:
             cursor = conn.cursor()
 
             charger_id = self.get_all_chargers_id()
-            # print(charger_id)
             for i in charger_id:
-                # print(i)
                 self.update_green_power(i, green_power_state)
 
         except (Exception, psycopg2.DatabaseError) as error:
@@ -262,9 +260,7 @@ class database:
             cursor = conn.cursor()
 
             charger_id = self.get_all_chargers_id()
-            # print(charger_id)
             for i in charger_id:
-                # print(i)
                 self.update_fc_availability(i, fc_state_int)
 
         except (Exception, psycopg2.DatabaseError) as error:
@@ -283,7 +279,7 @@ class database:
             cursor = conn.cursor()
 
             charging_id = self.get_charging_id(charger_id)
-            # print(charger_id)
+
             query = 'update "seai".charging set charge_state=%s where id=%s'
             cursor.execute(cursor.mogrify(query, (charge_state, charging_id)))
             conn.commit()
@@ -296,7 +292,6 @@ class database:
                 cursor.close()
                 conn.close()
         return
-
 
     def reset_chargers(self):
         try:
@@ -575,13 +570,14 @@ class database:
             now = datetime.now()
             delta_time = self.get_total_interval(charging_id, now)
 
-            query = 'select avg_power from "seai".charging where id=%s'
+            query = 'select avg_power, priceper_kwh from "seai".charging where id=%s'
             cursor.execute(cursor.mogrify(query, (charging_id,)))
 
             row = cursor.fetchall()[0]
+            ppkwh = float(row[1])
             power = float(row[0])
 
-            total_cost = round(power / 1000 * delta_time / 3600, 2)
+            total_cost = round(ppkwh * power / 1000 * delta_time / 3600, 2)
         except (Exception, psycopg2.DatabaseError) as error:
             print("Error while get_total_cost()", error)
 
