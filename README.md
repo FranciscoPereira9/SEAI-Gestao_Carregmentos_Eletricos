@@ -1,1 +1,1 @@
-# SEAI - Software de Gestão de Carregmentos Elétricos
+# SEAI - Software de Gestão de Carregamentos Elétricos
