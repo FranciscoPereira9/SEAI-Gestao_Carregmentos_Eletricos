@@ -97,7 +97,7 @@ if (pg_num_rows($result)>0) {
            }
 
 
-                        $sql = "SELECT * FROM seai.emergency";
+                        $sql = "SELECT * FROM seai.emergency ORDER BY id DESC";
                         $result = pg_query($conn, $sql);
                            if (pg_num_rows($result)>0) {
                              while ($row = pg_fetch_assoc($result)) {

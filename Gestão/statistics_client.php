@@ -84,39 +84,36 @@ $normal=0;
   </div>
   <div class="chargers_client">
     <div class="tabela">
+      <h2>Carregamentos</h2>
       <table>
         <tr>
-          <th>Name</th>
-          <th>E-mail</th>
-          <th>User Type</th>
-          <th>Total Charging time</th>
-          <th>Average charging time</th>
+          <th>User ID</th>
+          <th>Charger ID</th>
+          <th>Starting Time</th>
+          <th>Stoping Time</th>
+          <th>Starting date</th>
+          <th>Ending date</th>
+          <th>Total cost</th>
           </tr>
           <?php
-             $sql = "SELECT * FROM seai.user";
+             $sql = "SELECT * FROM seai.charging";
              $result = pg_query($conn, $sql);
                 if (pg_num_rows($result)>0) {
                   while ($row = pg_fetch_assoc($result)) {
                       $user_id = $row['id'];
-                       $sql1 = "SELECT * FROM seai.charging WHERE	user_id = '$user_id'";
-                       $result1 = pg_query($conn, $sql1);
-                       $all = 0;
-                       if (pg_num_rows($result1)>0) {
-                         while ($row1 = pg_fetch_assoc($result1)) {
-                            $starting_time = $row1['starting_time'];
-                            $datetime2=0;
-                              // VER ISTO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                            $all =  $all +  $datetime2;
-                            $datetime2 = strtotime($all);
-                            $data_min = $datetime2 / 60;
-                            $formattedmin = number_format($data_min);
-                            $data_seg = $datetime2 - ($formattedmin*60);
-                            $data_fin = "$formattedmin"." min and "."$data_seg"." sec";
-                            }
-                         }
+                      $charger_id = $row['charger_id'];
+                      $starting_time = $row['starting_time'];
+                      $stoping_time = $row['stoping_time'];
+                      $starting_date = $row['starting_date'];
+                      $ending_date = $row['ending_date'];
+                      $total_cost = $row['total_cost'];
 
-                      echo "<tr><td>". $row['name'] ."</td><td>" .$row['email'] ."</td><td>" .$row['user_type']
-                      ."</td><td>". $data_fin ."</td><td>" . $row['email'] ."</td></tr>";
+                       $all = 0;
+
+
+                      echo "<tr><td>". $user_id ."</td><td>" .$charger_id ."</td><td>" .$starting_time
+                      ."</td><td>". $stoping_time ."</td><td>" . $starting_date ."</td><td>" . $ending_date ."</td>
+                      <td>" . $total_cost ."€</td></tr>";
                             }
                            }
                           ?>
@@ -125,8 +122,36 @@ $normal=0;
 
 
 <div class="top">
-  <h4>Top 3 clients</h4>
+  <h4>Top Clients</h4>
+  <table>
+    <tr>
+      <th>User ID</th>
+      <th>Times used</th>
+      <th>Revenue</th>
 
+      </tr>
+      <?php
+         $sql = "SELECT * FROM seai.charging";
+         $result = pg_query($conn, $sql);
+            if (pg_num_rows($result)>0) {
+              while ($row = pg_fetch_assoc($result)) {
+                  $user_id = $row['id'];
+                  $sql1 = "SELECT * FROM seai.charging WHERE id='$user_id'";
+                  $result1 = pg_query($conn, $sql1);
+                  $a=0;
+                  $cost=0;
+                  if (pg_num_rows($result1)>0) {
+                    while ($row = pg_fetch_assoc($result1)) {
+                      $cost=$cost+$row['total_cost'];
+                      $a++;
+                      echo "<tr><td>". $user_id ."</td><td>". $a ."</td><td>". $cost ."€</td></tr>";
+                    }
+
+
+                        }
+                      }}
+                      ?>
+  </table>
 </div>
 
 

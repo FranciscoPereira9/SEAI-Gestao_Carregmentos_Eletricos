@@ -33,7 +33,7 @@ function count_normal($id){
   }else {
     $id_new = "2020"."$id";
   }
-  $sql = "SELECT * FROM seai.charging WHERE charger_id='$id'";
+  $sql = "SELECT * FROM seai.charging WHERE charger_id='20200$id'";
   $result = pg_query($conn, $sql);
 $normal=0;
 
@@ -53,7 +53,7 @@ return $normal;
 function count_avg_power($id){
   include "db_conn.php";
 
-  $sql = "SELECT * FROM seai.charging WHERE charger_id='$id'";
+  $sql = "SELECT * FROM seai.charging WHERE charger_id='20200$id'";
   $result = pg_query($conn, $sql);
 $total_avg_power=0;
 $a=0;
@@ -72,7 +72,7 @@ return $total_avg_power;
 function times_used($id){
   include "db_conn.php";
 
-  $sql = "SELECT * FROM seai.historic WHERE charger_id='$id'";
+  $sql = "SELECT * FROM seai.historic WHERE charger_id='20200$id'";
   $result = pg_query($conn, $sql);
 $times_used=0;
   if (pg_num_rows($result) > 0) {
@@ -88,7 +88,7 @@ return $times_used;
 function amout_time_avg($id){
   include "db_conn.php";
 
-  $sql = "SELECT * FROM seai.charging WHERE id='62'";
+  $sql = "SELECT * FROM seai.charging WHERE charger_id='20200$id'";
   $result = pg_query($conn, $sql);
 $ti=0;
 $to=0;
@@ -109,6 +109,7 @@ $data = $datetime2-$datetime1;
 $data_min = $data / 60;
 $formattedmin = number_format($data_min);
 $data_seg = $data - ($formattedmin*60);
+$data_seg=$data_seg*-1;
 $data_fin = "$formattedmin"." min and "."$data_seg"." sec";
 }
 return $data_fin;

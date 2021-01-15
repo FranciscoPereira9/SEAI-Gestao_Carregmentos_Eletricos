@@ -360,65 +360,65 @@ if (pg_num_rows($result) > 0) {
 
 
 
-   if (state1=="t") {
+   if (current_inst1!='0')  {
        document.getElementById("state1").style.backgroundColor = 'green';
    }
-   else if (state1=="f"){
+   else if (current_inst1=='0'){
        document.getElementById("state1").style.backgroundColor = 'red';
    }
 
-   if (state2=="t") {
+   if ( current_inst2!='0') {
        document.getElementById("state2").style.backgroundColor = 'green';
    }
-   else if (state2=="f"){
+   else if (current_inst2=='0'){
        document.getElementById("state2").style.backgroundColor = 'red';
    }
-   if (state3=="t") {
+   if (current_inst3!='0') {
        document.getElementById("state3").style.backgroundColor = 'green';
    }
-   else if (state3=="f"){
+   else if (current_inst3=='0'){
        document.getElementById("state3").style.backgroundColor = 'red';
    }
-   if (state4=="t") {
+   if ( current_inst4!='0') {
        document.getElementById("state4").style.backgroundColor = 'green';
    }
-   else if (state4=="f"){
+   else if (current_inst4=='0'){
        document.getElementById("state4").style.backgroundColor = 'red';
    }
-   if (state5=="t") {
+   if ( current_inst5!='0') {
        document.getElementById("state5").style.backgroundColor = 'green';
    }
-   else if (state5=="f"){
+   else if (current_inst5=='0'){
        document.getElementById("state5").style.backgroundColor = 'red';
    }
-   if (state6=="t") {
+   if ( current_inst6!='0') {
        document.getElementById("state6").style.backgroundColor = 'green';
    }
-   else if (state6=="f"){
+   else if (current_inst6=='0'){
        document.getElementById("state6").style.backgroundColor = 'red';
    }
-   if (state7=="t") {
+   if (current_inst7!='0') {
        document.getElementById("state7").style.backgroundColor = 'green';
    }
-   else if (state7=="f"){
+   else if (current_inst7=='0'){
        document.getElementById("state7").style.backgroundColor = 'red';
    }
-   if (state8=="t") {
+   if ( current_inst8!='0') {
        document.getElementById("state8").style.backgroundColor = 'green';
    }
-   else if (state8=="f"){
+   else if (current_inst8=='0'){
        document.getElementById("state8").style.backgroundColor = 'red';
    }
-   if (state9=="t") {
+   if ( current_inst9!='0') {
        document.getElementById("state9").style.backgroundColor = 'green';
    }
-   else if (state9=="f"){
+   else if (current_inst9=='0'){
        document.getElementById("state9").style.backgroundColor = 'red';
    }
-   if (state10=="t") {
+   if (current_inst10!='0') {
        document.getElementById("state10").style.backgroundColor = 'green';
    }
-   else if (state10=="f"){
+   else if (current_inst10=='0'){
        document.getElementById("state10").style.backgroundColor = 'red';
    }
 

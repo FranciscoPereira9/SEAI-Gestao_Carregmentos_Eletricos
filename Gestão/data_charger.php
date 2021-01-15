@@ -44,7 +44,8 @@ if (isset($_SESSION['id']) && isset($_SESSION['username'])) {
     <p class="id_charger1">ID CHARGER</p>
 
     <?php
-    $id_init=$_GET['id']
+    $id_init=$_GET['id'];
+    $id_init1=$_GET['id'];
     ?>
 
     <p class="id_charger"><?php if ($id_init=="202010") {
@@ -78,7 +79,7 @@ if (isset($_SESSION['id']) && isset($_SESSION['username'])) {
         </tr>
         <?php
         include "db_conn.php";
-        $sql = "SELECT * FROM seai.charging WHERE charger_id='$id_init'";
+        $sql = "SELECT * FROM seai.charging WHERE charger_id='$id_init1'";
         $result = pg_query($conn, $sql);
            if (pg_num_rows($result)>0) {
              while ($row = pg_fetch_assoc($result)) {

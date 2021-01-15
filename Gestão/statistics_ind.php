@@ -72,7 +72,7 @@ $normal=0;
           <ul class="lista_charts">
             <li class="charts"><a class="charts1"href="statistics.php">General</a></li>
             <li class="charts"><a  class="charts1_active" class="charts1" href="statistics_ind.php">Individual</a></li>
-            <li class="charts"><a class="charts1" href="statistics.php">Client</a></li>
+            <li class="charts"><a class="charts1" href="statistics_client.php">Client</a></li>
           </ul>  <a class="no" href="interruption_all.php"><i class="fas fa-exclamation-triangle"></i><span class="warning">Force all chargers to turn off</span> </a>
 
 
@@ -143,25 +143,25 @@ $b++;
   </Select>
   <h4 class="avg_info">Detailed information:</h4>
   <div class="avg_info_detailed">
-    <div id="a" class="colors" style="display:none"> <?php $res =  count_avg_power(1); $times_used = times_used(1); $time = amout_time_avg(1);?><h3>Charger 1:</h3><h5>This charger was used <?php echo $times_used; ?> times</h5><h5>Average power : <?php echo number_format($res, 2);?> KW</h5>
+    <div id="a" class="colors" style="display:none"> <?php $res =  count_avg_power(1); $times_used = times_used(1); $time = amout_time_avg(1);?><h3>Charger 1:</h3><h5>This charger was used <?php echo $times_used; ?> times</h5><h5>Average power : <?php echo number_format($res, 2);?> W</h5>
     <h5> Avg Charging time : <?php echo $time;?></h5></div>
-    <div id="b" class="colors" style="display:none"> <?php $res =  count_avg_power(2); $times_used = times_used(2); $time = amout_time_avg(2);?><h3>Charger 2:</h3><h5>This charger was used <?php echo $times_used; ?> times</h5><h5>Average power : <?php echo number_format($res, 2);?> KW</h5>
+    <div id="b" class="colors" style="display:none"> <?php $res =  count_avg_power(2); $times_used = times_used(2); $time = amout_time_avg(2);?><h3>Charger 2:</h3><h5>This charger was used <?php echo $times_used; ?> times</h5><h5>Average power : <?php echo number_format($res, 2);?> W</h5>
     <h5> Avg Charging time : <?php echo $time;?></h5></div>
-    <div id="c" class="colors" style="display:none"> <?php $res =  count_avg_power(3); $times_used = times_used(3); $time = amout_time_avg(3);?><h3>Charger 3:</h3><h5>This charger was used <?php echo $times_used; ?> times</h5><h5>Average power : <?php echo number_format($res, 2);?> KW</h5>
+    <div id="c" class="colors" style="display:none"> <?php $res =  count_avg_power(3); $times_used = times_used(3); $time = amout_time_avg(3);?><h3>Charger 3:</h3><h5>This charger was used <?php echo $times_used; ?> times</h5><h5>Average power : <?php echo number_format($res, 2);?> W</h5>
     <h5> Avg Charging time : <?php echo $time;?></h5></div>
-    <div id="d" class="colors" style="display:none"> <?php $res =  count_avg_power(4); $times_used = times_used(4); $time = amout_time_avg(4);?><h3>Charger 4:</h3><h5>This charger was used <?php echo $times_used; ?> times</h5><h5>Average power : <?php echo number_format($res, 2);?> KW</h5>
+    <div id="d" class="colors" style="display:none"> <?php $res =  count_avg_power(4); $times_used = times_used(4); $time = amout_time_avg(4);?><h3>Charger 4:</h3><h5>This charger was used <?php echo $times_used; ?> times</h5><h5>Average power : <?php echo number_format($res, 2);?> W</h5>
     <h5> Avg Charging time : <?php echo $time;?></h5></div>
-    <div id="e" class="colors" style="display:none"> <?php $res =  count_avg_power(5); $times_used = times_used(5); $time = amout_time_avg(5);?><h3>Charger 5:</h3><h5>This charger was used <?php echo $times_used; ?> times</h5><h5>Average power : <?php echo number_format($res, 2);?> KW</h5>
+    <div id="e" class="colors" style="display:none"> <?php $res =  count_avg_power(5); $times_used = times_used(5); $time = amout_time_avg(5);?><h3>Charger 5:</h3><h5>This charger was used <?php echo $times_used; ?> times</h5><h5>Average power : <?php echo number_format($res, 2);?> W</h5>
     <h5> Avg Charging time : <?php echo $time;?></h5></div>
-    <div id="f" class="colors" style="display:none"> <?php $res =  count_avg_power(6); $times_used = times_used(6); $time = amout_time_avg(6);?><h3>Charger 6:</h3><h5>This charger was used <?php echo $times_used; ?> times</h5><h5>Average power : <?php echo number_format($res, 2);?> KW</h5>
+    <div id="f" class="colors" style="display:none"> <?php $res =  count_avg_power(6); $times_used = times_used(6); $time = amout_time_avg(6);?><h3>Charger 6:</h3><h5>This charger was used <?php echo $times_used; ?> times</h5><h5>Average power : <?php echo number_format($res, 2);?> W</h5>
     <h5> Avg Charging time : <?php echo $time;?></h5></div>
-    <div id="g" class="colors" style="display:none"> <?php $res =  count_avg_power(7); $times_used = times_used(7); $time = amout_time_avg(7);?><h3>Charger 7:</h3><h5>This charger was used <?php echo $times_used; ?> times</h5><h5>Average power : <?php echo number_format($res, 2);?> KW</h5>
+    <div id="g" class="colors" style="display:none"> <?php $res =  count_avg_power(7); $times_used = times_used(7); $time = amout_time_avg(7);?><h3>Charger 7:</h3><h5>This charger was used <?php echo $times_used; ?> times</h5><h5>Average power : <?php echo number_format($res, 2);?> W</h5>
     <h5> Avg Charging time : <?php echo $time;?></h5></div>
-    <div id="h" class="colors" style="display:none"> <?php $res =  count_avg_power(8); $times_used = times_used(8); $time = amout_time_avg(8);?><h3>Charger 8:</h3><h5>This charger was used <?php echo $times_used; ?> times</h5><h5>Average power : <?php echo number_format($res, 2);?> KW</h5>
+    <div id="h" class="colors" style="display:none"> <?php $res =  count_avg_power(8); $times_used = times_used(8); $time = amout_time_avg(8);?><h3>Charger 8:</h3><h5>This charger was used <?php echo $times_used; ?> times</h5><h5>Average power : <?php echo number_format($res, 2);?> W</h5>
     <h5> Avg Charging time : <?php echo $time;?></h5></div>
-    <div id="i" class="colors" style="display:none"> <?php $res =  count_avg_power(9); $times_used = times_used(9); $time = amout_time_avg(9);?><h3>Charger 9:</h3><h5>This charger was used <?php echo $times_used; ?> times</h5><h5>Average power : <?php echo number_format($res, 2);?> KW</h5>
+    <div id="i" class="colors" style="display:none"> <?php $res =  count_avg_power(9); $times_used = times_used(9); $time = amout_time_avg(9);?><h3>Charger 9:</h3><h5>This charger was used <?php echo $times_used; ?> times</h5><h5>Average power : <?php echo number_format($res, 2);?> W</h5>
     <h5> Avg Charging time : <?php echo $time;?></h5></div>
-    <div id="j" class="colors" style="display:none"> <?php $res =  count_avg_power(10); $times_used = times_used(10); $time = amout_time_avg(10);?><h3>Charger 10:</h3><h5>This charger was used <?php echo $times_used; ?> times</h5><h5>Average power : <?php echo number_format($res, 2);?> KW</h5>
+    <div id="j" class="colors" style="display:none"> <?php $res =  count_avg_power(10); $times_used = times_used(10); $time = amout_time_avg(10);?><h3>Charger 10:</h3><h5>This charger was used <?php echo $times_used; ?> times</h5><h5>Average power : <?php echo number_format($res, 2);?> W</h5>
     <h5> Avg Charging time : <?php echo $time;?></h5></div>
   </div>
 
