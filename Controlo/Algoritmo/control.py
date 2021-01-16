@@ -23,7 +23,7 @@ fastDCPow = chargers_config.fastDCPow
 normalMaxPow = chargers_config.normalPow
 
 # Constants
-INSTALLED_POWER = len(chargers) * normalMaxPow
+INSTALLED_POWER = len(chargers) * normalMaxPow * 10
 
 # Flag - Fast Charging Availability
 fastChargAvail = 1 # 1 - Available ; 0 - Not Available
@@ -39,16 +39,16 @@ def run_control(module, ID, state_occupation, new_connection, charging_mode, vol
     # Update Flags
     updateFastChargAvail()
     updateGreenChargAvail()
-    
+    '''
     lock.acquire()
     try:
         # Atualiza o dicionario
         updateChargersState(module, ID, state_occupation, new_connection, charging_mode, voltage_mode, inst_power, max_power)
     finally:
-        lock.release()
+        lock.release()'''
         
     # Atualiza o dicionario
-    # updateChargersState(module, ID, state_occupation, new_connection, charging_mode, voltage_mode, inst_power, max_power)
+    updateChargersState(module, ID, state_occupation, new_connection, charging_mode, voltage_mode, inst_power, max_power)
     
     chargerKey = dictionaryKeyFromID(ID)
     return chargers.get(chargerKey)   
@@ -74,8 +74,8 @@ def updateChargersState(module, ID, state_occupation, new_connection, charging_m
                 chargers.get(chargerKey).update({"newConnection": new_connection})
                 chargers.get(chargerKey).update({"voltageMode": voltage_mode})
                 # Update Power
-                updateMaxPowers()
-                print("NEW CONNECTION \n")
+                #updateMaxPowers()
+                #print("NEW CONNECTION \n")
                 # Update DB - New Charger
                 try:
                     db.new_connection(ID, new_connection)
@@ -100,14 +100,14 @@ def updateChargersState(module, ID, state_occupation, new_connection, charging_m
                 if(inst_power > 0):
                     chargers.get(chargerKey).update({"instPower": inst_power})
                     # Update Power
-                    updateMaxPowers()
+                    updateMaxPowers(ID)
                     # Update DB - New Measure
-                    print("NEW MEASURE \n")
+                    #print("NEW MEASURE \n")
                     try:
                         db.new_measure(ID, inst_power, chargers.get(chargerKey).get("voltage"), max_power)
                     except:
                         print("An exception occurred -> DB")
-                
+                '''
                 # charging terminated - power = 0
                 elif(inst_power <= 0):
                     # reset as variaveis do carregador
@@ -118,6 +118,7 @@ def updateChargersState(module, ID, state_occupation, new_connection, charging_m
                         db.stop_charging(ID, False, 0) 
                     except:
                         print("An exception occurred -> DB")
+                        '''
         
         # BATTERY FULL - STOPPED CHARGING
         # ERROR: Após a interface parar já não se pode correr "stop.charging" de novo
@@ -161,12 +162,14 @@ def updateChargersState(module, ID, state_occupation, new_connection, charging_m
     #    - 2 -> Parou o carregamento - Reset as Variaveis
     if(module == 'interface'):
         # Interface atualiza o modo de carregamento
+        lock.acquire() #Adicionado
         chargers.get(chargerKey).update({"chargingMode": charging_mode})
+        lock.release() #Adicionado
         
         # ChargingMode Selected
         if ((charging_mode != 2) and (chargersEmer[chargerKey] == 1)):
             # update Power
-            updateMaxPowers()
+            updateMaxPowers(ID)
         
         # Charging Stopped
         elif ((charging_mode == 2) or (chargersEmer[chargerKey] == 0)):
@@ -180,7 +183,7 @@ def updateChargersState(module, ID, state_occupation, new_connection, charging_m
                 print("An exception occurred -> DB")
                         
 
-def updateMaxPowers():
+def updateMaxPowers(ID):
     totalPower = 0
     
     # PARA VEICULOS JA LIGADOS ANTERIORMENTE:
@@ -190,8 +193,10 @@ def updateMaxPowers():
         if ( (chargers.get(key).get("instPower") < chargers.get(key).get("maxPower")) \
         and (chargers.get(key).get("newConnection") == 0) and (chargers.get(key).get("stateOccupation") == 1) ):
             # Atualizacao o novo valor da corrente maxima
-            chargers.get(key).update({"maxPower": chargers.get(key).get("instPower")}) 
-        
+            lock.acquire()  # Adicionado
+            chargers.get(key).update({"maxPower": chargers.get(key).get("instPower")})
+            lock.release()  # Adicionado
+
         # Calcula o total consumido
         totalPower = totalPower + chargers.get(key).get("instPower")
     
@@ -222,56 +227,65 @@ def updateMaxPowers():
     
     # PARA VEICULOS NOVOS LIGADOS:
     # Atribui potencia maxima aos rapidos e distribui pelos restantes
-    for key, dict in chargers.items():
-        # Atribui corrente maxima aos carregadores rapidos
-        if ( (chargers.get(key).get("newConnection") == 1) and (chargers.get(key).get("chargingMode") == 1) and (fastChargAvail == 1) ):
-            # Atualizacao da nova corrente maxima DC
-            if ( chargers.get(key).get("voltageMode") == 0 ):
-                chargers.get(key).update({"maxPower": fastDCPow })
-                # Atualizacao de "novo carregamento"
-                chargers.get(key).update({"newConnection": 0 })
-                # A partir deste momento estao ocupados
-                chargers.get(key).update({"stateOccupation": 1 })
-                # Atualiza db - Rapido DC
-                chargerID = chargers.get(key).get("chargerID")
-                print("START CHARGING FAST DC")
-                # start_charging(self, charger_id, max_curr, charge_type_int, voltage_mode, new_connection, state_occupation_int)
-                try:
-                    db.start_charging(chargerID, fastDCPow, 1, 0, 0, 1)
-                except:
-                    print("An exception occurred -> DB")
-                
-            # Atualizacao da nova corrente maxima AC
-            elif ( chargers.get(key).get("voltageMode") == 1 ):
-                chargers.get(key).update({"maxPower": fastACPow })
-                # Atualizacao de "novo carregamento"
-                chargers.get(key).update({"newConnection": 0 })
-                # A partir deste momento estao ocupados
-                chargers.get(key).update({"stateOccupation": 1 })
-                # Atualiza DB - Rapido AC
-                chargerID = chargers.get(key).get("chargerID")
-                print("START CHARGING FAST AC\n")
-                try:
-                    db.start_charging(chargerID, fastACPow, 1, 1, 0, 1)
-                except:
-                    print("An exception occurred -> DB")
-        
-        # Atribui corrente maxima possivel aos carregadores normais
-        elif ( (chargers.get(key).get("newConnection") == 1) and (chargers.get(key).get("chargingMode") == 0) ):
-            # Atualizacao da nova corrente maxima
-            chargers.get(key).update({"maxPower": normalPower })
+    #for key, dict in chargers.items():
+    key = dictionaryKeyFromID(ID)
+    # Atribui corrente maxima aos carregadores rapidos
+    if ( (chargers.get(key).get("newConnection") == 1) and (chargers.get(key).get("chargingMode") == 1) and (fastChargAvail == 1) ):
+        # Atualizacao da nova corrente maxima DC
+        if ( chargers.get(key).get("voltageMode") == 0 ):
+            lock.acquire()  # Adicionado
+            chargers.get(key).update({"maxPower": fastDCPow })
             # Atualizacao de "novo carregamento"
             chargers.get(key).update({"newConnection": 0 })
             # A partir deste momento estao ocupados
             chargers.get(key).update({"stateOccupation": 1 })
-            # Atualiza DB - Normal
+            lock.release()  # Adicionado
+            # Atualiza db - Rapido DC
             chargerID = chargers.get(key).get("chargerID")
-            voltageMode = chargers.get(key).get("voltageMode")
-            print("START CHARGING NORMAL \n")
+            #print("START CHARGING FAST DC")
+            # start_charging(self, charger_id, max_curr, charge_type_int, voltage_mode, new_connection, state_occupation_int)
             try:
-                db.start_charging(chargerID, normalPower, 0, voltageMode, 0, 1)
+                db.start_charging(chargerID, fastDCPow, 1, 0, 0, 1)
             except:
                 print("An exception occurred -> DB")
+
+        # Atualizacao da nova corrente maxima AC
+        elif ( chargers.get(key).get("voltageMode") == 1 ):
+            lock.acquire()  # Adicionado
+            chargers.get(key).update({"maxPower": fastACPow })
+            # Atualizacao de "novo carregamento"
+            chargers.get(key).update({"newConnection": 0 })
+            # A partir deste momento estao ocupados
+            chargers.get(key).update({"stateOccupation": 1 })
+            lock.release()  # Adicionado
+            # Atualiza DB - Rapido AC
+            chargerID = chargers.get(key).get("chargerID")
+            #print("START CHARGING FAST AC\n")
+            try:
+                db.start_charging(chargerID, fastACPow, 1, 1, 0, 1)
+            except:
+                print("An exception occurred -> DB")
+
+    # Atribui corrente maxima possivel aos carregadores normais
+    elif ( (chargers.get(key).get("newConnection") == 1) and (chargers.get(key).get("chargingMode") == 0) ):
+        # Atualizacao da nova corrente maxima
+        lock.acquire()  # Adicionado
+        chargers.get(key).update({"maxPower": normalPower })
+        # Atualizacao de "novo carregamento"
+        chargers.get(key).update({"newConnection": 0 })
+        # A partir deste momento estao ocupados
+        chargers.get(key).update({"stateOccupation": 1 })
+        lock.release()  # Adicionado
+        # Atualiza DB - Normal
+        chargerID = chargers.get(key).get("chargerID")
+        voltageMode = chargers.get(key).get("voltageMode")
+        #print("START CHARGING NORMAL \n")
+        try:
+            db.start_charging(chargerID, normalPower, 0, voltageMode, 0, 1)
+        except:
+            print("An exception occurred -> DB")
+    #else:
+        #print("ATENÇÃO: ", chargers.get(key), " ", fastChargAvail)
     
   
 def updateFastChargAvail():
@@ -353,11 +367,13 @@ def startUp():
   
 def resetCharger(chargerKey):
   # Resets Charger Variables When is turned Off
+  lock.acquire()  # Adicionado
   chargers.get(chargerKey).update({"stateOccupation": 0})
   chargers.get(chargerKey).update({"newConnection": 0})
   chargers.get(chargerKey).update({"chargingMode": 2})
   chargers.get(chargerKey).update({"instPower": 0})
   chargers.get(chargerKey).update({"maxPower": 0})
+  lock.release()  # Adicionado
   
 
 def dictionaryKeyFromID(ID):
