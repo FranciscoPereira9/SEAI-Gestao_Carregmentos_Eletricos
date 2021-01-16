@@ -2,8 +2,6 @@ import psycopg2
 from datetime import datetime
 
 
-# TODO: start_charging()-Acrescentar forma dinâmica de definir preço/kwh quando se inicia carregamento
-
 class database:
     user = "up201504961"
     database = "up201504961"
@@ -20,11 +18,14 @@ class database:
             conn = self.connect()
             cursor = conn.cursor()
 
+            # ALTERAR QUANDO FOR POSSÍVEL POR CARREGAMENTO VERDE
+            price = self.get_price_pkwh(charger_id, charge_type, 0)
+
             # INSERE EM CHARGING
             now = datetime.now()
             query = 'insert into "seai".charging (charger_id, starting_time, charge_type, starting_date, avg_power, ' \
-                    'voltage_mode, priceper_kwh) values (%s, %s, %s, %s, 0, %s, 0.2) '
-            cursor.execute(cursor.mogrify(query, (charger_id, now.time(), charge_type, now.date(), voltage_mode)))
+                    'voltage_mode, priceper_kwh) values (%s, %s, %s, %s, 0, %s, %s) '
+            cursor.execute(cursor.mogrify(query, (charger_id, now.time(), charge_type, now.date(), voltage_mode, price)))
 
             conn.commit()
 
@@ -223,9 +224,7 @@ class database:
             cursor = conn.cursor()
 
             charger_id = self.get_all_chargers_id()
-            # print(charger_id)
             for i in charger_id:
-                # print(i)
                 self.update_green_power(i, green_power_state)
 
         except (Exception, psycopg2.DatabaseError) as error:
@@ -262,10 +261,29 @@ class database:
             cursor = conn.cursor()
 
             charger_id = self.get_all_chargers_id()
-            # print(charger_id)
             for i in charger_id:
-                # print(i)
                 self.update_fc_availability(i, fc_state_int)
+
+        except (Exception, psycopg2.DatabaseError) as error:
+            print("Error while update_all_fc_availability", error)
+
+        finally:
+            if conn:
+                cursor.close()
+                conn.close()
+        return
+
+    def update_charge_state(self, charger_id, charge_state):
+
+        try:
+            conn = self.connect()
+            cursor = conn.cursor()
+
+            charging_id = self.get_charging_id(charger_id)
+
+            query = 'update "seai".charging set charge_state=%s where id=%s'
+            cursor.execute(cursor.mogrify(query, (charge_state, charging_id)))
+            conn.commit()
 
         except (Exception, psycopg2.DatabaseError) as error:
             print("Error while update_all_fc_availability", error)
@@ -545,6 +563,7 @@ class database:
         return charger_id
 
     def get_total_cost(self, charging_id):
+        # para efeitos de simulação 1s=1min
 
         try:
             conn = self.connect()
@@ -553,13 +572,18 @@ class database:
             now = datetime.now()
             delta_time = self.get_total_interval(charging_id, now)
 
-            query = 'select avg_power from "seai".charging where id=%s'
+            query = 'select avg_power, priceper_kwh from "seai".charging where id=%s'
             cursor.execute(cursor.mogrify(query, (charging_id,)))
 
             row = cursor.fetchall()[0]
+            ppkwh = float(row[1])
             power = float(row[0])
 
-            total_cost = power / 1000 * delta_time / 3600
+            # DESCOMENTAR SE SIMULAÇÃO
+            total_cost = round(ppkwh * power / 1000 * delta_time / 60, 2)
+
+            # DESCOMENTAR SE REAL
+            # total_cost = round(ppkwh * power / 1000 * delta_time / 3600, 2)
         except (Exception, psycopg2.DatabaseError) as error:
             print("Error while get_total_cost()", error)
 
@@ -568,3 +592,34 @@ class database:
                 cursor.close()
                 conn.close()
         return total_cost
+
+    def get_price_pkwh(self, charger_id, fc, green):
+        try:
+            conn = self.connect()
+            cursor = conn.cursor()
+
+            # check if its either green or fast-charging
+            if fc:
+                query = 'select priceper_kwh_fc from "seai".charger where charger_id=%s'
+                query = cursor.mogrify(query, (charger_id, ))
+            elif green == 1:
+                query = 'select priceper_kwh_green from "seai".charger where charger_id=%s'
+                query = cursor.mogrify(query, (charger_id, ))
+            else:
+                query = 'select priceper_kwh from "seai".charger where charger_id=%s'
+                query = cursor.mogrify(query, (charger_id,))
+
+            cursor.execute(query)
+            row = cursor.fetchall()[0]
+
+            price = round(row[0], 2)
+
+        except (Exception, psycopg2.DatabaseError) as error:
+            print("Error while get_price_pkwh()", error)
+
+        finally:
+            if conn:
+                cursor.close()
+                conn.close()
+        return price
+

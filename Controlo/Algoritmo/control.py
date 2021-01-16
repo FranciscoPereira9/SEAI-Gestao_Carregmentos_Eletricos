@@ -66,7 +66,7 @@ def updateChargersState(module, ID, state_occupation, new_connection, charging_m
         # NEW CONNECTION
         if ( (new_connection == 1) and (state_occupation == 0) and (charging_mode == 2) ):
             # Update Flags DB - 1 time
-            if((new_connection == 1) and chargers.get(chargerKey).get("newConnection") == 0):
+            if((new_connection == 1) and (chargers.get(chargerKey).get("newConnection") == 0)):
                 updateFlagsDB(ID)
                 
             # Still waiting for interface reply and not interrupted
@@ -107,8 +107,9 @@ def updateChargersState(module, ID, state_occupation, new_connection, charging_m
                         db.new_measure(ID, inst_power, chargers.get(chargerKey).get("voltage"), max_power)
                     except:
                         print("An exception occurred -> DB")
-                '''
+        
                 # charging terminated - power = 0
+                '''
                 elif(inst_power <= 0):
                     # reset as variaveis do carregador
                     resetCharger(chargerKey)
@@ -129,6 +130,9 @@ def updateChargersState(module, ID, state_occupation, new_connection, charging_m
             print("CHARGING STOPPED")
             # Update DB - fori = true if interrompido, false se terminado
             try:
+                # NOVA FUNCAO SIMAO
+                # NOVA FUNCAO SIMAO
+                # NOVA FUNCAO SIMAO
                 db.stop_charging(ID, False, 0) 
             except:
                 print("An exception occurred -> DB")
@@ -146,7 +150,7 @@ def updateChargersState(module, ID, state_occupation, new_connection, charging_m
             resetCharger(chargerKey)
             # Update DB - fori = true if interrompido, false se terminado
             try:
-                db.charger_interr(ID, 0) 
+                db.stop_charging(ID, True, 0)
             except:
                 print("An exception occurred -> DB")
         
@@ -174,11 +178,10 @@ def updateChargersState(module, ID, state_occupation, new_connection, charging_m
         # Charging Stopped
         elif ((charging_mode == 2) or (chargersEmer[chargerKey] == 0)):
             # Update DB - fori = true if interrompido, false se terminado
-            fori = True if chargers.get(chargerKey).get("instPower") > 0 else False
             # reset as variaveis do carregador
             resetCharger(chargerKey)
             try:
-                db.stop_charging(ID, fori, 0) 
+                db.stop_charging(ID, False, 0) 
             except:
                 print("An exception occurred -> DB")
                         
