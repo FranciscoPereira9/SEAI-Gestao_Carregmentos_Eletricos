@@ -9,7 +9,7 @@ class database:
     port = "5432"
     host = "db.fe.up.pt"
 
-    def start_charging(self, charger_id, max_curr, charge_type_int, voltage_mode, new_connection, state_occupation_int):
+    def start_charging(self, charger_id, max_curr, charge_type_int, voltage_mode, new_connection, state_occupation_int, charge_type_green):
         state_occupation = True if state_occupation_int == 1 else False
         # print(state_occupation)
         # print(state_occupation_int)
@@ -19,7 +19,7 @@ class database:
             cursor = conn.cursor()
 
             # ALTERAR QUANDO FOR POSSÍVEL POR CARREGAMENTO VERDE
-            price = self.get_price_pkwh(charger_id, charge_type, 0)
+            price = self.get_price_pkwh(charger_id, charge_type, charge_type_green)
 
             # INSERE EM CHARGING
             now = datetime.now()
