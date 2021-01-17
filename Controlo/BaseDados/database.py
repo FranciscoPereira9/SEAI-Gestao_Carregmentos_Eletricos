@@ -24,8 +24,9 @@ class database:
             # INSERE EM CHARGING
             now = datetime.now()
             query = 'insert into "seai".charging (charger_id, starting_time, charge_type, starting_date, avg_power, ' \
-                    'voltage_mode, priceper_kwh) values (%s, %s, %s, %s, 0, %s, %s) '
-            cursor.execute(cursor.mogrify(query, (charger_id, now.time(), charge_type, now.date(), voltage_mode, price)))
+                    'voltage_mode, priceper_kwh, charge_type_green) values (%s, %s, %s, %s, 0, %s, %s, %s) '
+            cursor.execute(cursor.mogrify(query, (charger_id, now.time(), charge_type, now.date(), voltage_mode, price,
+                                                  charge_type_green)))
 
             conn.commit()
 
@@ -83,12 +84,8 @@ class database:
             cursor.execute(cursor.mogrify(query, (now.time(), fori, now.date(), total_cost, charging_id)))
             conn.commit()
 
-            # FAZ UPDATE NO CARREGADOR
-            # query = 'update "seai".charger set voltage_inst=0, current_inst=0, charging_id=0, max_curr=0 where ' \
-            #         'charger_id=%s'
-            # cursor.execute(cursor.mogrify(query, (charger_id,)))
-            # conn.commit()
-            self.update_charger_measures(0, 0, charger_id, 0)
+
+            self.update_charger_measures(400, 0, charger_id, 0)
             query = 'update "seai".charger set charging_id=0, state_occupation=%s where charger_id=%s'
             cursor.execute(cursor.mogrify(query, (state_occupation, charger_id)))
             conn.commit()
