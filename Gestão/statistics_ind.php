@@ -14,21 +14,7 @@ if (isset($_SESSION['id']) && isset($_SESSION['username'])) {
   $chart_data = substr ($chart_data, 0, -2);
 
 
-$fast=0;
-$normal=0;
-$green=0;
-  $sql = "SELECT * FROM seai.charging";
-  $result = pg_query($conn,$sql);
-  $chart_data_donut='';
-  while ($row = pg_fetch_array($result)) {
-    if ($row['charge_type']=="t") {
-      $fast++;
-    }  if ($row['charge_type_green']=="1") {
-        $green++;
-      }else {
-      $normal++;
-    }
-}
+
 
 
  ?>
@@ -109,7 +95,32 @@ $green=0;
 
   </div>
 
-<?php $fast = count_fast($b); $normal = count_normal($b);  ?>
+<?php $fast = count_fast($b); $normal = count_normal($b);
+
+$fast=0;
+$normal=0;
+$green=0;
+if ($b<>'10') {
+  $c='0'.$b;
+} else {
+  $c=$b;
+}
+  $sql = "SELECT * FROM seai.charging WHERE charger_id='2020$c'";
+  $result = pg_query($conn,$sql);
+  $chart_data_donut='';
+  while ($row = pg_fetch_array($result)) {
+    if ($row['charge_type']=="t") {
+      $fast++;
+    }  if ($row['charge_type_green']=="1") {
+        $green++;
+      }else {
+      $normal++;
+    }
+}
+
+
+
+ ?>
 <script>
 Morris.Donut({
   element : '<?php echo $b; ?>',
