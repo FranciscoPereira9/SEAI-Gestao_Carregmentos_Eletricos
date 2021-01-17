@@ -10,7 +10,7 @@ class ArrayValue implements JsonSerializable {
         return $this->array;
     }
 }
-$address = "172.29.0.38";
+$address = "172.29.0.17";
 $port    = 5050;
 
 
@@ -36,6 +36,11 @@ if($id == "202000"){
     $_SESSION['chargers'][202009] = 0;
     $_SESSION['chargers'][202010] = 0;
 
+                        $sql = "  UPDATE seai.charger
+                                  SET operator_interr='t'";
+                        $result = pg_query($conn, $sql);
+
+
                           $sql = "  UPDATE seai.charger
                                     SET current_inst='0'";
                           $result = pg_query($conn, $sql);
@@ -44,6 +49,7 @@ if($id == "202000"){
 
 }
 if ($id == "202000_on") {
+
   $_SESSION['chargers'][202001] = 1;
   $_SESSION['chargers'][202002] = 1;
   $_SESSION['chargers'][202003] = 1;
@@ -55,28 +61,89 @@ if ($id == "202000_on") {
   $_SESSION['chargers'][202009] = 1;
   $_SESSION['chargers'][202010] = 1;
 
-                        $sql = "  UPDATE seai.charger
-                                  SET current_inst='0.1'";
-                        $result = pg_query($conn, $sql);
+  $sql = "  UPDATE seai.charger
+            SET operator_interr='f'";
+  $result = pg_query($conn, $sql);
 }
 else{
 
     if (isset($_GET['id'])) {
-                        $_SESSION['chargers'][$id] = 0;
+
+                              $sql = "  UPDATE seai.charger
+                                        SET operator_interr='t'
+                                        WHERE	charger_id=$id";
+                              $result = pg_query($conn, $sql);
+
+
+      $sql = "SELECT * FROM seai.charger ORDER BY charger_id ASC";
+      $result = pg_query($conn, $sql);
+
+
+      if (pg_num_rows($result) > 0) {
+        while($row = pg_fetch_assoc($result)) {
+
+          $operator_interr = $row['operator_interr'];
+          $id_charger = $row['charger_id'];
+          if ($operator_interr=='t') {
+              // ATUALIZA VARIAVEL DE SESSAO
+            $_SESSION['chargers'][$id_charger] = 0;
+          } else {
+            $_SESSION['chargers'][$id_charger] = 1;
+          }
+
+
+
+        }
+
+
+
+
+    }
 
                         $sql = "  UPDATE seai.charger
                                   SET current_inst='0'
                                   WHERE	charger_id=$id";
                         $result = pg_query($conn, $sql);
+
     }
 
     if (isset($_GET['id_on'])) {
-                        $_SESSION['chargers'][$id] = 1;
+      $sql = "  UPDATE seai.charger
+                SET operator_interr='f'
+                WHERE	charger_id=$id";
+      $result = pg_query($conn, $sql);
 
-                        $sql = "  UPDATE seai.charger
-                                  SET current_inst='0.1'
-                                  WHERE	charger_id=$id";
-                        $result = pg_query($conn, $sql);
+
+$sql = "SELECT * FROM seai.charger ORDER BY charger_id ASC";
+$result = pg_query($conn, $sql);
+
+
+if (pg_num_rows($result) > 0) {
+while($row = pg_fetch_assoc($result)) {
+
+$operator_interr = $row['operator_interr'];
+$id_charger = $row['charger_id'];
+if ($operator_interr=='t') {
+// ATUALIZA VARIAVEL DE SESSAO
+$_SESSION['chargers'][$id_charger] = 0;
+} else {
+$_SESSION['chargers'][$id_charger] = 1;
+}
+
+
+
+}
+
+
+
+
+}
+
+$sql = "  UPDATE seai.charger
+          SET current_inst='0'
+          WHERE	charger_id=$id";
+$result = pg_query($conn, $sql);
+
     }
 }
 

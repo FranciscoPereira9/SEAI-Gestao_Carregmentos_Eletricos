@@ -109,7 +109,7 @@ $data = $datetime2-$datetime1;
 $data_min = $data / 60;
 $formattedmin = number_format($data_min);
 $data_seg = $data - ($formattedmin*60);
-$data_seg=$data_seg*-1;
+$data_seg=$data_seg;
 $data_fin = "$formattedmin"." min and "."$data_seg"." sec";
 }
 return $data_fin;

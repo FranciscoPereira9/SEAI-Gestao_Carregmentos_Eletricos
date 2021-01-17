@@ -18,7 +18,7 @@ if (pg_num_rows($result) > 0) {
       $state_charger1 = $row['charging_mode'];
       $emergency1 = $row['emergency_interr'];
   }
-  if ($state_charger1=="t") {
+  if ($current_inst1!="0") {
     $count++;
   }
 }
@@ -40,7 +40,7 @@ if (pg_num_rows($result) > 0) {
       $emergency2 = $row['emergency_interr'];
 
   }
-  if ($state_charger2=="t") {
+  if ($current_inst2!="0") {
     $count++;
   }
 }
@@ -62,7 +62,7 @@ if (pg_num_rows($result) > 0) {
       $emergency3 = $row['emergency_interr'];
 
   }
-  if ($state_charger3=="t") {
+  if ($current_inst3!="0") {
     $count++;
   }
 }
@@ -85,7 +85,7 @@ if (pg_num_rows($result) > 0) {
       $emergency4 = $row['emergency_interr'];
 
   }
-  if ($state_charger4=="t") {
+  if ($current_inst4!="0") {
     $count++;
   }
 }
@@ -107,7 +107,7 @@ if (pg_num_rows($result) > 0) {
       $emergency5 = $row['emergency_interr'];
 
   }
-  if ($state_charger5=="t") {
+  if ($current_inst5!="0") {
     $count++;
   }
 }
@@ -129,7 +129,7 @@ if (pg_num_rows($result) > 0) {
       $emergency6 = $row['emergency_interr'];
 
   }
-  if ($state_charger6=="t") {
+  if ($current_inst6!="0") {
     $count++;
   }
 }
@@ -151,7 +151,7 @@ if (pg_num_rows($result) > 0) {
       $emergency7 = $row['emergency_interr'];
 
   }
-  if ($state_charger7=="t") {
+  if ($current_inst7!="0") {
     $count++;
   }
 }
@@ -173,7 +173,7 @@ if (pg_num_rows($result) > 0) {
       $emergency8 = $row['emergency_interr'];
 
   }
-  if ($state_charger8=="t") {
+  if ($current_inst8!="0") {
     $count++;
   }
 }
@@ -194,7 +194,7 @@ if (pg_num_rows($result) > 0) {
       $emergency9 = $row['emergency_interr'];
 
   }
-  if ($state_charger9=="t") {
+  if ($current_inst9!="0") {
     $count++;
   }
 }
@@ -215,7 +215,7 @@ if (pg_num_rows($result) > 0) {
       $emergency10 = $row['emergency_interr'];
 
   }
-  if ($state_charger10=="t") {
+  if ($current_inst10!="0") {
     $count++;
   }
 }

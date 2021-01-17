@@ -83,8 +83,8 @@ $normal=0;
   <div class="nothing">
   </div>
   <div class="chargers_client">
+        <h4 class="charging_title">Charging table</h4>
     <div class="tabela">
-      <h2>Carregamentos</h2>
       <table>
         <tr>
           <th>User ID</th>
@@ -96,7 +96,7 @@ $normal=0;
           <th>Total cost</th>
           </tr>
           <?php
-             $sql = "SELECT * FROM seai.charging";
+             $sql = "SELECT * FROM seai.charging ORDER BY starting_time DESC";
              $result = pg_query($conn, $sql);
                 if (pg_num_rows($result)>0) {
                   while ($row = pg_fetch_assoc($result)) {
@@ -122,8 +122,8 @@ $normal=0;
 
 
 <div class="top">
-  <h4>Top Clients</h4>
-  <table>
+  <h4>Clients</h4>
+  <table class="tabela_clientes">
     <tr>
       <th>User ID</th>
       <th>Times used</th>

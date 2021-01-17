@@ -16,13 +16,16 @@ if (isset($_SESSION['id']) && isset($_SESSION['username'])) {
 
 $fast=0;
 $normal=0;
+$green=0;
   $sql = "SELECT * FROM seai.charging";
   $result = pg_query($conn,$sql);
   $chart_data_donut='';
   while ($row = pg_fetch_array($result)) {
     if ($row['charge_type']=="t") {
       $fast++;
-    }else {
+    }  if ($row['charge_type_green']=="1") {
+        $green++;
+      }else {
       $normal++;
     }
 }
@@ -110,9 +113,15 @@ $normal=0;
 <script>
 Morris.Donut({
   element : '<?php echo $b; ?>',
+  colors: [
+  '#26C6DA',
+  '#B2EBF2',
+  'green',
+],
   data: [
     { label: "Nr. Fast Charging", value: <?php echo $fast; ?>},
-    { label: "Nr. Normal Charging", value: <?php echo $normal; ?>}
+    { label: "Nr. Normal Charging", value: <?php echo $normal; ?>},
+    { label: "Nr. Green Charging", value: <?php echo $green; ?>}
   ]
 });
 </script>
@@ -130,6 +139,7 @@ $b++;
 <div class="avg">
 
   Select Charger <Select id="id">
+    <option value="">none</option>
      <option value="a">1</option>
      <option value="b">2</option>
      <option value="c">3</option>
