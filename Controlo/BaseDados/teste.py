@@ -11,6 +11,6 @@ if __name__ == '__main__':
     # time.sleep(10)
     # db.new_measure(1, 20000, 1, 2000)
     # time.sleep(3)
-    db.stop_charging(1, 0, 0)
+    # db.stop_charging(1, 0, 0)
     # db.reset_chargers()
     # db.update_charge_state(1, 1)

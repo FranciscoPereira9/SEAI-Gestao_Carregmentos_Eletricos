@@ -9,11 +9,20 @@ class database:
     port = "5432"
     host = "db.fe.up.pt"
 
-    def start_charging(self, charger_id, max_curr, charge_type_int, voltage_mode, new_connection, state_occupation_int, charge_type_green):
+    def start_charging(self, charger_id, max_curr, charge_type_int, voltage_mode, new_connection, state_occupation_int):
         state_occupation = True if state_occupation_int == 1 else False
         # print(state_occupation)
         # print(state_occupation_int)
-        charge_type = True if charge_type_int == 1 else False
+        if charge_type_int == 1:
+            charge_type = True
+            charge_type_green = 0
+        elif charge_type_int == 3:
+            charge_type = False
+            charge_type_green = 1
+        else:
+            charge_type = False
+            charge_type_green = 0
+
         try:
             conn = self.connect()
             cursor = conn.cursor()
@@ -83,7 +92,6 @@ class database:
             query = 'update "seai".charging set stoping_time=%s, fori=%s, ending_date=%s, total_cost=%s where id=%s'
             cursor.execute(cursor.mogrify(query, (now.time(), fori, now.date(), total_cost, charging_id)))
             conn.commit()
-
 
             self.update_charger_measures(400, 0, charger_id, 0)
             query = 'update "seai".charger set charging_id=0, state_occupation=%s where charger_id=%s'
