@@ -360,16 +360,7 @@ justify-content: center;
   padding: 15px;
   margin-left: 190px;
   margin-top: 10px;
-  overflow-y: scroll;
-  height: 250px;
-}
-.tabela_clientes{
-  display: inline-block;
-  overflow-y: scroll;
-  padding: 15px;
-  margin-top: 20px;
-  overflow-y: scroll;
-  height: 150px;
+
 
 }
 table{
@@ -385,10 +376,8 @@ table{
 }
 .emergency_table{
   width: 80%;
+  height: 300px;
   margin-top: 50px;
-  overflow-y: scroll;
-  padding: 15px;
-  overflow-y: scroll
 }
 th{
   background-color: #90EE90;
@@ -404,20 +393,10 @@ tr:nth-child(even) {
   align-items: center;
   text-align: center;
   justify-content: center;
-  margin-top:10px;
+  margin-top: 70px;
   height: 30px;
   margin-left: 15%;
 }
-.charging_title{
-  width: 70%;
-  border-bottom: 3px solid #90EE90;
-  align-items: center;
-  text-align: center;
-  justify-content: center;
-  margin-left: 15%;
-  padding-bottom: 10px;
-}
-
 .emergency{
   width: 100%;
   height: 200px;

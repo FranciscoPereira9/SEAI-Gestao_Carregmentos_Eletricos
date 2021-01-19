@@ -115,7 +115,48 @@ $data_fin = "$formattedmin"." min and "."$data_seg"." sec";
 return $data_fin;
 }
 
+function updatePrice($new_ppk, $new_ppk_fc, $new_ppk_green ){
+	include "db_conn.php";
 
+	for($i=1; $i<10; $i=$i+1){ 
+		$query = "update seai.charger
+					set priceper_kwh = '".$new_ppk."' 
+					where charger_id = 20200".$i.";";
+		$result = pg_query($conn, $query);
+		
+	}
+	$query = "update seai.charger
+					set priceper_kwh = '".$new_ppk."' 
+					where charger_id = 202010;";
+					$result = pg_query($conn, $query);
+					
+	for($i=1; $i<10; $i=$i+1){ 
+		$query = "update seai.charger
+					set priceper_kwh_fc = '".$new_ppk_fc."' 
+					where charger_id = 20200".$i.";";
+		$result = pg_query($conn, $query);
+		
+	}
+	$query = "update seai.charger
+					set priceper_kwh_fc = '".$new_ppk_fc."' 
+					where charger_id = 202010;";	
+					$result = pg_query($conn, $query);
+
+	for($i=1; $i<10; $i=$i+1){ 
+		$query = "update seai.charger
+					set priceper_kwh_green = '".$new_ppk_green."' 
+					where charger_id = 20200".$i.";";
+		$result = pg_query($conn, $query);
+		
+	}
+	$query = "update seai.charger
+					set priceper_kwh_green = '".$new_ppk_green."' 
+					where charger_id = 202010;";	
+	$result = pg_query($conn, $query);
+
+	$result = pg_query($conn, $query);
+	return $result;
+}
 
 
 

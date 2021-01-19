@@ -39,6 +39,7 @@ if (isset($_SESSION['id']) && isset($_SESSION['username'])) {
         <a href="home.php"><li class="active">Home</li></a>
         <a href="statistics.php"><li>Statistics</li></a>
         <a href="alerts.php"><li>Alerts</li></a>
+		<a href="prices.php"><li>Prices</li></a>
       </ul>
     </div>
     <div class="other_stuff">
