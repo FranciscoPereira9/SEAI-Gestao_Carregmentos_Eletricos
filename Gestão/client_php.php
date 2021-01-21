@@ -10,7 +10,7 @@ class ArrayValue implements JsonSerializable {
         return $this->array;
     }
 }
-$address = "172.29.0.17";
+$address = "172.29.0.48";
 $port    = 5050;
 
 
@@ -38,6 +38,18 @@ if($id == "202000"){
 
                         $sql = "  UPDATE seai.charger
                                   SET operator_interr='t'";
+                        $result = pg_query($conn, $sql);
+                        $a=1;
+                        while ($a <= 9) {
+                          if ($a!='0') {
+                            $sql = "INSERT into seai.forced_interr (charger_id, time_interr) VALUES ('20200$a', CURRENT_TIMESTAMP(0))";
+                            $result = pg_query($conn, $sql);
+
+                          }
+                            $a++;
+
+                        }
+                        $sql = "INSERT into seai.forced_interr (charger_id, time_interr) VALUES ('202010', CURRENT_TIMESTAMP(0))";
                         $result = pg_query($conn, $sql);
 
 
@@ -73,6 +85,10 @@ else{
                                         SET operator_interr='t'
                                         WHERE	charger_id=$id";
                               $result = pg_query($conn, $sql);
+                              if ($id!='202000') {
+                                $sql = "INSERT into seai.forced_interr (charger_id, time_interr) VALUES ('$id', CURRENT_TIMESTAMP(0))";
+                                $result = pg_query($conn, $sql);
+                              }
 
 
       $sql = "SELECT * FROM seai.charger ORDER BY charger_id ASC";

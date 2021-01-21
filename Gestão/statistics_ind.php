@@ -42,7 +42,7 @@ if (isset($_SESSION['id']) && isset($_SESSION['username'])) {
         <img src="logo_seai.png" alt="">
       </div>
       <div class="user">
-        <h1 class="greets">Bem vindo, <?php echo ($_SESSION['username']) ; ?></h1>
+        <h1 class="greets">Welcome, <?php echo ($_SESSION['username']) ; ?></h1>
         <a class="logout"href="logout.php">LOGOUT</a>
       </div>
 
@@ -54,6 +54,8 @@ if (isset($_SESSION['id']) && isset($_SESSION['username'])) {
         <a href="home.php"><li>Home</li></a>
         <a href="statistics.php"><li class="active">Statistics</li></a>
         <a href="alerts.php"><li>Alerts</li></a>
+        <a href="prices.php"><li>Prices</li></a>
+        <a href="forced.php"><li>Forced Interrupt</li></a>
       </ul>
     </div>
     <div class="other_stuff1">

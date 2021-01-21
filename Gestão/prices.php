@@ -29,7 +29,7 @@ if (isset($_SESSION['id']) && isset($_SESSION['username'])) {
         <img src="logo_seai.png" alt="">
       </div>
       <div class="user">
-        <h1 class="greets">Bem vindo, <?php echo ($_SESSION['username']) ; ?></h1>
+        <h1 class="greets">Welcome, <?php echo ($_SESSION['username']) ; ?></h1>
         <a class="logout"href="logout.php">LOGOUT</a>
       </div>
 
@@ -42,6 +42,7 @@ if (isset($_SESSION['id']) && isset($_SESSION['username'])) {
         <a href="statistics.php"><li>Statistics</li></a>
         <a href="alerts.php"><li>Alerts</li></a>
 		<a href="prices.php"><li class="active">Prices</li></a>
+    <a href="forced.php"><li>Forced Interrupt</li></a>
       </ul>
     </div>
     <div class="other_stuff1">
@@ -65,25 +66,37 @@ if (isset($_SESSION['id']) && isset($_SESSION['username'])) {
 			$current_ppk_fc = $row['priceper_kwh_fc'];
 			$current_ppk_green = $row['priceper_kwh_green'];
 			//$_SESSION['PPK'] = $current_PPK;
+      ?>
+      <div class="container_total">
+
+        <h3 class="charging_title_price">Price Changing € / KW / h</h3>
+        <form class="container_price" method = "GET" action ="actionUpdatePrice.php">
+        <div class="price1">
+          Normal Charging: <br><input class="input_price_text" type="text" 		name="new_ppk" 		 value="<?php echo $current_ppk; ?>">
+        </div>
+        <div class="price2">
+          Fast Charging: <br><input class="input_price_text" type="text" 		name="new_ppk_fc" 		 value="<?php echo $current_ppk_fc; ?>">
+        </div>
+        <div class="price3">
+          Green Charging: <br><input class="input_price_text" type="text" 		name="new_ppk_green" 		 value="<?php echo $current_ppk_green;  ?>">
+        </div>
+
+        <div class="submit_input">
+            <input class="button4" type="submit" 	name="Confirmar" 	value="Confirmar">
+        </div>
+
+        </form>
+
+      </div>
+      <?php
         }
-		echo "<br style=\"margin-top:20px\">";
-		echo "<form method = \"GET\" action = \"../seai/actionUpdatePrice.php\">";
-		echo "Price p/ KWh: <input type=\"text\" 		name=\"new_ppk\" 		 value=\"$current_ppk\"><br>";
-		//echo "<input type=\"submit\" 	name=\"Confirmar\" 	value=\"Confirmar\">";
-		echo "<br>";
-		
-		echo "<br>";		
-		//echo "<form method = \"GET\" action = \"../seai/actionUpdatePrice.php\">";
-		echo "Price p/ KWh Fast: <input type=\"text\" 		name=\"new_ppk_fc\" 		 value=\"$current_ppk_fc\"><br>";
-		//echo "<input type=\"submit\" 	name=\"Confirmar\" 	value=\"Confirmar\">";
-		echo "<br>";
-		
-		echo "<br>";		
-		//echo "<form method = \"GET\" action = \"../seai/actionUpdatePrice.php\">";
-		echo "Price p/ KWh Green: <input type=\"text\" 		name=\"new_ppk_green\" 		 value=\"$current_ppk_green\"><br>";
-		echo "<input type=\"submit\" 	name=\"Confirmar\" 	value=\"Confirmar\">";
-		echo "</form>";
+if (isset($_GET['Confirmar'])) {
+  echo '<script language="javascript">';
+  echo 'alert("record is successfully inserted")';
+  echo '</script>';
+}
 ?>
+
 			</div>
 		</div>
 	</div>

@@ -26,7 +26,7 @@ if (isset($_SESSION['id']) && isset($_SESSION['username'])) {
         <img src="logo_seai.png" alt="">
       </div>
       <div class="user">
-        <h1 class="greets">Bem vindo, <?php echo ($_SESSION['username']) ; ?></h1>
+        <h1 class="greets">Welcome, <?php echo ($_SESSION['username']) ; ?></h1>
         <a class="logout"href="logout.php">LOGOUT</a>
       </div>
 
@@ -37,6 +37,9 @@ if (isset($_SESSION['id']) && isset($_SESSION['username'])) {
       <ul>
         <a href="home.php"><li class="active">Home</li></a>
         <a href="statistics.php"><li>Statistics</li></a>
+        <a href="alerts.php"><li>Alerts</li></a>
+    <a href="prices.php"><li>Prices</li></a>
+    <a href="forced.php"><li>Forced Interrupt</li></a>
       </ul>
     </div>
     <div class="other_stuff">
@@ -79,7 +82,7 @@ if (isset($_SESSION['id']) && isset($_SESSION['username'])) {
         </tr>
         <?php
         include "db_conn.php";
-        $sql = "SELECT * FROM seai.charging WHERE charger_id='$id_init1'";
+        $sql = "SELECT * FROM seai.charging WHERE charger_id='$id_init1' ORDER BY starting_time DESC";
         $result = pg_query($conn, $sql);
            if (pg_num_rows($result)>0) {
              while ($row = pg_fetch_assoc($result)) {
@@ -88,8 +91,10 @@ if (isset($_SESSION['id']) && isset($_SESSION['username'])) {
                }else {
                  $aux = "Normal";
                }
+               $avg_power = $row['avg_power'];
+               $avg_power2 = number_format($avg_power/1000, 2, '.', '')."KW";
                  echo "<tr><td>". $row['charger_id'] ."</td><td>" .$row['user_id'] ."</td><td>" .$row['starting_time']
-                 ."</td><td>". $row['stoping_time'] ."</td><td>" . $row['fori'] ."</td><td>" . $row['avg_power']
+                 ."</td><td>". $row['stoping_time'] ."</td><td>" . $row['fori'] ."</td><td>" . $avg_power2
                  ."</td><td>". $aux ."</td><td>" . $row['starting_date'] ."</td><td>" . $row['ending_date']
                   ."</td><td>" . $row['priceper_kwh'] ."</td>";
                       }

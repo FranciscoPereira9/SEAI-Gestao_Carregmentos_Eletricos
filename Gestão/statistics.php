@@ -8,7 +8,14 @@ if (isset($_SESSION['id']) && isset($_SESSION['username'])) {
   $result = pg_query($conn,$sql);
   $chart_data='';
   while ($row = pg_fetch_array($result)) {
-    $chart_data  .="{ charger_id:'".$row["charger_id"]."', avg_power:".$row["avg_power"]."}, ";
+    $charger_id_stats = $row["charger_id"];
+    $aux = $charger_id_stats;
+    $power  = $row["avg_power"];
+
+
+
+    $chart_data  .="{ charger_id:'".$charger_id_stats."', avg_power:".$power."}, ";
+
   }
   $chart_data = substr ($chart_data, 0, -2);
 
@@ -56,7 +63,7 @@ $green=0;
         <img src="logo_seai.png" alt="">
       </div>
       <div class="user">
-        <h1 class="greets">Bem vindo, <?php echo ($_SESSION['username']) ; ?></h1>
+        <h1 class="greets">Welcome, <?php echo ($_SESSION['username']) ; ?></h1>
         <a class="logout"href="logout.php">LOGOUT</a>
       </div>
 
@@ -69,6 +76,7 @@ $green=0;
         <a href="statistics.php"><li class="active">Statistics</li></a>
         <a href="alerts.php"><li>Alerts</li></a>
 		<a href="prices.php"><li>Prices</li></a>
+    <a href="forced.php"><li>Forced Interrupt</li></a>
       </ul>
     </div>
     <div class="other_stuff1">
@@ -90,7 +98,7 @@ $green=0;
   <div class="chargers">
     <div class="line1_charts">
       <div class="chart1">
-          <h4>Avg Power Per Charger</h4>
+          <h4>Avg Power Per Charging - Analysis</h4>
             <div id="chart"></div>
       </div>
       <div class="chart2">

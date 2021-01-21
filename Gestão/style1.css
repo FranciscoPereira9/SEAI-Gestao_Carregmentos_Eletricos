@@ -353,6 +353,7 @@ justify-content: center;
   background: #fff;
   border-radius: 15px;
 }
+
 .tabela{
   display: inline-block;
   overflow-y: scroll;
@@ -360,8 +361,30 @@ justify-content: center;
   padding: 15px;
   margin-left: 190px;
   margin-top: 10px;
+  overflow-y: scroll;
+  height: 250px;
+}
+.tabela_clientes{
+  display: inline-block;
+  overflow-y: scroll;
+  padding: 15px;
+  margin-top: 20px;
+  overflow-y: scroll;
+  height: 150px;
 
-
+}
+.price{
+width: 190px;
+text-align: center;
+align-items: center;
+justify-content: center;
+margin-top: 50px;
+}
+.input_price{
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
 }
 table{
   text-align: center;
@@ -376,8 +399,10 @@ table{
 }
 .emergency_table{
   width: 80%;
-  height: 300px;
   margin-top: 50px;
+  overflow-y: scroll;
+  padding: 15px;
+  overflow-y: scroll
 }
 th{
   background-color: #90EE90;
@@ -393,17 +418,27 @@ tr:nth-child(even) {
   align-items: center;
   text-align: center;
   justify-content: center;
-  margin-top: 70px;
+  margin-top:10px;
   height: 30px;
   margin-left: 15%;
 }
+.charging_title{
+  width: 70%;
+  border-bottom: 3px solid #90EE90;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  margin-left: 15%;
+  padding-bottom: 10px;
+}
+
 .emergency{
   width: 100%;
   height: 200px;
   justify-content: center;
   align-items: center;
   text-align: center;
-  margin-top: 40px;
+  margin-top: 20px;
 }
 
 
@@ -412,7 +447,7 @@ tr:nth-child(even) {
     -moz-animation: blink 1000ms infinite alternate;
     -o-animation: blink 1700ms infinite alternate;
     animation: blink 1000ms infinite alternate;
-    margin-top: 30px;
+    margin-top: 20px;
     border-radius: 2px;
 }
 @-webkit-keyframes blink {
@@ -431,3 +466,89 @@ tr:nth-child(even) {
 	from { opacity:1; }
 	to { opacity:0; }
 };
+.container_price{
+  display: flex;
+}
+.price1{
+  margin-left: 19%;
+  padding: 20px;
+  border-left: 2px solid #90EE90;
+  height: 100px;
+}
+
+.price2{
+padding: 20px;
+border-left: 2px solid #90EE90;
+height: 100px;
+}
+.price3{
+  padding: 20px;
+  border-left: 2px solid #90EE90;
+  height: 100px;
+  border-right: 2px solid #90EE90;
+
+}
+.container_price{
+  display: flex;
+}
+.charging_title_price{
+  width: 70%;
+  border-bottom: 3px solid #90EE90;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  margin-left: 15%;
+  padding-bottom: 10px;
+}
+.submit_input{
+  width: 100%;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  position: absolute;
+  top: 67%;
+  left: 57%;
+  transform:translate(-50%,-50%);
+
+}
+.input_price_text{
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  margin-top: 15px;
+}
+.container_total{
+  width: 80%;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+}
+
+.button4{
+  border-radius: 4px;
+  background-color: #90EE90;
+  padding: 10px;
+  font-size: 15px;
+    font-family:Century Gothic;
+    border: transparent;
+}
+.button4:hover{
+  opacity: 0.5;
+  border: 1px solid #90EE90 ;
+  background-color: white;
+  color: black;
+}
+#uuu{
+  color: black;
+}
+#ids{
+  color: brown;
+}
+.disabled_chargers{
+  position: absolute;
+  top: 9.2%;
+  left: 32%;
+  transform:translate(-50%,-50%);
+  padding: 5px;
+  border-left: 1px solid white;
+}

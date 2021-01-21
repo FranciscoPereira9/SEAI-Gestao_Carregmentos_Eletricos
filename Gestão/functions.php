@@ -105,53 +105,66 @@ $datetime1 = strtotime($ti2);
 $to2 = date('Y-m-d h:i:sa', strtotime($to));
 $datetime2 = strtotime($to2);
 $data = $datetime2-$datetime1;
-
 $data_min = $data / 60;
-$formattedmin = number_format($data_min);
-$data_seg = $data - ($formattedmin*60);
-$data_seg=$data_seg;
+if ($data_min<1) {
+  $formattedmin=0;
+  $data_seg=$data;
+}
+else {
+  $formattedmin = number_format($data_min);
+  $data_seg = $data - ($formattedmin*60);
+  $data_seg=$data_seg;
+}
+
+
 $data_fin = "$formattedmin"." min and "."$data_seg"." sec";
+
 }
 return $data_fin;
 }
 
+
+
+
+
+
 function updatePrice($new_ppk, $new_ppk_fc, $new_ppk_green ){
 	include "db_conn.php";
 
-	for($i=1; $i<10; $i=$i+1){ 
+	for($i=1; $i<10; $i=$i+1){
 		$query = "update seai.charger
-					set priceper_kwh = '".$new_ppk."' 
+					set priceper_kwh = '".$new_ppk."'
 					where charger_id = 20200".$i.";";
 		$result = pg_query($conn, $query);
-		
+
 	}
 	$query = "update seai.charger
-					set priceper_kwh = '".$new_ppk."' 
+					set priceper_kwh = '".$new_ppk."'
 					where charger_id = 202010;";
 					$result = pg_query($conn, $query);
-					
-	for($i=1; $i<10; $i=$i+1){ 
+
+	for($i=1; $i<10; $i=$i+1){
 		$query = "update seai.charger
-					set priceper_kwh_fc = '".$new_ppk_fc."' 
+					set priceper_kwh_fc = '".$new_ppk_fc."'
 					where charger_id = 20200".$i.";";
 		$result = pg_query($conn, $query);
-		
+
 	}
 	$query = "update seai.charger
-					set priceper_kwh_fc = '".$new_ppk_fc."' 
-					where charger_id = 202010;";	
+					set priceper_kwh_fc = '".$new_ppk_fc."'
+					where charger_id = 202010;";
 					$result = pg_query($conn, $query);
 
-	for($i=1; $i<10; $i=$i+1){ 
+	for($i=1; $i<10; $i=$i+1){
 		$query = "update seai.charger
-					set priceper_kwh_green = '".$new_ppk_green."' 
+					set priceper_kwh_green = '".$new_ppk_green."'
 					where charger_id = 20200".$i.";";
 		$result = pg_query($conn, $query);
-		
+
 	}
 	$query = "update seai.charger
-					set priceper_kwh_green = '".$new_ppk_green."' 
-					where charger_id = 202010;";	
+					set priceper_kwh_green = '".$new_ppk_green."'
+					where charger_id = 202010;";
 	$result = pg_query($conn, $query);
 
 	$result = pg_query($conn, $query);

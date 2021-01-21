@@ -42,9 +42,9 @@ if (isset($_SESSION['id']) && isset($_SESSION['username'])) {
       <ul>
         <a href="home.php"><li>Home</li></a>
         <a href="statistics.php"><li>Statistics</li></a>
-        <a href="alerts.php"><li class="active">Alerts</li></a>
+        <a href="alerts.php"><li>Alerts</li></a>
 		<a href="prices.php"><li>Prices</li></a>
-    <a href="forced.php"><li>Forced Interrupt</li></a>
+    <a href="forced.php"><li  class="active">Forced Interrupt</li></a>
       </ul>
     </div>
     <div class="other_stuff1">
@@ -61,6 +61,7 @@ if (isset($_SESSION['id']) && isset($_SESSION['username'])) {
   <div class="chargers">
 
 <?php
+/*
 $teste= $_SESSION['emer'];
 $id_mod=0;
 if ($teste == "202010") {
@@ -68,43 +69,29 @@ if ($teste == "202010") {
 } else {
   $id_mod = $teste[strlen($teste)-1];
 }
-
+*/
  ?>
-<?php
-$sql = "SELECT * FROM seai.emergency ORDER BY id DESC LIMIT 1";
-$result = pg_query($conn, $sql);
-if (pg_num_rows($result)>0) {
-  while ($row = pg_fetch_assoc($result)) {
 
-    $teste1 = $row['charger_id'];
-  }
-  }
-
-
- ?>
  <table class="emergency_table">
    <tr>
      <th>Charger ID</th>
-     <th>Date Emergency</th>
+     <th>Time Interruption</th>
 
    </tr>
 
    <?php
 
-           if ($teste1!=$id_mod && ($id_mod!="")) {
-
-             $sql = "INSERT into seai.emergency (charger_id, date_emergency) VALUES ('$id_mod', CURRENT_TIMESTAMP)";
-             $result = pg_query($conn, $sql);
-
-           }
 
 
-                        $sql = "SELECT * FROM seai.emergency ORDER BY id DESC";
+
+
+
+                        $sql = "SELECT * FROM seai.forced_interr ORDER BY time_interr DESC";
                         $result = pg_query($conn, $sql);
                            if (pg_num_rows($result)>0) {
                              while ($row = pg_fetch_assoc($result)) {
 
-                                 echo "<tr><td>". $row['charger_id'] ."</td><td>" .$row['date_emergency'] ."</td></tr>";
+                                 echo "<tr><td>". $row['charger_id'] ."</td><td>" .$row['time_interr'] ."</td></tr>";
                                       }
 
                                      }

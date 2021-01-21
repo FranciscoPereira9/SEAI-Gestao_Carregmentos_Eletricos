@@ -27,7 +27,7 @@ if (isset($_SESSION['id']) && isset($_SESSION['username'])) {
         <img src="logo_seai.png" alt="">
       </div>
       <div class="user">
-        <h1 class="greets">Bem vindo, <?php echo ($_SESSION['username']) ; ?></h1>
+        <h1 class="greets">Welcome, <?php echo ($_SESSION['username']) ; ?></h1>
         <a class="logout"href="logout.php">LOGOUT</a>
       </div>
 
@@ -39,12 +39,15 @@ if (isset($_SESSION['id']) && isset($_SESSION['username'])) {
         <a href="home.php"><li class="active">Home</li></a>
         <a href="statistics.php"><li>Statistics</li></a>
         <a href="alerts.php"><li>Alerts</li></a>
-		<a href="prices.php"><li>Prices</li></a>
+    		<a href="prices.php"><li>Prices</li></a>
+        <a href="forced.php"><li>Forced Interrupt</li></a>
       </ul>
     </div>
     <div class="other_stuff">
 
       <h6>Active Chargers -  <i class="fas fa-plug"><span id="active_chargers"></span> </i></h6>
+      <h6>Forced Interruptions -  <i class="fas fa-hand-paper"><span id="nr_fori"></span> </i></h6>
+
       <a href="client_php.php?id=<?php echo '202000'; ?>"><i class="fas fa-exclamation-triangle"></i><span class="warning">Force all chargers to turn off</span> </a>
       <p><a href="client_php.php?id=<?php echo '202000_on'; ?>"><i id="onn"class="fas fa-exclamation-triangle"></i><span class="warning">Force all chargers to turn on</span> </a></p>
       <div class="emergency">
@@ -85,10 +88,11 @@ if (isset($_SESSION['id']) && isset($_SESSION['username'])) {
 
       </div>
       <div class="info1">
-        <p>Voltage Inst. = <span id="voltage_inst1"></span>V</p>
-        <p>Power Inst. = <span id="current_inst1"></span>W</p>
-        <p>Power max = <span id="max_curr1"></span>W</p>
+
+        <p>Power Inst. = <span id="current_inst1"></span>KW</p>
+        <p>Power max = <span id="max_curr1"></span>KW</p>
         <p>Charging id =<span id="charging_id1"></span> </p>
+
 
         <a href="data_charger.php?id=<?php echo $chargerid1; ?>">+ info</a>
       </div>
@@ -106,9 +110,9 @@ if (isset($_SESSION['id']) && isset($_SESSION['username'])) {
         </div>
       </div>
       <div class="info1">
-        <p>Voltage Inst. = <span id="voltage_inst2"></span>V</p>
-        <p>Power Inst. = <span id="current_inst2"></span>W</p>
-        <p>Power max = <span id="max_curr2"></span>W</p>
+
+        <p>Power Inst. = <span id="current_inst2"></span>KW</p>
+        <p>Power max = <span id="max_curr2"></span>KW</p>
         <p>Charging id = <span id="charging_id2"></span> </p>
 
         <a href="data_charger.php?id=<?php echo $chargerid2; ?>">+ info</a>
@@ -127,9 +131,9 @@ if (isset($_SESSION['id']) && isset($_SESSION['username'])) {
         </div>
       </div>
       <div class="info1">
-        <p>Voltage Inst. = <span id="voltage_inst3"></span>V</p>
-        <p>Power Inst. = <span id="current_inst3"></span>W</p>
-        <p>Power max = <span id="max_curr3"></span>W</p>
+
+        <p>Power Inst. = <span id="current_inst3"></span>KW</p>
+        <p>Power max = <span id="max_curr3"></span>KW</p>
         <p>Charging id = <span id="charging_id3"></span> </p>
 
         <a href="data_charger.php?id=<?php echo $chargerid3; ?>">+ info</a>
@@ -148,9 +152,9 @@ if (isset($_SESSION['id']) && isset($_SESSION['username'])) {
         </div>
       </div>
       <div class="info1">
-        <p>Voltage Inst. = <span id="voltage_inst4"></span>V</p>
-        <p>Power Inst. = <span id="current_inst4"></span>W</p>
-        <p>Power max = <span id="max_curr4"></span>W</p>
+
+        <p>Power Inst. = <span id="current_inst4"></span>KW</p>
+        <p>Power max = <span id="max_curr4"></span>KW</p>
         <p>Charging id = <span id="charging_id4"></span> </p>
 
         <a href="data_charger.php?id=<?php echo $chargerid4; ?>">+ info</a>
@@ -169,9 +173,9 @@ if (isset($_SESSION['id']) && isset($_SESSION['username'])) {
         </div>
       </div>
       <div class="info1_">
-        <p>Voltage Inst. = <span id="voltage_inst5"></span>V</p>
-        <p>Power Inst. = <span id="current_inst5"></span>W</p>
-        <p>Power max = <span id="max_curr5"></span>W</p>
+
+        <p>Power Inst. = <span id="current_inst5"></span>KW</p>
+        <p>Power max = <span id="max_curr5"></span>KW</p>
         <p>Charging id = <span id="charging_id5"></span> </p>
 
         <a href="data_charger.php?id=<?php echo $chargerid5; ?>">+ info</a>
@@ -197,9 +201,9 @@ if (isset($_SESSION['id']) && isset($_SESSION['username'])) {
     </div>
   </div>
   <div class="info1_line2">
-    <p>Voltage Inst. = <span id="voltage_inst6"></span>V</p>
-    <p>Power Inst. = <span id="current_inst6"></span>W</p>
-    <p>Power max = <span id="max_curr6"></span>W</p>
+
+    <p>Power Inst. = <span id="current_inst6"></span>KW</p>
+    <p>Power max = <span id="max_curr6"></span>KW</p>
     <p>Charging id = <span id="charging_id6"></span> </p>
 
     <a href="data_charger.php?id=<?php echo $chargerid6; ?>">+ info</a>
@@ -218,9 +222,9 @@ if (isset($_SESSION['id']) && isset($_SESSION['username'])) {
     </div>
   </div>
   <div class="info1_line2">
-    <p>Voltage Inst. = <span id="voltage_inst7"></span>V</p>
-    <p>Power Inst. = <span id="current_inst7"></span>W</p>
-    <p>Power max = <span id="max_curr7"></span>W</p>
+
+    <p>Power Inst. = <span id="current_inst7"></span>KW</p>
+    <p>Power max = <span id="max_curr7"></span>KW</p>
     <p>Charging id = <span id="charging_id7"></span> </p>
 
     <a href="data_charger.php?id=<?php echo $chargerid7; ?>">+ info</a>
@@ -239,9 +243,9 @@ if (isset($_SESSION['id']) && isset($_SESSION['username'])) {
     </div>
   </div>
   <div class="info1_line2">
-    <p>Voltage Inst. = <span id="voltage_inst8"></span>V</p>
-    <p>Power Inst. = <span id="current_inst8"></span>W</p>
-    <p>Power max = <span id="max_curr8"></span>W</p>
+
+    <p>Power Inst. = <span id="current_inst8"></span>KW</p>
+    <p>Power max = <span id="max_curr8"></span>KW</p>
     <p>Charging id = <span id="charging_id8"></span> </p>
 
     <a href="data_charger.php?id=<?php echo $chargerid8; ?>">+ info</a>
@@ -260,9 +264,9 @@ if (isset($_SESSION['id']) && isset($_SESSION['username'])) {
     </div>
   </div>
   <div class="info1_line2">
-    <p>Voltage Inst. = <span id="voltage_inst9"></span>V</p>
-    <p>Power Inst. = <span id="current_inst9"></span>W</p>
-    <p>Power max = <span id="max_curr9"></span>W</p>
+
+    <p>Power Inst. = <span id="current_inst9"></span>KW</p>
+    <p>Power max = <span id="max_curr9"></span>KW</p>
     <p>Charging id = <span id="charging_id9"></span> </p>
 
     <a href="data_charger.php?id=<?php echo $chargerid9; ?>">+ info</a>
@@ -281,9 +285,9 @@ if (isset($_SESSION['id']) && isset($_SESSION['username'])) {
     </div>
   </div>
   <div class="info1_line2_">
-    <p>Voltage Inst. = <span id="voltage_inst10"></span>V</p>
-    <p>Power Inst. = <span id="current_inst10"></span>W</p>
-    <p>Power max = <span id="max_curr10"></span>W</p>
+
+    <p>Power Inst. = <span id="current_inst10"></span>KW</p>
+    <p>Power max = <span id="max_curr10"></span>KW</p>
     <p>Charging id = <span id="charging_id10"></span> </p>
 
     <a href="data_charger.php?id=<?php echo $chargerid10; ?>">+ info</a>
