@@ -585,7 +585,7 @@ class database:
             power = float(row[0])
 
             # DESCOMENTAR SE SIMULAÇÃO
-            total_cost = round(ppkwh * power / 1000 * 540 * delta_time / 3660, 2)
+            total_cost = round(ppkwh * power / 1000 * 540 * delta_time / 3600, 2)
 
             # DESCOMENTAR SE REAL
             # total_cost = round(ppkwh * power / 1000 * delta_time / 3600, 2)
