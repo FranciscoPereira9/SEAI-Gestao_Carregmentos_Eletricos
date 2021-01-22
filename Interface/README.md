@@ -16,3 +16,7 @@ Para a comunicação com o subsistema do controlo e com a base de dados, desenvo
 ## Interface Local
 
 ![mockup](https://user-images.githubusercontent.com/47570179/105553817-09c0a200-5cfe-11eb-8317-9f6511755217.jpg)
+
+## Autores
+* André Martins - up201605016@fe.up.pt
+* Inês Soares - up201606615@fe.up.pt
