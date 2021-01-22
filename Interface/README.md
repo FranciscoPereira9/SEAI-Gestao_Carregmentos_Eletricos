@@ -6,7 +6,9 @@ Para a comunicação com o subsistema do controlo e com a base de dados, desenvo
 
 ## Aplicação para dispositivos móveis (Android)
 
-### Overview da App
+A aplicação para dispositivos móveis foi desenvolvida para o sistema operativo Android e a linguagem utilizada para programação da mesma foi Kotlin (desenvolvimento nativo deste sistema operativo). A plataforma Firebase desenvolvida pela Google para a criação de aplicativos móveis e da web, foi também utilizada para armazenar os dados de login *Authentication* e todos os dados gerados pela aplicação *Cloud Firestore*: informação de carregamentos e informação sobre os veículos adicionados pelo utilizador. Uma vez que a API que estabelece comunicação com o módulo do Controlo e com a base de dados não está alojada em nenhum servidor (é corrida localmente), utilizou-se a ferramenta *ngrok* que permite criar túneis seguros para um servidor local.
+
+### Visão geral da aplicação móvel
 ![Estrutura](https://user-images.githubusercontent.com/47570179/105553859-24931680-5cfe-11eb-92d2-ac456e6e4e08.jpg)
 
 ### Sequência de carregamento
