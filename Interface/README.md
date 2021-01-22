@@ -14,7 +14,7 @@ Para a comunicação com o subsistema do controlo e com a base de dados, desenvo
 
 
 ## Interface Local
-
+### Sequência de carregamento
 ![mockup](https://user-images.githubusercontent.com/47570179/105553817-09c0a200-5cfe-11eb-8317-9f6511755217.jpg)
 
 ## Autores
