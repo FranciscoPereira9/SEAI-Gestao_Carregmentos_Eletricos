@@ -21,4 +21,3 @@ Esta plataforma possui também acesso, não só á base de dados (PostGreSQL), m
 
 ## Autores
 * Francisco Costa - up201604136@fe.up.pt
-* Hugo Marques - up201506023@fe.up.pt
