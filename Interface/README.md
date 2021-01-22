@@ -6,7 +6,13 @@ Para a comunicação com o subsistema do controlo e com a base de dados, desenvo
 
 ## Aplicação para dispositivos móveis (Android)
 
-![Estrutura](https://user-images.githubusercontent.com/47570179/105551406-98332480-5cfa-11eb-8036-3a1a130a4886.jpg)
+### Overview da App
+![Estrutura](https://user-images.githubusercontent.com/47570179/105553859-24931680-5cfe-11eb-92d2-ac456e6e4e08.jpg)
+
+### Sequência de carregamento
+![SequenciaCarregamento](https://user-images.githubusercontent.com/47570179/105553458-52c42680-5cfd-11eb-9218-d124b9fc3a19.jpg)
 
 
 ## Interface Local
+
+![mockup](https://user-images.githubusercontent.com/47570179/105553817-09c0a200-5cfe-11eb-8317-9f6511755217.jpg)
