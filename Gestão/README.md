@@ -19,5 +19,5 @@ Esta plataforma possui também acesso, não só á base de dados (PostGreSQL), m
 <img width="778" alt="gestao2" src="https://user-images.githubusercontent.com/47570179/105554798-fc0c1c00-5cff-11eb-9151-60c9e2b992f1.PNG">
 
 
-## Autores
+## Autor
 * Francisco Costa - up201604136@fe.up.pt
