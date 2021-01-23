@@ -25,8 +25,8 @@ fastDCPow = chargers_config.fastDCPow
 normalMaxPow = chargers_config.normalPow
 
 # Constants
-#INSTALLED_POWER = len(chargers) * normalMaxPow
-INSTALLED_POWER = 100000
+INSTALLED_POWER = len(chargers) * normalMaxPow
+
 # Flag - Fast Charging Availability
 fastChargAvail = 1 # 1 - Available ; 0 - Not Available
 
